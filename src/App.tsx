@@ -6,6 +6,8 @@ import Baranagay from './components/pages/admin/barangay'
 import { BrowserRouter, Routes, Route } from "react-router";
 import ProtectedRoutes from './util/protectedRoutes';
 import SurveyForm from './components/pages/admin/surveyForm'
+import Household from './components/pages/admin/household'
+import EditSurveyForm from './components/pages/admin/editHouseholdform'
 function App() {
   
 
@@ -19,7 +21,9 @@ function App() {
             <Route path="/admin/access_users" element={<Access_user />} />
             <Route path="/admin/master_list" element={<Master_list />} />
             <Route path="/admin/barangay" element={<Baranagay />} />
-            <Route path="/surver_form" element={<SurveyForm />} />
+            <Route path="/survey_form" element={<SurveyForm />} />
+            <Route path="/admin/household" element={<Household />} />
+            <Route path="/survey_form/:id" element={<EditSurveyForm />} />
           </Route>
         </Routes>
       </BrowserRouter>

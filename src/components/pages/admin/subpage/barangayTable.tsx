@@ -10,7 +10,8 @@ import Swal from 'sweetalert2';
 
 
 interface IProps {
-    onClick: () => void;
+    onClick: () => void,
+    setLoading: ()=>void
 }
 
 const BarangayTable:React.FC<IProps> = (props)=> {
@@ -26,6 +27,7 @@ const BarangayTable:React.FC<IProps> = (props)=> {
     const getBarangayList = async ()=>{
         const token = userData().token
         setLoadingTable(!isLoadingTable);
+        
         try {
             const res = await axios.get(`${api_link()}/getBarangay`,{
                 headers:{
@@ -64,6 +66,7 @@ const BarangayTable:React.FC<IProps> = (props)=> {
         }).then(async (result) => { 
             if (result.isConfirmed) {
                 const token = userData().token
+                props.setLoading()
                 try {
                     await axios.delete(`${api_link()}/deleteBarangay`,{
                         headers:{
@@ -81,6 +84,7 @@ const BarangayTable:React.FC<IProps> = (props)=> {
                     showConfirmButton: false,
                     timer: 1000,
                 }).then(()=>{
+                    props.setLoading()
                     window.location.reload()
                 })
                 } catch (error) {
@@ -117,11 +121,11 @@ const BarangayTable:React.FC<IProps> = (props)=> {
 
     return (
         <>
-            <div className='absolute w-full h-full flex items-center justify-center text-white z-1'>
+            <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50'>
                 <div className="w-full max-w-lg bg-[#86ACE2] border border-black shadow-lg rounded">
                     <div className='relative'>
-                        {isShowformEdit&&<FormEdit dataObj={editName} onClick={()=>setShowformEdit(!isShowformEdit)}/>}
-                        {isShowformAdd&&<AddForm onClick={()=>setShowformAdd(!isShowformAdd)} />}
+                        {isShowformEdit&&<FormEdit dataObj={editName} onClick={()=>setShowformEdit(!isShowformEdit)} setLoading={()=>props.setLoading()}/>}
+                        {isShowformAdd&&<AddForm onClick={()=>setShowformAdd(!isShowformAdd)} setLoading={()=>props.setLoading()}/>}
                         <div className='flex flex-row p-3 gap-x-3'>
                             <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                                 <div>
@@ -169,7 +173,8 @@ const BarangayTable:React.FC<IProps> = (props)=> {
 }
 
 interface IAddForm {
-    onClick: ()=> void
+    onClick: ()=> void,
+    setLoading: ()=>void
 }
 
 const AddForm: React.FC<IAddForm> = (props)=>{
@@ -179,6 +184,7 @@ const AddForm: React.FC<IAddForm> = (props)=>{
         const formData = new FormData(e.currentTarget);
         const formValue = Object.fromEntries(formData)
         setLoading(true)
+        props.setLoading()
         const token = userData().token
         try {
             await axios.post(`${api_link()}/addBarangay`, formValue, 
@@ -196,6 +202,7 @@ const AddForm: React.FC<IAddForm> = (props)=>{
             timer: 1000,
         }).then(()=>{
             setLoading(false)
+            props.setLoading()
             window.location.reload()
         })
         } catch (error) {
@@ -240,7 +247,8 @@ interface IForm{
         barangay_name: string,
         id: number
     },
-    onClick: () => void
+    onClick: () => void,
+    setLoading: ()=>void
 }
 
 const FormEdit: React.FC<IForm> = (props) => {
@@ -250,6 +258,7 @@ const FormEdit: React.FC<IForm> = (props) => {
     const editSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
         setLoading(true);
+        props.setLoading()
         const formData = new FormData(e.currentTarget)
         const formValue = {
             barangay_name : formData.get("name"),
@@ -273,6 +282,7 @@ const FormEdit: React.FC<IForm> = (props) => {
                 timer: 1000,
             }).then(()=>{
                 setLoading(false)
+                props.setLoading()
                 window.location.reload()
             })
         } catch (error) {

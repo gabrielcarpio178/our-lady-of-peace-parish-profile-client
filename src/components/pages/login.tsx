@@ -6,6 +6,7 @@ import ourLadyOfPeace from'./../../assets/image/our-lady-of-peace.png';
 import {api_link} from "../../api_link"
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { BounceLoader } from 'react-spinners';
 
 export default function Login(){
     const API_LINK = api_link()
@@ -47,6 +48,13 @@ export default function Login(){
     return (
         <>
             <div className="w-full h-screen relative flex flex-row">
+                {isLoading&&
+                <div className='absolute bg-black/50 z-1 w-full h-full'>
+                    <div  className='flex items-center justify-center w-full h-full'>
+                        <BounceLoader color='#ffffff' size={120}/>
+                    </div>
+                </div>    
+                }
                 <div className='w-full flex md:flex-row'>
                     <div className="md:w-[55%]  bg-[#44618E] h-full hidden md:block">
                         <img src={churchImg} alt="church" className='h-full w-full'/>

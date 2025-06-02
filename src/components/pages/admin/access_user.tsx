@@ -9,6 +9,8 @@ import DataTable from 'react-data-table-component';
 import { userData, api_link } from '../../../api_link';
 import axios from 'axios';
 import moment from 'moment';
+import { BounceLoader } from 'react-spinners';
+import Swal from 'sweetalert2';
 
 
 export default function Access_user(){
@@ -24,6 +26,7 @@ export default function Access_user(){
                                                 username: "",
                                                 password: ""
                                             })
+    const [isLoading, setLoading] = useState(false)
     const myFunction = () => {
         setAddFormShow(!isShowAddForm)
     };
@@ -52,9 +55,9 @@ export default function Access_user(){
             })
             const result = res.data.map((user: any)=>{
                 return {
-                            NAME: user.firstname+" "+user.lastname,
+                            NAME: <div className='capitalize'>{user.firstname+" "+user.lastname}</div>,
                             USERNAME: user.username, 
-                            ROLE: user.rule, 
+                            ROLE: <div className='capitalize'>{user.rule}</div>, 
                             STATUS: user.isActive==0?"DEACTIVE":"ACTIVE",
                             DATE: moment(user.addDate).format("MMM D, YYYY"),
                             ACTION: <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>edit(user)}><FaEdit/></button>
@@ -93,8 +96,16 @@ export default function Access_user(){
         <>
             <div className="flex flex-row">
                 <MyAppNav/>
-                {isShowAddForm&&<AddContent onClick={myFunction} refreshUserList={getData}/>}
-                {isShowEditForm&&<EditForm user={editUser} onClick={editFormShowfun}/>}
+                {isLoading&&
+                <div className='absolute bg-black/50 z-40 w-full h-full'>
+                    {/* how to make this first layer of the screen */}
+                    <div  className='flex items-center justify-center w-full h-full'>
+                        <BounceLoader color='#ffffff' size={120}/>
+                    </div>
+                </div>    
+                } 
+                {isShowAddForm&&<AddContent onClick={myFunction} refreshUserList={getData} setLoading={()=>setLoading(!isLoading)}/>}
+                {isShowEditForm&&<EditForm user={editUser} onClick={editFormShowfun} setLoading={()=>setLoading(!isLoading)}/>}
                 {/* add this to a file content */}
                 <div className='w-[80%] h-screen bg-[#86ACE2] text-white'>
                     {/* content here */}
@@ -129,6 +140,7 @@ export default function Access_user(){
 interface IProps {
     onClick: () => void;
     refreshUserList: () => void;
+    setLoading: () => void
 }
 
 const AddContent: React.FC<IProps> = (props)=> {
@@ -147,24 +159,25 @@ const AddContent: React.FC<IProps> = (props)=> {
         const formValues = Object.fromEntries(formData)
         const token = userData().token
         setLoading(true)
+        props.setLoading()
         try {
-            const res = await axios.post(`${api_link()}/addUsers`, formValues, 
+            await axios.post(`${api_link()}/addUsers`, formValues, 
             {
             headers:{
                 'Content-type':'application/x-www-form-urlencoded',
                 "authorization" : `bearer ${token}`,
             }
         })
-        if(res.data.msg=="send success"){
-            props.refreshUserList();
-            props.onClick();
-            setFirstname("")
-            setLastname("")
-            setRole("admin")
-            setUsername("")
-            setPassword("")
-            setLoading(false)
-        }
+        Swal.fire({
+            position: "center",
+            title: `Add Success`,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1000,
+        }).then(()=>{
+            props.setLoading();
+            window.location.reload()
+        })
         } catch (error) {
             console.log(error)
         }
@@ -248,6 +261,7 @@ interface EditUSerData {
         password: string
     },
     onClick: () => void
+    setLoading: () => void
 }
 
 const EditForm: React.FC<EditUSerData> = (content) =>{
@@ -260,6 +274,7 @@ const EditForm: React.FC<EditUSerData> = (content) =>{
     const userEditSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
         setLoading(true);
+        content.setLoading()
         const formData = new FormData(e.currentTarget)
         const formValues = {
             firstname: formData.get('firstname'),
@@ -278,10 +293,20 @@ const EditForm: React.FC<EditUSerData> = (content) =>{
                     }
                 }
             );
+        Swal.fire({
+            position: "center",
+            title: `Edit Success`,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1000,
+        }).then(()=>{
+            setLoading(false);
+            content.setLoading();
+            window.location.reload()
+        })
         } catch (error) {
             console.log(error)
         }
-        setLoading(false);
         window.location.reload()
     }
 
@@ -310,27 +335,27 @@ const EditForm: React.FC<EditUSerData> = (content) =>{
                 </div>
                 
                 <form className="px-8 pt-6 pb-8 mb-4" onSubmit={userEditSubmit}>
-                    <div className="mb-4 flex flex-col">
+                    <div className="mb-4 flex flex-col bg-white px-2 text-black rounded-md gap-y-2">
                         <div className='flex flex-col w-full'>
-                            <label htmlFor="firstname" className="block mb-2 text-sm font-medium text-white">Firstname</label>
-                            <input name="firstname" value={firstname} onChange={(e) => setFirstname(e.target.value)} type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-white focus:border-blue-500" placeholder="Firstname" required />
+                            <label htmlFor="firstname" className="block mb-2 text-sm font-medium ">Firstname</label>
+                            <input name="firstname" value={firstname} onChange={(e) => setFirstname(e.target.value)} type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Firstname" required />
                         </div>
 
                         <div className='flex flex-col w-full'>
-                            <label htmlFor="lastname" className="block mb-2 text-sm font-medium text-white">Lastname</label>
-                            <input name="lastname" value={lastname} onChange={(e) => setLastname(e.target.value)} type="text" id="lastname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-white focus:border-blue-500" placeholder="Lastname" required />
+                            <label htmlFor="lastname" className="block mb-2 text-sm font-medium ">Lastname</label>
+                            <input name="lastname" value={lastname} onChange={(e) => setLastname(e.target.value)} type="text" id="lastname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Lastname" required />
                         </div>
 
                         <div className='flex flex-col w-full'>
-                            <label htmlFor="role" className="block mb-2 text-sm font-medium text-white">Role</label>
-                            <select name="role" value={rule} onChange={(e) => setRole(e.target.value)} id="role" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-white focus:border-blue-500" required>
+                            <label htmlFor="role" className="block mb-2 text-sm font-medium ">Role</label>
+                            <select name="role" value={rule} onChange={(e) => setRole(e.target.value)} id="role" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" required>
                                 <option value="admin">Admin</option>
                                 <option value="encoder">Encoder</option>
                             </select>
                         </div>
                         <div className='flex flex-col w-full mt-2.5'>
 
-                            <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full">{isLoading?"Loading...":"Submit"}</button>
+                            <button type="submit" className=" focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full text-white">{isLoading?"Loading...":"Submit"}</button>
 
                         </div>
                     </div>

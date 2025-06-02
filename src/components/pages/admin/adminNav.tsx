@@ -42,8 +42,8 @@ const NAVIGATIONDATA = [
     },
     {
         id: 5,
-        link: '/surver_form',
-        name: 'Surver form',
+        link: '/survey_form',
+        name: 'Survey form',
         icon: <FaWpforms/>,
     },
 ]
@@ -60,7 +60,6 @@ const MASTER_LIST = [
         id: 2,
         link: '/admin/household',
         name: 'Households',
-        
     },
 ]
 
