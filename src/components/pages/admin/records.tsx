@@ -1,0 +1,110 @@
+
+import MyAppNav from './adminNav'
+import AdminHeader from './adminHeader'
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { FaClock } from "react-icons/fa";
+import { IconContext } from 'react-icons';
+import axios from 'axios';
+import { userData, api_link } from '../../../api_link';
+import DataTable from 'react-data-table-component';
+
+export default function Records(){
+    const [datetime, setDatetime] = useState("Loading...")
+    const [recordsData, setRecordsData] = useState([])
+    const [allRecordsData, setAllRecordsData] = useState([])
+    const getCurrentDatetime = () =>{
+        const now = moment();
+        const formattedDateTime = now.format('MMMM DD, YYYY h:mm:ss a');
+        setDatetime(formattedDateTime);
+        
+    }
+
+    const getRecordData = async ()=>{
+        const token = userData().token
+            try {
+                const res = await axios.get(`${api_link()}/getRecords`,{
+                headers:{
+                        'Content-type':'application/x-www-form-urlencoded',
+                        "authorization" : `bearer ${token}`,
+                    }
+                })
+                const datas = res.data.map((data: any)=>{
+                    return {
+                        "DATE": moment(data.addDate).format("MMMM DD, YYYY"),
+                        "USER": <div className='capitalize'>{`${data.firstname} ${data.lastname}`}</div>,
+                        "ROLE": <div className='capitalize'>{data.rule}</div>,
+                        "NO. OF SURVEY": data.total_encoded
+                    }
+                })
+                setRecordsData(datas)
+                setAllRecordsData(datas)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        const columns = [
+            {name: "DATE", selector: ((row: any) => row["DATE"]), sortable: true},
+            {name: "USER", selector: ((row: any) => row["USER"]), sortable: true},
+            {name: "ROLE", selector: ((row: any) => row["ROLE"])},
+            {name: "NO. OF SURVEY", selector: ((row: any) => row["NO. OF SURVEY"]), sortable: true},
+        ]
+        
+        const handleSearch = (e: any) =>{
+            const search = e.target.value;
+            const result = allRecordsData.filter((data: any)=>{
+                return data["USER"]["props"]["children"].toLocaleLowerCase().includes(search.toLocaleLowerCase())
+            })
+            setRecordsData(result)
+        }
+
+    useEffect(()=>{
+        setInterval(function() {
+            getCurrentDatetime()
+        }, 1000);
+        getRecordData()
+    },[])
+    return (
+        <>
+            <div className="flex flex-row">
+                <MyAppNav/>
+                {/* add this to a file content */}
+                <div className='w-[80%] h-screen bg-[#86ACE2] text-white'>
+                    {/* content here */}
+                    <div className='flex flex-col w-full h-full'>
+                        <div className='w-full h-[12.7%] flex flex-row'>
+                            <AdminHeader/>
+                        </div>
+                        <div className='w-full h-[87.3%] flex flex-col px-10'>
+                            <div className='w-full flex flex-row justify-between'>
+                                <h2 className='text-2xl text-black opacity-[50%]'>
+                                    Records
+                                </h2>
+                                <div className="flex flex-row items-center px-3 bg-[#001656] h-[15vh] gap-x-3 rounded-lg w-[30%]">
+                                    <div className='bg-gray-500 rounded-sm p-3'>
+                                        <IconContext.Provider value={{ color: "white", size: "3em" }}>
+                                            <FaClock/>
+                                        </IconContext.Provider>
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className="text-2xl font-bold">DateTime</div>
+                                        <div className="font-bold text-lg">{datetime}</div>
+                                    </div>
+                                </div>
+                            </div>  
+                            <div className='mt-10'>
+                                <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3'>
+                                    <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search User: </label>
+                                    <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
+                                </div>
+                                <DataTable columns={columns} data={recordsData} pagination paginationPerPage={6} responsive paginationRowsPerPageOptions={[1,2,3,4,5, 6]}></DataTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </>
+    )
+}

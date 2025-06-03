@@ -8,6 +8,7 @@ import ProtectedRoutes from './util/protectedRoutes';
 import SurveyForm from './components/pages/admin/surveyForm'
 import Household from './components/pages/admin/household'
 import EditSurveyForm from './components/pages/admin/editHouseholdform'
+import Records from './components/pages/admin/records'
 function App() {
   
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/survey_form" element={<SurveyForm />} />
             <Route path="/admin/household" element={<Household />} />
             <Route path="/survey_form/:id" element={<EditSurveyForm />} />
+            <Route path='/admin/records' element={<Records/>}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
