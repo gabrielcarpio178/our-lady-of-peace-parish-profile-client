@@ -7,8 +7,9 @@ import { useEffect, useState, useRef } from 'react';
 import Chart from 'chart.js/auto';
 export default function Dashboard(){
     const chartRef = useRef<HTMLCanvasElement | null>(null)
-    const [chartInstance, setChartInstance] = useState<Chart | null>(null);
+    const chartInstanceRef = useRef<Chart | null>(null);
     const [barangayList, setBarangayList] = useState([])
+    const [dataGraph, setDataGraph] = useState([0,0,0,0,0])
     const [becList, setBecList] = useState([]);
     const [bec_id, setBEC_id] = useState(0)
     const [brgy_id, setBrgy_id] = useState(0)
@@ -22,6 +23,7 @@ export default function Dashboard(){
                 }   
             })
             setBarangayList(res.data)
+            dashboardData(bec_id, brgy_id)
             getBEClist(0)
         } catch (error) {
             console.log(error)
@@ -41,33 +43,74 @@ export default function Dashboard(){
                 const datas = res.data.filter((data: any)=>{return data.barangay_id == id})
                 setBEC_id(parseInt(datas.length==0?"":"0"))
                 setBecList(datas)
+                if(datas.length!=0){
+                    dashboardData(0, id)
+                }
+                
             }else{
                 res.data = [{id: "0", bec_name: "All"}]
+                dashboardData(0, id)
                 setBEC_id(0)
                 setBecList(res.data)
             }
-        
+            
         } catch (error) {
             console.log(error)
         }
     }
 
-    const dashboardData = async ()=>{
+    const setBEC_data_id = (e: any)=>{
+        const id = e.target.value;
+        setBEC_id(id)
+        dashboardData(id, brgy_id)
+    }
+
+    const dashboardData = async (bec_data_id: number, brgy_data_id: number)=>{
         const token = userData().token
         try {
-            const res = await axios.get(`${api_link()}/getRecords`,{
+            const res = await axios.get(`${api_link()}/getdashboardData`,{
                 headers:{
                     'Content-type':'application/x-www-form-urlencoded',
                     "authorization" : `bearer ${token}`,
                 }
             })
-            console.log(res.data)
+            console.log(bec_data_id, brgy_data_id)
+            filterData(res.data, bec_data_id, brgy_data_id)
         } catch (error) {
             console.log(error)
         }
     }
+
+
+    const filterData = (datas: {barangay_id: any, bec_id: any, confirmation: any, total_baptism: any, total_catholic: any, total_household: any, total_married: any}[], BEC_id: number, barangay_id: number) =>{
+        let dataContent = [0,0,0,0,0]
+        let dataResult = datas
+        if(BEC_id!=0||barangay_id!=0){
+            if(barangay_id!=0){
+                const dataFIlter = datas.filter((data: any)=>data.barangay_id==barangay_id)
+                dataResult = dataFIlter
+            }
+            if(BEC_id!=0){
+                const dataFIlter = datas.filter((data: any)=>data.bec_id==BEC_id)
+                dataResult = dataFIlter
+            }
+            if(barangay_id!=0&&BEC_id!=0){
+                const dataFIlter = datas.filter((data: any)=>data.bec_id==BEC_id)
+                dataResult = dataFIlter
+            }
+        }
+        dataResult.map((data: any)=>{
+            dataContent[0]=dataContent[0]+parseInt(data.total_household)
+            dataContent[1]=dataContent[1]+parseInt(data.total_catholic)
+            dataContent[2]=dataContent[2]+parseInt(data.total_baptism)
+            dataContent[3]=dataContent[3]+parseInt(data.confirmation)
+            dataContent[4]=dataContent[4]+parseInt(data.total_married)
+        })
+        setDataGraph(dataContent);
+    }
     useEffect(()=>{
-        getBarangayList()
+        getBarangayList();
+        
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
             if (!ctx) return;
@@ -75,16 +118,16 @@ export default function Dashboard(){
             const newChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Total Population', 'Roman Catholic', 'Baptized', 'Confirmation', 'Married'],
+                    labels: ['Population', 'Roman Catholic', 'Baptized', 'Confirmation', 'Married'],
                     datasets: [{
                         label: 'Survey Data Summary',
-                        data: [12, 19, 3, 5, 2],
+                        data: dataGraph,
                         backgroundColor: [
                             'rgb(67, 204, 99)',
-                            'rgba(245, 250, 250)',
-                            'rgba(237, 221, 128)',
-                            'rgba(98, 169, 240)',
-                            'rgba(230, 119, 242)'
+                            'rgb(245, 250, 250)',
+                            'rgb(237, 221, 128)',
+                            'rgb(98, 169, 240)',
+                            'rgb(230, 119, 242)'
                         ],
                         borderColor: [
                             'rgb(2, 3, 3)',
@@ -107,13 +150,21 @@ export default function Dashboard(){
                 }
             });
 
-            setChartInstance(newChart);
+            chartInstanceRef.current = newChart;
             
             return () => {
                 newChart.destroy();
             };
         }
     },[])
+
+    useEffect(() => {
+        const chart = chartInstanceRef.current;
+        if (chart) {
+            chart.data.datasets[0].data = dataGraph;
+            chart.update();
+        }
+    }, [dataGraph]);
 
     return (
         <>
@@ -145,7 +196,7 @@ export default function Dashboard(){
                                     </div>
                                     <div className='flex flex-col w-[50%]'>
                                         <label htmlFor="bec_id" className="block mb-2 text-sm font-medium capitalize">BEC name</label>
-                                        <select name="bec_id" id="bec_id" value={bec_id} className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required disabled={becList.length==0||brgy_id==0} onChange={(e:any)=>{setBEC_id(e.target.value)}}>
+                                        <select name="bec_id" id="bec_id" value={bec_id} className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required disabled={becList.length==0||brgy_id==0} onChange={(e:any)=>{setBEC_data_id(e)}}>
                                             {becList.length==0?<option value="" disabled selected>No BEC Name for this Barangay</option>:""}
                                             {becList.length!=0?<option value="0">All</option>:""}
                                             {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id}>{bec.bec_name}</option>)})}
@@ -153,8 +204,45 @@ export default function Dashboard(){
                                     </div>
                                 </div>
                             </div> 
-                            <div className='w-full mt-3'>
-                                <div className='w-full h-[60vh] bg-white p-5 rounded-lg'>
+                            <div className='w-full mt-3 flex flex-row gap-x-3 h-[70vh]'>
+                                <div className='flex flex-col w-[30%] gap-y-2'>
+                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[70%] flex flex-col'>
+                                            <div className='text-2xl font-bold'>Population</div>
+                                            <div className='text-2xl'>{dataGraph[0]}</div>
+                                        </div>
+                                    </div>
+                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[70%] flex flex-col'>
+                                            <div className='text-2xl font-bold'>Roman Catholic</div>
+                                            <div className='text-2xl'>{dataGraph[1]}</div>
+                                        </div>
+                                    </div>
+                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[70%] flex flex-col'>
+                                            <div className='text-2xl font-bold'>Baptized</div>
+                                            <div className='text-2xl'>{dataGraph[2]}</div>
+                                        </div>
+                                    </div>
+                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[70%] flex flex-col'>
+                                            <div className='text-2xl font-bold'>Confirmation</div>
+                                            <div className='text-2xl'>{dataGraph[3]}</div>
+                                        </div>
+                                    </div>
+                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[70%] flex flex-col'>
+                                            <div className='text-2xl font-bold'>Married</div>
+                                            <div className='text-2xl'>{dataGraph[4]}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='w-[70%] h-[100%] bg-white p-5 rounded-lg'>
                                     <canvas ref={chartRef}></canvas>
                                 </div>
                             </div>
