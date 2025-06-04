@@ -1,7 +1,16 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": ["dom", "es2015"],
+    "jsx": "react-jsx", // For React 17+ and JSX transform
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "module": "esnext",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "src/**/*"
   ]
 }

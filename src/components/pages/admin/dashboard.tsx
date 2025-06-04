@@ -2,9 +2,10 @@
 import MyAppNav from './adminNav'
 import AdminHeader from './adminHeader'
 import axios from 'axios'
-import { userData, api_link } from '../../../api_link'
+import { userData, api_link, socket_link } from '../../../api_link'
 import { useEffect, useState, useRef } from 'react';
 import Chart from 'chart.js/auto';
+
 export default function Dashboard(){
     const chartRef = useRef<HTMLCanvasElement | null>(null)
     const chartInstanceRef = useRef<Chart | null>(null);
@@ -13,6 +14,7 @@ export default function Dashboard(){
     const [becList, setBecList] = useState([]);
     const [bec_id, setBEC_id] = useState(0)
     const [brgy_id, setBrgy_id] = useState(0)
+
     const getBarangayList = async ()=>{
         const token = userData().token
         try {
@@ -74,7 +76,6 @@ export default function Dashboard(){
                     "authorization" : `bearer ${token}`,
                 }
             })
-            console.log(bec_data_id, brgy_data_id)
             filterData(res.data, bec_data_id, brgy_data_id)
         } catch (error) {
             console.log(error)

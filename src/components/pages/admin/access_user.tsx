@@ -6,14 +6,17 @@ import { MdOutlineCancel  } from "react-icons/md";
 import { useEffect, useState } from 'react'
 import { IconContext } from "react-icons";
 import DataTable from 'react-data-table-component';
-import { userData, api_link } from '../../../api_link';
+import { userData, api_link, socket_link } from '../../../api_link';
 import axios from 'axios';
 import moment from 'moment';
 import { BounceLoader } from 'react-spinners';
 import Swal from 'sweetalert2';
+import React from 'react';
+import { Socket, io as socketIoClient } from 'socket.io-client';
 
 
 export default function Access_user(){
+    const [socket, setSocket] = useState<Socket | null>(null);
     const [isShowAddForm, setAddFormShow] = useState(false)
     const [users, setUser] = useState([]);
     const [allData, setAllData] = useState([])
@@ -77,6 +80,12 @@ export default function Access_user(){
 
     useEffect(()=>{
         getData()
+        var newSocket = socketIoClient(socket_link())
+        newSocket.on("receive-message", data=>{
+            if(data.message){
+                getData()
+            }
+        })
     },[])
 
 
@@ -87,7 +96,9 @@ export default function Access_user(){
 
     const handleSearch = (e: any)=>{
         let query = e.target.value;
-        const searchRes = allData.filter((item: any)=>item.NAME.toLocaleLowerCase().includes(query.toLocaleLowerCase()))
+        const searchRes = allData.filter((item: any)=>{
+            return item["NAME"]["props"]["children"].toLocaleLowerCase().includes(query.toLocaleLowerCase())
+        })
         setUser(searchRes)
     }
 
@@ -156,7 +167,13 @@ const AddContent: React.FC<IProps> = (props)=> {
     const loginData = async (e: React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        const formValues = Object.fromEntries(formData)
+        const formValues = {
+            firstname: formData.get('firstname'),
+            lastname: formData.get('lastname'),
+            role: formData.get('role'),
+            username: formData.get('username'),
+            password: formData.get('password')
+        };
         const token = userData().token
         setLoading(true)
         props.setLoading()
@@ -211,7 +228,7 @@ const AddContent: React.FC<IProps> = (props)=> {
                 <form className="px-8 pt-6 pb-8 mb-4" onSubmit={loginData}>
                     <div className="mb-4 flex flex-col bg-white px-2 text-black rounded-md gap-y-2">
                         <div className='flex flex-col w-full'>
-                            <label htmlFor="firstname" className="block mb-2 text-sm font-medium ">Firstname</label>
+                            <label htmlFor="d" className="block mb-2 text-sm font-medium ">Firstname</label>
                             <input name="firstname" value={firstname} onChange={(e) => setFirstname(e.target.value)} type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Firstname" required />
                         </div>
 
@@ -365,3 +382,5 @@ const EditForm: React.FC<EditUSerData> = (content) =>{
         </>
     )
 }
+
+

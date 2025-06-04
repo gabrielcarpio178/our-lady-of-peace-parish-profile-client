@@ -4,8 +4,9 @@ import { FaClock, FaFolderOpen, FaUsers, FaFile, FaWpforms, FaChevronRight , FaC
 import { IoLogOut } from "react-icons/io5";
 import { IconContext } from "react-icons";
 import { useState, type JSX } from "react";
-import {api_link} from "../../../api_link"
+import {api_link, socket_link as socket_link_data} from "../../../api_link"
 import axios from "axios";
+import { Socket, io as socketIoClient } from 'socket.io-client';
 
 
 type nav = {
@@ -68,11 +69,16 @@ const MASTER_LIST = [
 
 export default function MyAppNav() {
     const API_LINK = api_link()
+    const SOCKET_LINK = socket_link_data()
     axios.defaults.withCredentials = true;
-
+    
     const logout = async () => {
         await axios.get(`${API_LINK}/logout`)
         localStorage.removeItem("user")
+        var newSocket = socketIoClient(SOCKET_LINK)
+        newSocket.emit("thereIsLogined", {
+            message: true
+        })
         window.location.href = '/';
     }
 
@@ -171,3 +177,7 @@ function Navigation(props: navCard){
         </>
     )
 }
+function socket_link(): Partial<import("socket.io-client").ManagerOptions & import("socket.io-client").SocketOptions> | undefined {
+    throw new Error("Function not implemented.");
+}
+

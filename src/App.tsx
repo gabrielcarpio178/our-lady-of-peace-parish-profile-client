@@ -9,11 +9,14 @@ import SurveyForm from './components/pages/admin/surveyForm'
 import Household from './components/pages/admin/household'
 import EditSurveyForm from './components/pages/admin/editHouseholdform'
 import Records from './components/pages/admin/records'
+import { SocketProvider } from './util/socketContext'
+
+
 function App() {
   
-
   return (
     <>
+    <SocketProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -29,7 +32,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-      
+    </SocketProvider>
     </>
   )
 }

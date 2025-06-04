@@ -3,10 +3,12 @@ import churchImg from'./../../assets/image/church-image.png';
 import { FaUser, FaEye  } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import ourLadyOfPeace from'./../../assets/image/our-lady-of-peace.png';
-import {api_link} from "../../api_link"
+import {api_link, socket_link as socket_linkData} from "../../api_link"
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BounceLoader } from 'react-spinners';
+import React from 'react';
+import { Socket, io as socketIoClient } from 'socket.io-client';
 
 export default function Login(){
     const API_LINK = api_link()
@@ -29,10 +31,15 @@ export default function Login(){
         
         try {
             const res = await axios.post(`${API_LINK}/loginUser`, formValues);
+            
             if(res.data.msg!=="logined"){
                 setResult(res.data.msg);
             }else{
                 localStorage.setItem("user", JSON.stringify(res.data))
+                var newSocket = socketIoClient(socket_linkData())
+                newSocket.emit("thereIsLogined", {
+                    message: true
+                })
                 if(res.data.user.rule==="admin"){
                     window.location.href = '/admin/dashboard';
                 }
@@ -116,4 +123,8 @@ export default function Login(){
             </div>
         </>
     )
+}
+
+function socket_link(): Partial<import("socket.io-client").ManagerOptions & import("socket.io-client").SocketOptions> | undefined {
+    throw new Error('Function not implemented.');
 }
