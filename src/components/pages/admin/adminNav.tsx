@@ -1,10 +1,10 @@
 import { NavLink } from "react-router";
 import ourLadyOfPeace from'./../../../assets/image/our-lady-of-peace-full.png';
 import { FaClock, FaFolderOpen, FaUsers, FaFile, FaWpforms, FaChevronRight , FaChevronDown  } from "react-icons/fa";
-import { IoLogOut } from "react-icons/io5";
+import { IoLogOut, IoSettings } from "react-icons/io5";
 import { IconContext } from "react-icons";
-import { useState, type JSX } from "react";
-import {api_link, socket_link as socket_link_data} from "../../../api_link"
+import { useEffect, useState, type JSX } from "react";
+import {api_link, socket_link as socket_link_data, userData} from "../../../api_link"
 import axios from "axios";
 import { Socket, io as socketIoClient } from 'socket.io-client';
 
@@ -19,30 +19,36 @@ type nav = {
 const NAVIGATIONDATA = [
     {
         id: 1,
-        link: '/admin/dashboard',
+        link: '/dashboard',
         name: 'Dashboard',
         icon: <FaClock/>,
     },
     {  
         id: 2,
-        link: '/admin/master_list',
+        link: '/master_list',
         name: 'Master List',
         icon: <FaFolderOpen/>,
     },
     {
         id: 3,
-        link: '/admin/access_users',
+        link: '/access_users',
         name: 'Access Users',
         icon: <FaUsers/>,
     },
     {
         id: 4,
-        link: '/admin/records',
+        link: '/records',
         name: 'Records',
         icon: <FaFile/>,
     },
     {
         id: 5,
+        link: '/settings',
+        name: 'Settings',
+        icon: <IoSettings />,
+    },
+    {
+        id: 6,
         link: '/survey_form',
         name: 'Survey form',
         icon: <FaWpforms/>,
@@ -53,13 +59,13 @@ const NAVIGATIONDATA = [
 const MASTER_LIST = [
     {
         id: 1,
-        link: '/admin/barangay',
+        link: '/barangay',
         name: 'Barangay',
         
     },
     {
         id: 2,
-        link: '/admin/household',
+        link: '/household',
         name: 'Households',
     },
 ]
@@ -68,6 +74,7 @@ const MASTER_LIST = [
 
 
 export default function MyAppNav() {
+    const [role, setrole] = useState("loading..")
     const API_LINK = api_link()
     const SOCKET_LINK = socket_link_data()
     axios.defaults.withCredentials = true;
@@ -82,6 +89,15 @@ export default function MyAppNav() {
         window.location.href = '/';
     }
 
+    const userRole = ()=>{
+        const user = userData()
+        setrole(user.user.rule==="admin"?"admin":"encoder")
+    }
+
+    useEffect(()=>{
+        userRole()
+    },[])
+
     return (
         <>
             <div className="w-[20%] h-screen bg-[#001656] flex flex-col relative">
@@ -90,8 +106,8 @@ export default function MyAppNav() {
                         <div className="w-[25%]">
                             <img src={ourLadyOfPeace} alt="Our Lady Of Peace" />
                         </div>
-                        <header className="text-white text-2xl">
-                            Admin
+                        <header className="text-white text-2xl capitalize">
+                            {role}
                         </header>
                     </div>
                     <div className="mt-5">

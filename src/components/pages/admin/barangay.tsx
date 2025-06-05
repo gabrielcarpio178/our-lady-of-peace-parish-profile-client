@@ -215,19 +215,23 @@ export default function Baranagay(){
                                     <h2 className='text-2xl text-black opacity-[50%]'>
                                         List of Barangay
                                     </h2>
-                                    <p>La Carlota consists of <span>{numberOfbrgy}</span> barangay: <span className='cursor-pointer text-blue-600 underline' onClick={showBarangayTableFun}>Show Barangay</span></p>
+                                    <p>La Carlota consists of <span>{numberOfbrgy}</span> barangay 
+                                    {userData().user.rule==="admin"&&<span className='cursor-pointer text-blue-600 underline' onClick={showBarangayTableFun}>Show Barangay</span>}
+                                    </p>
                                 </div>
                                 <div>
-                                    <button onClick={()=>setShowAddFormBEC(!isShowAddFormBEC)} type="button" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 flex gap-x-2">
-                                    <span>
-                                        <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
-                                            <div>
-                                                <FaPlus />
-                                            </div>
-                                        </IconContext.Provider>   
-                                    </span>
-                                        Add BEC
-                                    </button>
+                                    {userData().user.rule==="admin"&&
+                                        <button onClick={()=>setShowAddFormBEC(!isShowAddFormBEC)} type="button" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 flex gap-x-2">
+                                        <span>
+                                            <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
+                                                <div>
+                                                    <FaPlus />
+                                                </div>
+                                            </IconContext.Provider>   
+                                        </span>
+                                            Add BEC
+                                        </button>
+                                    }
                                 </div>
                             </div>
                             <div className='mt-10'>
@@ -263,6 +267,7 @@ const AddBECForm:React.FC<AddBECFormData> = (props)=>{
         setLoading();
         const formData = new FormData(e.currentTarget)
         const formValues = Object.fromEntries(formData)
+
         const token = userData().token
         try {
             await axios.post(`${api_link()}/addbec`,formValues, 
@@ -338,7 +343,6 @@ const AddBECForm:React.FC<AddBECFormData> = (props)=>{
                                     <label htmlFor="catholic" className="block mb-2 text-sm font-medium text-black">Number of Catholic</label>
                                     <input name="catholic" type="number" id="catholic" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500" placeholder="Number of Catholic" required />
                                 </div>
-    
                                 <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full mt-4">{"Submit"}</button>
                             </div>
                         </div>
@@ -510,7 +514,9 @@ const ViewBECData:React.FC<ViewData> = (props)=>{
                                 </div>
                             </div>
                         </div>
-                        <button className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full mt-4" onClick={()=>getData({bec_id: data.id, population: data.population, no_catholic: data.total_catholic, bec_name:data.bec_name, barangay_name: data.barangay_name})}>Edit</button>
+                        {userData().user.rule==="admin"&&
+                            <button className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full mt-4" onClick={()=>getData({bec_id: data.id, population: data.population, no_catholic: data.total_catholic, bec_name:data.bec_name, barangay_name: data.barangay_name})}>Edit</button>
+                        }
                     </div>
                 </div>    
             </div>        

@@ -35,14 +35,13 @@ export default function Login(){
             if(res.data.msg!=="logined"){
                 setResult(res.data.msg);
             }else{
-                localStorage.setItem("user", JSON.stringify(res.data))
+                localStorage.setItem("user", JSON.stringify(res.data.user))
+                localStorage.setItem("token", res.data.token)
                 var newSocket = socketIoClient(socket_linkData())
                 newSocket.emit("thereIsLogined", {
                     message: true
                 })
-                if(res.data.user.rule==="admin"){
-                    window.location.href = '/admin/dashboard';
-                }
+                window.location.href = '/dashboard';
             }
         } catch (error) {
             console.log(error)

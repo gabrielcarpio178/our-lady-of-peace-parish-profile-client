@@ -1,0 +1,156 @@
+
+    import MyAppNav from './adminNav'
+    import AdminHeader from './adminHeader'
+    import { useEffect, useState } from 'react';
+    import axios from 'axios';
+    import { userData, api_link } from '../../../api_link';
+    import React from 'react';
+    import Swal from 'sweetalert2';
+
+    export default function Settings(){
+
+        const [firstname, setfirstname] = useState("")
+        const [lastname, setlastname] = useState("")
+        const [username, setusername] = useState("")
+        const [message, setmessage] = useState("")
+
+
+        async function getData(){
+            const token = userData().token
+            const user = userData().user
+            try {
+                var res = await axios.get(`${api_link()}/getUser`,{
+                    headers:{
+                        'Content-type':'application/x-www-form-urlencoded',
+                        "authorization" : `bearer ${token}`,
+                    }
+                })
+                const dataUser = res.data.filter((data: any)=>{return (data.id==user.id)})[0]
+                setfirstname(dataUser.firstname)
+                setlastname(dataUser.lastname)
+                setusername(dataUser.username)
+            } catch (error) {
+                console.log(error)
+            }
+            
+        }
+
+
+        const submitData = async (e: React.FormEvent<HTMLFormElement>) =>{
+            e.preventDefault()
+            const {token ,user} = userData()
+            const formData = new FormData(e.currentTarget)
+            const formValues = {
+                firstname: formData.get('firstname'),
+                lastname: formData.get('lastname'),
+                username: formData.get('username'),
+                old_password: formData.get('old_password'),
+                new_password: formData.get('new_password')
+            }
+            try {
+                const token = userData().token;
+                const res = await axios.put(`${api_link()}/editUserData`, formValues, {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                if(res.data.msg === "invalid old password"){
+                    Swal.fire({
+                        position: "center",
+                        title: `Invalid Old Password`,
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    })
+                    setmessage("Invalid Old Password")
+                }else if(res.data.msg=== "update success"){
+                    const updatedUserInfo = {
+                        ...user,
+                        firstname: formValues.firstname,
+                        lastname: formValues.lastname,
+                        username: formValues.username,
+                    };
+                    localStorage.setItem("user", JSON.stringify(updatedUserInfo));
+                    Swal.fire({
+                        position: "center",
+                        title: `Update Success`,
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    }).then(()=>{
+                        window.location.reload()
+                    })
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        useEffect(()=>{
+            getData()
+        },[])
+
+
+        return (
+            <>
+                <div className="flex flex-row">
+                    <MyAppNav/>
+                    {/* add this to a file content */}
+                    <div className='w-[80%] h-screen bg-[#86ACE2] text-white'>
+                        {/* content here */}
+                        <div className='flex flex-col w-full h-full'>
+                            <div className='w-full h-[12.7%] flex flex-row'>
+                                <AdminHeader/>
+                            </div>
+                            <div className='w-full h-[87.3%] flex flex-col px-10'>
+                                <div className='w-full flex flex-row justify-between'>
+                                    <h2 className='text-2xl text-black opacity-[50%]'>
+                                        Settings
+                                    </h2>
+                                </div>  
+                                <form className="px-8 pt-6 pb-8 mb-4 flex items-center justify-center" onSubmit={submitData}>
+                                    <div className="flex flex-col bg-white p-4 text-black rounded-md gap-y-2 m-10 w-[50%]">
+                                        <div className='flex flex-col w-full'>
+                                            <label htmlFor="d" className="block mb-2 text-sm font-medium ">Firstname</label>
+                                            <input name="firstname" type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Firstname" value={firstname} onChange={(e)=>setfirstname(e.target.value)} required />
+                                        </div>
+
+                                        <div className='flex flex-col w-full'>
+                                            <label htmlFor="lastname" className="block mb-2 text-sm font-medium ">Lastname</label>
+                                            <input name="lastname" type="text" id="lastname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Lastname" required value={lastname} onChange={(e)=>setlastname(e.target.value)}/>
+                                        </div>
+
+                                        <div className='flex flex-col w-full'>
+                                            <label htmlFor="username" className="block mb-2 text-sm font-medium ">Username</label>
+                                            <input name="username" type="text" id="username" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Username" required value={username} onChange={(e)=>setusername(e.target.value)} />
+                                        </div>
+
+                                        <div className='flex flex-col w-full text-sm text-red-800 capitalize'>
+                                            {message}
+                                        </div>
+
+                                        <div className='flex flex-col w-full'>
+                                            <label htmlFor="old_password" className="block mb-2 text-sm font-medium ">Old Password</label>
+                                            <input name="old_password" type="password" id="old_password" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Old Password" required onChange={()=>setmessage("")}/>
+                                        </div>
+                                        
+                                        <div className='flex flex-col w-full'>
+                                            <label htmlFor="new_password" className="block mb-2 text-sm font-medium ">New Password</label>
+                                            <input name="new_password" type="password" id="new_password" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="New Password" required/>
+                                        </div>
+                                        <div className='flex flex-col w-full mt-2.5'>
+
+                                            <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full">{"Submit"}</button>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </>
+        )
+    }

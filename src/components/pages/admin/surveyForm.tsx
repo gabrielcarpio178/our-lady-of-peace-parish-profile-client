@@ -59,27 +59,39 @@ export default function SurveyForm(){
 
     const addHousehold = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoading(!isLoading)
+        setLoading(true)
         const formData = new FormData(e.currentTarget)
         const formValues = Object.fromEntries(formData)
         const token = userData().token
         try {
-            await axios.post(`${api_link()}/addHousehold`, formValues, {
+            const res = await axios.post(`${api_link()}/addHousehold`, formValues, {
             headers:{
                 'Content-type':'application/x-www-form-urlencoded',
                 "authorization" : `bearer ${token}`,
             }
         })
-        Swal.fire({
-            position: "center",
-            title: `Add Success`,
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1000,
-        }).then(()=>{
-            setLoading(!isLoading)
-            window.location.reload()
-        })
+        if(res.data.msg=="bec_id is not found"){
+            Swal.fire({
+                position: "center",
+                title: `Add BEC Name`,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 1000,
+            })
+            setLoading(false)
+        }else{
+            Swal.fire({
+                position: "center",
+                title: `Add Success`,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1000,
+            }).then(()=>{
+                setLoading(!isLoading)
+                window.location.reload()
+            })
+        }
+        
         } catch (error) {
             console.log(error)
         }
@@ -256,7 +268,7 @@ export default function SurveyForm(){
                                                 </div>  
                                             </div>
                                         </div>       
-                                        <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800" disabled={!bec}>{"Submit"}</button>
+                                        <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">{"Submit"}</button>
                                     </form>
                                 </div>
                             </div>

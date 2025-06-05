@@ -29,7 +29,15 @@ export default function Records(){
                         "authorization" : `bearer ${token}`,
                     }
                 })
-                const datas = res.data.map((data: any)=>{
+
+                console.log(res.data)
+
+                const filteredData = res.data.filter((data: any) => {
+                    if (userData().user.rule === "admin") return true; 
+                    return data.userAdd_id === userData().user.id; 
+                });
+
+                const datas = filteredData.map((data: any)=>{
                     return {
                         "DATE": moment(data.addDate).format("MMMM DD, YYYY"),
                         "USER": <div className='capitalize'>{`${data.firstname} ${data.lastname}`}</div>,

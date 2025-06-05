@@ -5,6 +5,9 @@ import axios from 'axios'
 import { userData, api_link, socket_link } from '../../../api_link'
 import { useEffect, useState, useRef } from 'react';
 import Chart from 'chart.js/auto';
+import { IconContext } from 'react-icons';
+import { FaPeopleGroup } from 'react-icons/fa6';
+import { FaCross, FaChild, FaCheckCircle, FaUserFriends } from 'react-icons/fa';
 
 export default function Dashboard(){
     const chartRef = useRef<HTMLCanvasElement | null>(null)
@@ -208,35 +211,56 @@ export default function Dashboard(){
                             <div className='w-full mt-3 flex flex-row gap-x-3 h-[70vh]'>
                                 <div className='flex flex-col w-[30%] gap-y-2'>
                                     <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
+                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
+                                                <FaPeopleGroup/>                        
+                                            </IconContext.Provider>
+                                        </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Population</div>
                                             <div className='text-2xl'>{dataGraph[0]}</div>
                                         </div>
                                     </div>
                                     <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
+                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
+                                                <FaCross/>                           
+                                            </IconContext.Provider>  
+                                        </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Roman Catholic</div>
                                             <div className='text-2xl'>{dataGraph[1]}</div>
                                         </div>
                                     </div>
                                     <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
+                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
+                                                <FaChild  />                           
+                                            </IconContext.Provider>  
+                                            
+                                        </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Baptized</div>
                                             <div className='text-2xl'>{dataGraph[2]}</div>
                                         </div>
                                     </div>
                                     <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
+                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
+                                                <FaCheckCircle />                           
+                                            </IconContext.Provider>  
+                                        </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Confirmation</div>
                                             <div className='text-2xl'>{dataGraph[3]}</div>
                                         </div>
                                     </div>
                                     <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] border border-white'></div>
+                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
+                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
+                                                <FaUserFriends />                           
+                                            </IconContext.Provider>  
+                                        </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Married</div>
                                             <div className='text-2xl'>{dataGraph[4]}</div>

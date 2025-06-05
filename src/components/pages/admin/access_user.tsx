@@ -16,7 +16,6 @@ import { Socket, io as socketIoClient } from 'socket.io-client';
 
 
 export default function Access_user(){
-    const [socket, setSocket] = useState<Socket | null>(null);
     const [isShowAddForm, setAddFormShow] = useState(false)
     const [users, setUser] = useState([]);
     const [allData, setAllData] = useState([])
@@ -30,6 +29,7 @@ export default function Access_user(){
                                                 password: ""
                                             })
     const [isLoading, setLoading] = useState(false)
+
     const myFunction = () => {
         setAddFormShow(!isShowAddForm)
     };
@@ -38,17 +38,25 @@ export default function Access_user(){
         setShowEditForm(!isShowEditForm)
     }
 
-    const columns = [
+    const baseColumns = [
         { name: "NAME", selector: (row: any) => row.NAME, sortable: true },
         { name: "USERNAME", selector: (row: any) => row.USERNAME, sortable: true },
         { name: "ROLE", selector: (row: any) => row.ROLE },
         { name: "STATUS", selector: (row: any) => row.STATUS },
         { name: "DATE", selector: (row: any) => row.DATE, sortable: true },
-        { name: "ACTION", selector: (row: any)=> row.ACTION, style: { alignText: "center" }}
-    ] 
+    ];
+
+    const actionColumn = {
+        name: "ACTION",
+        selector: (row: any) => row.ACTION,
+        style: { alignText: "center" }
+    };
+
+    const columns = userData().user.rule==="admin" ? [...baseColumns, actionColumn] : baseColumns;
 
     async function getData(){
         const token = userData().token
+        const userInfo = userData().user
         try {
             var res = await axios.get(`${api_link()}/getUser`,{
                 headers:{
@@ -56,7 +64,12 @@ export default function Access_user(){
                     "authorization" : `bearer ${token}`,
                 }
             })
-            const result = res.data.map((user: any)=>{
+
+            const filterData = res.data.filter((user: any)=>{
+                return (user.id!==userInfo.id)
+            })
+
+            const result = filterData.map((user: any)=>{
                 return {
                             NAME: <div className='capitalize'>{user.firstname+" "+user.lastname}</div>,
                             USERNAME: user.username, 
@@ -128,12 +141,13 @@ export default function Access_user(){
                             <h2 className='text-2xl text-black opacity-[50%]'>
                                 List of Users
                             </h2>
+                            {userData().user.rule==="admin"&&
                             <div className='flex flex-col w-full'>
                                 <div className='flex flex-row items-center justify-end py-1'>
                                     <button type="button" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 flex flex-row items-center gap-x-1 cursor-pointer" onClick={()=>setAddFormShow(!isShowAddForm)}><FaPlus/> Add</button>
                                 </div>
-                            </div>
-                            <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3'>
+                            </div>}
+                            <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3 mt-4'>
                                 <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search Name:</label>
                                 <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                             </div>
@@ -202,7 +216,7 @@ const AddContent: React.FC<IProps> = (props)=> {
 
     return (
         <>
-        <div className='absolute w-full h-full flex items-center justify-center text-white z-1'>
+        <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50'>
             <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded">
                 <div className='relative'>
                     <div className='flex flex-row p-3 gap-x-3'>
