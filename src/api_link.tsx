@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 
 export function api_link(){
-    return "http://localhost:8080/auth";
+    return "https://our-lady-of-peace-parish-profile-backend.onrender.com/auth";
 };
 
 export function socket_link()
 {
-    return "http://localhost:8080";
+    return "https://our-lady-of-peace-parish-profile-backend.onrender.com/";
 }
 export function userData(){
     try {
