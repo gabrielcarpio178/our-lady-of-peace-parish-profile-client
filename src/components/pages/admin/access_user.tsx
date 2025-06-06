@@ -118,7 +118,7 @@ export default function Access_user(){
 
     return (
         <>
-            <div className="flex flex-row">
+            <div className="flex md:flex-row flex-col">
                 <MyAppNav/>
                 {isLoading&&
                 <div className='absolute bg-black/50 z-40 w-full h-full'>
@@ -131,7 +131,7 @@ export default function Access_user(){
                 {isShowAddForm&&<AddContent onClick={myFunction} refreshUserList={getData} setLoading={()=>setLoading(!isLoading)}/>}
                 {isShowEditForm&&<EditForm user={editUser} onClick={editFormShowfun} setLoading={()=>setLoading(!isLoading)}/>}
                 {/* add this to a file content */}
-                <div className='w-[80%] h-screen bg-[#86ACE2] text-white'>
+                <div className='md:w-[80%] h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
                     {/* content here */}
                     <div className='flex flex-col w-full h-full'>
                         <div className='w-full h-[12.7%] flex flex-row'>
@@ -217,7 +217,7 @@ const AddContent: React.FC<IProps> = (props)=> {
     return (
         <>
         <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50'>
-            <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded">
+            <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3">
                 <div className='relative'>
                     <div className='flex flex-row p-3 gap-x-3'>
                         <IconContext.Provider value={{ color: "white", size: "1.5em" }}>

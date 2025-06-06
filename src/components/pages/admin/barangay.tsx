@@ -188,7 +188,7 @@ export default function Baranagay(){
     return (
         <>
             
-            <div className="flex flex-row">
+            <div className="flex md:flex-row flex-col">
                 <MyAppNav/>
                 {isLoading&&
                 <div className='absolute bg-black/50 z-40 w-full h-full'>
@@ -203,7 +203,7 @@ export default function Baranagay(){
                 {isViewBEC&&<ViewBECData data={viewBECData} onClose={()=>setViewBEC(!isViewBEC)} setLoading={()=>setLoading(!isLoading)}/>}
                 
                 {/* add this to a file content */}
-                <div className='w-[80%] h-screen bg-[#86ACE2] text-white'>
+                <div className='md:w-[80%] md:h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
                     {/* content here */}
                     <div className='flex flex-col w-full h-full'>
                         <div className='w-full h-[12.7%] flex flex-row'>
@@ -221,7 +221,7 @@ export default function Baranagay(){
                                 </div>
                                 <div>
                                     {userData().user.rule==="admin"&&
-                                        <button onClick={()=>setShowAddFormBEC(!isShowAddFormBEC)} type="button" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 flex gap-x-2">
+                                        <button onClick={()=>setShowAddFormBEC(!isShowAddFormBEC)} type="button" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 flex gap-x-2 items-center">
                                         <span>
                                             <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                                                 <div>
@@ -266,35 +266,62 @@ const AddBECForm:React.FC<AddBECFormData> = (props)=>{
         e.preventDefault()
         setLoading();
         const formData = new FormData(e.currentTarget)
-        const formValues = Object.fromEntries(formData)
+    
+        const formValues = {
+            barangay_id: formData.get("barangay_id"),
+            bec_name: formData.get("bec_name"),
+            catholic: formData.get("catholic"),
+            population: formData.get("population")
+        }
 
         const token = userData().token
         try {
-            await axios.post(`${api_link()}/addbec`,formValues, 
+            const res = await axios.post(`${api_link()}/addbec`,formValues, 
             {
                 headers:{
                 'Content-type':'application/x-www-form-urlencoded',
                 "authorization" : `bearer ${token}`,
             }
             })
-        Swal.fire({
-            position: "center",
-            title: `Add Success`,
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1000,
-        }).then(()=>{
-            setLoading();
-            window.location.reload()
-        })
+            if(res.status===200){
+                Swal.fire({
+                    position: "center",
+                    title: `Add Success`,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1000,
+                }).then(()=>{
+                    setLoading();
+                    window.location.reload()
+                })
+            }else{
+                Swal.fire({
+                    position: "center",
+                    title: "Somethings want wrong",
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 1000,
+                }).then(()=>{
+                    setLoading();
+                })
+            }
         } catch (error) {
+            Swal.fire({
+                position: "center",
+                title: "Somethings want wrong",
+                icon: "error",
+                showConfirmButton: false,
+                timer: 1000,
+            }).then(()=>{
+                setLoading();
+            })
             console.log(error)
         }
     }
     return(
         <>
             <div className='absolute w-full h-full flex items-center justify-center text-white z-2 bg-black/50'>
-                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded">
+                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3">
                     <div className='relative'>
                         <div className='flex flex-row p-3 gap-x-3'> 
                             <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
@@ -394,7 +421,6 @@ const ViewBECData:React.FC<ViewData> = (props)=>{
         setEditBECForm(!isEditBECForm)
         setDataEdit(getData)
     }
-    console.log(data)
     return (
         <>
             <div className='absolute w-full h-full flex items-center justify-center text-white z-2 bg-black/50'>
@@ -544,12 +570,17 @@ const EditBECFormData: React.FC<Data> = (props) => {
     const editData = async (e: React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        var formValues = Object.fromEntries(formData)
+        var formValues = {
+            bec_name: formData.get("bec_name"),
+            catholic: formData.get("catholic"),
+            population: formData.get("population"),
+            bec_id: ""
+        }
         formValues.bec_id = data.bec_id.toString()
         const token = userData().token
         setLoading()
         try {
-            await axios.put(`${api_link()}/editBec`,
+            const res = await axios.put(`${api_link()}/editBec`,
                 formValues,
                 {
                     headers:{
@@ -558,18 +589,39 @@ const EditBECFormData: React.FC<Data> = (props) => {
                     }
                 }
             );
+            if(res.status===200){
+                Swal.fire({
+                    position: "center",
+                    title: `Edit Success`,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1000,
+                }).then(()=>{
+                    setLoading()
+                    window.location.reload()
+                })
+            }else{
+                Swal.fire({
+                    position: "center",
+                    title: `Something want wrong`,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 1000,
+                }).then(()=>{
+                    setLoading()
+                })
+            }
+            
+        } catch (error) {
             Swal.fire({
                 position: "center",
-                title: `Edit Success`,
-                icon: "success",
+                title: `Something want wrong`,
+                icon: "error",
                 showConfirmButton: false,
                 timer: 1000,
             }).then(()=>{
                 setLoading()
-                window.location.reload()
             })
-        } catch (error) {
-            console.log(error)
         }
     }
     return (

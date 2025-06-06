@@ -122,7 +122,7 @@ const BarangayTable:React.FC<IProps> = (props)=> {
     return (
         <>
             <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50'>
-                <div className="w-full max-w-lg bg-[#86ACE2] border border-black shadow-lg rounded">
+                <div className="w-full max-w-lg bg-[#86ACE2] border border-black shadow-lg rounded mx-5 md:mx-0">
                     <div className='relative'>
                         {isShowformEdit&&<FormEdit dataObj={editName} onClick={()=>setShowformEdit(!isShowformEdit)} setLoading={()=>props.setLoading()}/>}
                         {isShowformAdd&&<AddForm onClick={()=>setShowformAdd(!isShowformAdd)} setLoading={()=>props.setLoading()}/>}
@@ -182,32 +182,56 @@ const AddForm: React.FC<IAddForm> = (props)=>{
     const addSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        const formValue = Object.fromEntries(formData)
+        const formValue = {
+            barangay: formData.get("barangay")
+        }
         setLoading(true)
         props.setLoading()
         const token = userData().token
         try {
-            await axios.post(`${api_link()}/addBarangay`, formValue, 
+            const res = await axios.post(`${api_link()}/addBarangay`, formValue, 
             {
             headers:{
                 'Content-type':'application/x-www-form-urlencoded',
                 "authorization" : `bearer ${token}`,
             }
         })
-        Swal.fire({
-            position: "center",
-            title: `Add Success`,
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1000,
-        }).then(()=>{
-            setLoading(false)
-            props.setLoading()
-            window.location.reload()
-        })
+        if(res.status===200){
+            Swal.fire({
+                position: "center",
+                title: `Add Success`,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1000,
+            }).then(()=>{
+                window.location.reload()
+            })
+        }else{
+            Swal.fire({
+                position: "center",
+                title: `Something want wrong`,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 1000,
+            }).then(()=>{
+                window.location.reload()
+            })
+        }
+        
         } catch (error) {
+            Swal.fire({
+                position: "center",
+                title: `Something want wrong`,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 1000,
+            }).then(()=>{
+                window.location.reload()
+            })
             console.log(error)
         }
+        setLoading(false)
+        props.setLoading()
     }
     return(
         <>
@@ -227,7 +251,7 @@ const AddForm: React.FC<IAddForm> = (props)=>{
                         <div className="mb-4 flex flex-col mt-5 bg-white p-5 rounded-sm">
                             <div className='flex flex-col w-full'>
                                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-black">Name</label>
-                                <input name="barangay" type="text" id="name" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500" placeholder="Name" required />
+                                <input name="barangay" type="text" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500" placeholder="Name" required />
                             </div>
                             <div className='flex flex-col w-full mt-2.5'>
 

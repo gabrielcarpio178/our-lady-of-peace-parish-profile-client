@@ -61,7 +61,26 @@ export default function SurveyForm(){
         e.preventDefault();
         setLoading(true)
         const formData = new FormData(e.currentTarget)
-        const formValues = Object.fromEntries(formData)
+        const formValues = {
+            baptism: formData.get("baptism"),
+            barangay: formData.get("barangay"),
+            bec_id: formData.get("bec_id"),
+            comment: formData.get("comment"),
+            confirmation: formData.get("confirmation"),
+            family_name: formData.get("family_name"),
+            husband_name: formData.get("husband_name"),
+            living_condition: formData.get("living_condition"),
+            marrige: formData.get("marrige"),
+            mass_attendants: formData.get("mass_attendants"),
+            no_catholic: formData.get("no_catholic"),
+            no_catholic_residence: formData.get("no_catholic_residence"),
+            no_college: formData.get("no_college"),
+            no_high_school: formData.get("no_high_school"),
+            no_professional: formData.get("no_professional"),
+            occupation_husband: formData.get("occupation_husband"),
+            occupation_wife: formData.get("occupation_wife"),
+            wife_name: formData.get("wife_name"),
+        }
         const token = userData().token
         try {
             const res = await axios.post(`${api_link()}/addHousehold`, formValues, {
@@ -101,7 +120,7 @@ export default function SurveyForm(){
 
     return (
         <>
-            <div className="flex flex-row">
+            <div className="flex md:flex-row flex-col">
                     {isLoading&&
                     <div className='absolute bg-black/50 z-40 w-full h-full'>
                         {/* how to make this first layer of the screen */}
@@ -112,7 +131,7 @@ export default function SurveyForm(){
                     } 
                     <MyAppNav/>
                     {/* add this to a file content */}
-                    <div className='w-[80%] h-screen bg-[#86ACE2] text-white'>
+                    <div className='md:w-[80%] h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
                         {/* content here */}
                         <div className='flex flex-col w-full h-full'>
                             <div className='w-full h-[12.7%] flex flex-row'>
@@ -133,7 +152,7 @@ export default function SurveyForm(){
                                                 Basic Information
                                             </h2>
                                             <div className="w-full h-[0.5vh] bg-black opacity-50 mt-2"></div>
-                                            <div className="grid grid-cols-2 mt-2 gap-5">
+                                            <div className="grid md:grid-cols-2 mt-2 gap-5">
                                                 <div className="col-span-2">
                                                     <label htmlFor="family_name" className="block mb-2 text-sm font-medium capitalize">family name</label>
                                                     <input name="family_name" type="text" id="family_name" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-gray-600 placeholder-gray-400 focus:border-blue-500 w-[49%]" required />

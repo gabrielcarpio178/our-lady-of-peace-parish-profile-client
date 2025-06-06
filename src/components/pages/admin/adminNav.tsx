@@ -77,6 +77,7 @@ export default function MyAppNav() {
     const [role, setrole] = useState("loading..")
     const API_LINK = api_link()
     const SOCKET_LINK = socket_link_data()
+    const [isNavBarShow, setIsNavBarShow] = useState(false)
     axios.defaults.withCredentials = true;
     
     const logout = async () => {
@@ -98,19 +99,25 @@ export default function MyAppNav() {
         userRole()
     },[])
 
+
+
+
     return (
         <>
-            <div className="w-[20%] h-screen bg-[#001656] flex flex-col relative">
+            <div className={`md:w-[20%] w-full md:h-screen ${!isNavBarShow?" h-14":"h-screen"} overflow-y-hidden bg-[#001656] flex flex-col md:relative fixed z-1`}>
+                <div className="fixed border border-white w-10 h-10 md:hidden block right-3 top-2" onClick={()=>setIsNavBarShow(!isNavBarShow)}>
+                    
+                </div>
                 <nav className="flex flex-col">
-                    <div className="flex flex-row border-b-3 border-white items-center justify-center py-5 gap-x-2">
-                        <div className="w-[25%]">
+                    <div className="flex flex-row border-b-3 border-white items-center md:justify-center md:py-5 gap-x-2 py-2">
+                        <div className="md:w-[25%] w-[15%]">
                             <img src={ourLadyOfPeace} alt="Our Lady Of Peace" />
                         </div>
                         <header className="text-white text-2xl capitalize">
                             {role}
                         </header>
                     </div>
-                    <div className="mt-5">
+                    <div className="md:mt-5 mt-3">
                         {NAVIGATIONDATA.map(n=>{
                             return (<Navigation id={n.id} key={n.id} name={n.name} link={n.link} icon={n.icon} />)
                         })}
@@ -118,8 +125,8 @@ export default function MyAppNav() {
                 
                 </nav>
 
-                <div className="text-xl text-white border-t-3 border-white absolute bottom-0 w-full h-[15%] flex items-center justify-center pl-10">
-                    <div className="flex flex-row gap-x-5 w-full py-5 px-10 rounded-l-full hover:bg-[#86ACE2] cursor-pointer" onClick={logout}>
+                <div className={`text-xl text-white border-t-3 border-white absolute bottom-0 w-full h-[15%] md:flex items-center justify-center md:pl-10 ${!isNavBarShow?"hidden":""}`}>
+                    <div className="flex flex-row gap-x-5 w-full py-5 px-10 md:rounded-l-full rounded-full hover:bg-[#86ACE2] cursor-pointer mx-2" onClick={logout}>
                         <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                             <IoLogOut/>
                         </IconContext.Provider>  
@@ -135,13 +142,13 @@ export default function MyAppNav() {
 type navCard = nav
 
 function Navigation(props: navCard){
-    const classDeActive = "flex flex-row gap-x-5 ml-10 py-5 px-10 cursor-pointer hover:bg-[#86ACE2] hover:rounded-l-full"
-    const classActive = "flex flex-row gap-x-5 ml-10 py-5 px-10 bg-[#86ACE2] rounded-l-full cursor-pointer"
+    const classDeActive = "flex flex-row gap-x-5 md:ml-10 mx-10 py-5 px-10 cursor-pointer hover:bg-[#86ACE2] md:hover:rounded-l-full hover:rounded-full md:w-full"
+    const classActive = "flex flex-row gap-x-5 md:ml-10 mx-10 py-5 px-10 bg-[#86ACE2] md:rounded-l-full rounded-full cursor-pointer md:w-full"
     const [isShowMasterList, setShowMasterList] = useState(false)
     let navContent;
     const masterListDiv = MASTER_LIST.map((master)=>{
                             return (
-                                <NavLink key={master.id} to={master.link} className={({ isActive }) => isActive ? "py-5 px-10 w-full bg-[#86ACE2] rounded-l-full": "py-5 px-10 w-full rounded-l-full hover:bg-[#86ACE2] hover:rounded-l-full"}>
+                                <NavLink key={master.id} to={master.link} className={({ isActive }) => isActive ? "py-5 px-10 w-full bg-[#86ACE2] md:rounded-l-full rounded-full": "py-5 px-10 w-full rounded-l-full hover:bg-[#86ACE2] hover:rounded-l-full rounded-full"}>
                                     {master.name}
                                 </NavLink>
                             )

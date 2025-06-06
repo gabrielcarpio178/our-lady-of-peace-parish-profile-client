@@ -208,7 +208,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     }
     return(
         <>
-        <div className="flex flex-row">
+        <div className="flex md:flex-row flex-col">
             {isLoading&&
             <div className='absolute bg-black/50 z-40 w-full h-full'>
                 <div  className='flex items-center justify-center w-full h-full'>
@@ -219,7 +219,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             <MyAppNav/>
             {/* add this to a file content */}
             {isTableSettingShow&&<TableSettings onClose={()=>setTableSettiingShow(!isTableSettingShow)} sendDataToHousehold={handleDataFromChild}/>}
-            <div className='w-[80%] h-screen bg-[#86ACE2] text-white'>
+            <div className='md:w-[80%] md:h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
                 {/* content here */}
                 <div className='flex flex-col w-full h-full'>
                     <div className='w-full h-[12.7%] flex flex-row'>
@@ -255,52 +255,54 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                 </div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-3 w-full mt-10 gap-x-4">
-                            <div className="flex flex-row bg-[#001656] rounded-lg p-4 items-center">
-                                <div className="bg-gray-500 rounded-sm p-3">
-                                    <IconContext.Provider value={{ color: "white", size: "3em" }}>
-                                        <RiSurveyFill/>                        
-                                    </IconContext.Provider>  
+                        <div className="flex flex-col-reverse md:flex-col">
+                            <div className="grid md:grid-cols-3 w-full mt-10 gap-4">
+                                <div className="flex flex-row bg-[#001656] rounded-lg p-4 items-center">
+                                    <div className="bg-gray-500 rounded-sm p-3">
+                                        <IconContext.Provider value={{ color: "white", size: "3em" }}>
+                                            <RiSurveyFill/>                        
+                                        </IconContext.Provider>  
+                                    </div>
+                                    <div className="flex flex-col px-3">
+                                        <div className="text-2xl font-bold">Total Encode</div>
+                                        <div className="font-bold text-lg">{numberData.total_encoded}</div>
+                                        <div></div>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col px-3">
-                                    <div className="text-2xl font-bold">Total Encode</div>
-                                    <div className="font-bold text-lg">{numberData.total_encoded}</div>
-                                    <div></div>
+                                <div className="flex flex-row bg-[#001656] rounded-lg p-4 items-center">
+                                    <div className="bg-gray-500 rounded-sm p-3">
+                                        <IconContext.Provider value={{ color: "white", size: "3em" }}>
+                                            <FaCross/>                           
+                                        </IconContext.Provider>  
+                                    </div>
+                                    <div className="flex flex-col px-3">
+                                        <div className="text-2xl font-bold">Total Catholic</div>
+                                        <div className="font-bold text-lg">{numberData.total_catholic}</div>
+                                        <div>Catholic: <span>{numberData.total_encoded_catholic}</span></div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-row bg-[#001656] rounded-lg p-4 items-center">
+                                    <div className="bg-gray-500 rounded-sm p-3">
+                                        <IconContext.Provider value={{ color: "white", size: "3em" }}>
+                                            <FaPeopleGroup/>                        
+                                        </IconContext.Provider>
+                                    </div>
+                                    <div className="flex flex-col px-3">
+                                        <div className="text-2xl font-bold">Total Populations</div>
+                                        <div className="font-bold text-lg">{numberData.total_population}</div>
+                                        <div>Households: <span>{numberData.total_household}</span></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex flex-row bg-[#001656] rounded-lg p-4 items-center">
-                                <div className="bg-gray-500 rounded-sm p-3">
-                                    <IconContext.Provider value={{ color: "white", size: "3em" }}>
-                                        <FaCross/>                           
-                                    </IconContext.Provider>  
+                            <div className="mt-10">
+                                <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3'>
+                                    <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search: </label>
+                                    <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                                 </div>
-                                <div className="flex flex-col px-3">
-                                    <div className="text-2xl font-bold">Total Catholic</div>
-                                    <div className="font-bold text-lg">{numberData.total_catholic}</div>
-                                    <div>Catholic: <span>{numberData.total_encoded_catholic}</span></div>
-                                </div>
-                            </div>
-                            <div className="flex flex-row bg-[#001656] rounded-lg p-4 items-center">
-                                <div className="bg-gray-500 rounded-sm p-3">
-                                    <IconContext.Provider value={{ color: "white", size: "3em" }}>
-                                        <FaPeopleGroup/>                        
-                                    </IconContext.Provider>
-                                </div>
-                                <div className="flex flex-col px-3">
-                                    <div className="text-2xl font-bold">Total Populations</div>
-                                    <div className="font-bold text-lg">{numberData.total_population}</div>
-                                    <div>Households: <span>{numberData.total_household}</span></div>
-                                </div>
+                                <DataTable columns={columns} data={dataTable} pagination paginationPerPage={4} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}/>
                             </div>
                         </div>
-                        <div className="mt-10">
-                            <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3'>
-                                <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search: </label>
-                                <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
-                            </div>
-                            <DataTable columns={columns} data={dataTable} pagination paginationPerPage={4} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}/>
-                        </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -380,7 +382,10 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
     const procced = async (e: React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        const {barangay, bec} = Object.fromEntries(formData)
+        const {barangay, bec} = {
+            barangay: formData.get("barangay"),
+            bec: formData.get("bec")
+        }
         sendDataToHousehold({ barangay: barangay as string, bec: bec as string, barangay_name: barangay_nameData as string, bec_name: bec_nameData as string })
     }
 
@@ -389,8 +394,8 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
     },[])
     return (
         <>
-            <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50'>
-                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded">
+            <div className='md:absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50 fixed'>
+                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded mx-5">
                     <div className='relative'>
                         <div className='flex flex-row p-3 gap-x-3'>
                             <div className='text-xl'>

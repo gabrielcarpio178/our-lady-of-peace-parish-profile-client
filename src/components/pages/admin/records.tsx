@@ -75,21 +75,21 @@ export default function Records(){
     },[])
     return (
         <>
-            <div className="flex flex-row">
+            <div className="flex md:flex-row flex-col">
                 <MyAppNav/>
                 {/* add this to a file content */}
-                <div className='w-[80%] h-screen bg-[#86ACE2] text-white'>
+                <div className='md:w-[80%] h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
                     {/* content here */}
                     <div className='flex flex-col w-full h-full'>
                         <div className='w-full h-[12.7%] flex flex-row'>
                             <AdminHeader/>
                         </div>
                         <div className='w-full h-[87.3%] flex flex-col px-10'>
-                            <div className='w-full flex flex-row justify-between'>
+                            <div className='w-full flex md:flex-row flex-col justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
                                     Records
                                 </h2>
-                                <div className="flex flex-row items-center px-3 bg-[#001656] h-[15vh] gap-x-3 rounded-lg w-[30%]">
+                                <div className="flex flex-row items-center px-3 bg-[#001656] h-[15vh] gap-x-3 rounded-lg md:w-[30%] mt-3 md:mt-0">
                                     <div className='bg-gray-500 rounded-sm p-3'>
                                         <IconContext.Provider value={{ color: "white", size: "3em" }}>
                                             <FaClock/>

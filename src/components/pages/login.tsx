@@ -72,15 +72,15 @@ export default function Login(){
                     </div>
                 </div>
                 
-                <div className="absolute top-0 w-full h-screen py-40 px-64">
+                <div className="absolute top-0 w-full h-screen md:py-40 md:px-64 px-10 py-36">
                     <div className="w-full h-full bg-[#001656] rounded-2xl shadow-blue-500 shadow-2xl flex md:flex-row relative">
-                        <div className="md:w-[55%] md:flex items-center justify-center">
+                        <div className="md:w-[55%] md:flex hidden items-center justify-center">
                             <div className="bg-[#86ACE2] rounded w-[95%] h-[95%] opacity-100">
                                 <img src={churchImg} alt="church" className='h-full w-full'/>
                             </div>
                         </div>
-                        <form className='md:w-[44%] absolute md:static' method="post" onSubmit={loginData}>
-                            <h1 className='text-center p-10 font-serif text-5xl text-white font-light'>
+                        <form className='md:w-[44%] absolute md:static w-full h-full flex flex-col justify-center md:block md:p-0 p-16' method="post" onSubmit={loginData}>
+                            <h1 className='text-center md:p-10 font-serif md:text-5xl text-4xl text-white font-light w-full'>
                                 Welcome
                             </h1>
                             <div className='flex flex-col gap-y-3'>

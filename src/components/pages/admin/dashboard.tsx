@@ -172,23 +172,22 @@ export default function Dashboard(){
 
     return (
         <>
-            <div className="flex flex-row">
+            <div className="flex md:flex-row flex-col">
                 <MyAppNav/>
                 {/* add this to a file content */}
-                <div className='w-[80%] h-screen bg-[#86ACE2] text-white'>
+                <div className='md:w-[80%] md:h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
                     {/* content here */}
                     <div className='flex flex-col w-full h-full'>
                         <div className='w-full h-[12.7%] flex flex-row'>
                             <AdminHeader/>
                         </div>
                         <div className='w-full h-[87.3%] flex flex-col px-10'>
-                            <div className='w-full flex flex-row justify-between'>
+                            <div className='w-full flex md:flex-row flex-col items-center justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
                                     Dashboard
                                 </h2>
                                 {/* data content */}
-                                {/* <div>{`${brgy_id} ${bec_id}`}</div> */}
-                                <div className="flex flex-row text-white p-2 rounded-lg gap-x-2 bg-[#001656] w-[30%]">
+                                <div className="flex flex-row text-white p-2 rounded-lg gap-x-2 bg-[#001656] md:w-[30%] w-full md:mt-0 mt-4">
                                     <div className='flex flex-col w-[50%]'>
                                         <label htmlFor="barangay" className="block mb-2 text-sm font-medium">Barangay</label>
                                         <select name="barangay" value={brgy_id} id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e:any)=>{getBEClist(e.target.value)}}>
@@ -208,8 +207,8 @@ export default function Dashboard(){
                                     </div>
                                 </div>
                             </div> 
-                            <div className='w-full mt-3 flex flex-row gap-x-3 h-[70vh]'>
-                                <div className='flex flex-col w-[30%] gap-y-2'>
+                            <div className='w-full mt-3 flex md:flex-row flex-col-reverse gap-3 md:h-[70vh]'>
+                                <div className='flex flex-col md:w-[30%] gap-2 w-full md:p-0 pb-4'>
                                     <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
                                         <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
                                             <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
@@ -267,7 +266,7 @@ export default function Dashboard(){
                                         </div>
                                     </div>
                                 </div>
-                                <div className='w-[70%] h-[100%] bg-white p-5 rounded-lg'>
+                                <div className='md:w-[70%] h-[100%] bg-white p-5 rounded-lg'>
                                     <canvas ref={chartRef}></canvas>
                                 </div>
                             </div>
