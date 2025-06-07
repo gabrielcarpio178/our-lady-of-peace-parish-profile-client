@@ -39,8 +39,12 @@
         const submitData = async (e: React.FormEvent<HTMLFormElement>) =>{
             e.preventDefault()
             const {token ,user} = userData()
+            const user_id = user.id;
+            const olddb_password = user.password;
             const formData = new FormData(e.currentTarget)
             const formValues = {
+                user_id: user_id,
+                olddb_password: olddb_password,
                 firstname: formData.get('firstname'),
                 lastname: formData.get('lastname'),
                 username: formData.get('username'),
@@ -48,13 +52,13 @@
                 new_password: formData.get('new_password')
             }
             try {
-                const token = userData().token;
                 const res = await axios.put(`${api_link()}/editUserData`, formValues, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                         Authorization: `Bearer ${token}`,
                     },
                 });
+                
                 if(res.data.msg === "invalid old password"){
                     Swal.fire({
                         position: "center",
@@ -70,6 +74,7 @@
                         firstname: formValues.firstname,
                         lastname: formValues.lastname,
                         username: formValues.username,
+                        password: res.data.newPassword
                     };
                     localStorage.setItem("user", JSON.stringify(updatedUserInfo));
                     Swal.fire({

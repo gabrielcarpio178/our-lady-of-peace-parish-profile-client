@@ -60,8 +60,10 @@ export default function SurveyForm(){
     const addHousehold = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true)
+        const user_id = userData().user.id
         const formData = new FormData(e.currentTarget)
         const formValues = {
+            user_id: user_id,
             baptism: formData.get("baptism"),
             barangay: formData.get("barangay"),
             bec_id: formData.get("bec_id"),
