@@ -9,7 +9,7 @@ import SurveyForm from './components/pages/admin/surveyForm'
 import Household from './components/pages/admin/household'
 import EditSurveyForm from './components/pages/admin/editHouseholdform'
 import Records from './components/pages/admin/records'
-import { SocketProvider } from './util/socketContext'
+// import { SocketProvider } from './util/socketContext'
 import Settings from './components/pages/admin/settings'
 
 
@@ -17,24 +17,25 @@ function App() {
   
   return (
     <>
-    <SocketProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route element={<ProtectedRoutes/>}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/access_users" element={<Access_user />} />
-            <Route path="/master_list" element={<Master_list />} />
-            <Route path="/barangay" element={<Baranagay />} />
-            <Route path="/survey_form" element={<SurveyForm />} />
-            <Route path="/household" element={<Household />} />
-            <Route path="/survey_form/:id" element={<EditSurveyForm />} />
-            <Route path='/records' element={<Records/>}></Route>
-            <Route path='/settings' element={<Settings/>}></Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </SocketProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route element={<ProtectedRoutes/>}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/access_users" element={<Access_user />} />
+          <Route path="/master_list" element={<Master_list />} />
+          <Route path="/barangay" element={<Baranagay />} />
+          <Route path="/survey_form" element={<SurveyForm />} />
+          <Route path="/household" element={<Household />} />
+          <Route path="/survey_form/:id" element={<EditSurveyForm />} />
+          <Route path='/records' element={<Records/>}></Route>
+          <Route path='/settings' element={<Settings/>}></Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+    {/* <SocketProvider>
+      
+    </SocketProvider> */}
     </>
   )
 }
