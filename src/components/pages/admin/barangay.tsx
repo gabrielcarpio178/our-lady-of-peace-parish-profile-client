@@ -23,6 +23,7 @@ export default function Baranagay(){
     const [data, setDataHouseHold] = useState([])
     const [allData, setAllData] = useState([])
     const [isViewBEC, setViewBEC] = useState(false)
+    const [isLoadingTable, setIsLoadingTable] = useState(true);
     const [viewBECData, setViewBECData] = useState({
         id: 0,
         barangay_name: "",
@@ -89,6 +90,7 @@ export default function Baranagay(){
 
     const getHousehold = async ()=>{
         const token = userData().token
+        setIsLoadingTable(true)
         try {
             const res = await axios.get(`${api_link()}/getHousehold`,{
                 headers:{
@@ -121,30 +123,30 @@ export default function Baranagay(){
             })
             setDataHouseHold(datas);
             setAllData(datas)
+            setIsLoadingTable(false)
         } catch (error) {
             console.log(error)
         }
     }
-
     const colums = [
-        {name: "VIEW", selector: (row: any)=>row[""], sortable: true},
-        {name: "BARANGAY NAME", selector: (row: any) => row["BARANGAY NAME"], sortable: true},
-        {name: "BEC", selector: (row: any) => row["BEC"], sortable: true},
-        {name: "POPULATION", selector: (row: any) => row["POPULATION"], sortable: true},
-        {name: "HOUSEHOLD", selector: (row: any) => row["HOUSEHOLD"], sortable: true},
-        {name: "CATHOLIC RESIDINCES", selector: (row: any) => row["CATHOLIC RESIDINCES"], sortable: true},
-        {name: "ENCODED", selector: (row: any) => row["ENCODED"], sortable: true},
-        {name: "PERCENTAGE", selector: (row: any) => row["PERCENTAGE"], sortable: true},
-        {name: "CATHOLIC", selector: (row: any) => row["CATHOLIC"], sortable: true},
-        {name: "NOT BAPTIZED", selector: (row: any) => row["NOT BAPTIZED"], sortable: true},
-        {name: "NOT CONFIRMED", selector: (row: any) => row["NOT CONFIRMED"], sortable: true},
-        {name: "NOT MARRIED", selector: (row: any) => row["NOT MARRIED"]},
-        {name: "NOT HIGH SCHOOL", selector: (row: any) => row["NOT HIGH SCHOOL"]},
-        {name: "NOT COLLEGE", selector: (row: any) => row["NOT COLLEGE"]},
-        {name: "UPPER CLASS", selector: (row: any) => row["UPPER CLASS"]},
-        {name: "MIDDLE CLASS", selector: (row: any) => row["MIDDLE CLASS"]},
-        {name: "POOR CLASS", selector: (row: any) => row["POOR CLASS"]},
-        {name: "VERY POOR CLASS", selector: (row: any) => row["VERY POOR CLASS"]},
+        {name: "VIEW", selector: (row: any)=>row[""], sortable: true, width: "200px" },
+        {name: "BARANGAY NAME", selector: (row: any) => row["BARANGAY NAME"], sortable: true, width: "200px" },
+        {name: "BEC", selector: (row: any) => row["BEC"], sortable: true, width: "200px" },
+        {name: "POPULATION", selector: (row: any) => row["POPULATION"], sortable: true, width: "200px" },
+        {name: "HOUSEHOLD", selector: (row: any) => row["HOUSEHOLD"], sortable: true, width: "200px" },
+        {name: "CATHOLIC RESIDINCES", selector: (row: any) => row["CATHOLIC RESIDINCES"], sortable: true, width: "200px" },
+        {name: "ENCODED", selector: (row: any) => row["ENCODED"], sortable: true, width: "200px" },
+        {name: "PERCENTAGE", selector: (row: any) => row["PERCENTAGE"], sortable: true, width: "200px" },
+        {name: "CATHOLIC", selector: (row: any) => row["CATHOLIC"], sortable: true, width: "200px" },
+        {name: "NOT BAPTIZED", selector: (row: any) => row["NOT BAPTIZED"], sortable: true, width: "200px" },
+        {name: "NOT CONFIRMED", selector: (row: any) => row["NOT CONFIRMED"], sortable: true, width: "200px" },
+        {name: "NOT MARRIED", selector: (row: any) => row["NOT MARRIED"], width: "200px" },
+        {name: "NOT HIGH SCHOOL", selector: (row: any) => row["NOT HIGH SCHOOL"], width: "200px" },
+        {name: "NOT COLLEGE", selector: (row: any) => row["NOT COLLEGE"], width: "200px" },
+        {name: "UPPER CLASS", selector: (row: any) => row["UPPER CLASS"], width: "200px" },
+        {name: "MIDDLE CLASS", selector: (row: any) => row["MIDDLE CLASS"], width: "200px" },
+        {name: "POOR CLASS", selector: (row: any) => row["POOR CLASS"], width: "200px" },
+        {name: "VERY POOR CLASS", selector: (row: any) => row["VERY POOR CLASS"], width: "200px" },
     ]
     
 
@@ -239,7 +241,10 @@ export default function Baranagay(){
                                     <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search by Barangay or BEC:</label>
                                     <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                                 </div>
-                                <DataTable columns={colums} data={data} pagination paginationPerPage={5} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}></DataTable>
+                                {isLoadingTable?<div className='w-full bg-white'>Loading..</div>:""}
+                                {!isLoadingTable&&
+                                    <DataTable columns={colums} data={data} pagination paginationPerPage={5} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}></DataTable>
+                                }
                             </div>
                         </div>
                     </div>

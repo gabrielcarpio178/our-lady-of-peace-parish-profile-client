@@ -11,6 +11,7 @@ import EditSurveyForm from './components/pages/admin/editHouseholdform'
 import Records from './components/pages/admin/records'
 import { SocketProvider } from './util/socketContext'
 import Settings from './components/pages/admin/settings'
+import Coverpage from './components/pages/coverPage'
 
 
 function App() {
@@ -22,7 +23,8 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Coverpage />} />
+          <Route path="/login" element={<Login />} />
           <Route element={<ProtectedRoutes/>}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/access_users" element={<Access_user />} />

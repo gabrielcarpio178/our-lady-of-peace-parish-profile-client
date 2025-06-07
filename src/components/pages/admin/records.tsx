@@ -13,6 +13,7 @@ export default function Records(){
     const [datetime, setDatetime] = useState("Loading...")
     const [recordsData, setRecordsData] = useState([])
     const [allRecordsData, setAllRecordsData] = useState([])
+    const [isDisplayLoading, setIsDisplayLoading] = useState(true)
     const getCurrentDatetime = () =>{
         const now = moment();
         const formattedDateTime = now.format('MMMM DD, YYYY h:mm:ss a');
@@ -22,6 +23,7 @@ export default function Records(){
 
     const getRecordData = async ()=>{
         const token = userData().token
+        setIsDisplayLoading(true)
             try {
                 const res = await axios.get(`${api_link()}/getRecords`,{
                 headers:{
@@ -47,6 +49,7 @@ export default function Records(){
                 })
                 setRecordsData(datas)
                 setAllRecordsData(datas)
+                setIsDisplayLoading(false)
             } catch (error) {
                 console.log(error)
             }
@@ -106,7 +109,11 @@ export default function Records(){
                                     <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search User: </label>
                                     <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                                 </div>
-                                <DataTable columns={columns} data={recordsData} pagination paginationPerPage={6} responsive paginationRowsPerPageOptions={[1,2,3,4,5, 6]}></DataTable>
+                                {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
+                                {!isDisplayLoading&&
+                                    <DataTable columns={columns} data={recordsData} pagination paginationPerPage={6} responsive paginationRowsPerPageOptions={[1,2,3,4,5, 6]}></DataTable>
+                                }
+                                
                             </div>
                         </div>
                     </div>

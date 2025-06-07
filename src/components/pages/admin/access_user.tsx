@@ -29,7 +29,7 @@ export default function Access_user(){
                                                 password: ""
                                             })
     const [isLoading, setLoading] = useState(false)
-
+    const [isDisplayLoading, setIsDisplayLoading] = useState(true)
     const myFunction = () => {
         setAddFormShow(!isShowAddForm)
     };
@@ -57,6 +57,7 @@ export default function Access_user(){
     async function getData(){
         const token = userData().token
         const userInfo = userData().user
+        setIsDisplayLoading(true)
         try {
             var res = await axios.get(`${api_link()}/getUser`,{
                 headers:{
@@ -83,6 +84,7 @@ export default function Access_user(){
             })
             setAllData(result)
             setUser(result)
+            setIsDisplayLoading(false)
         } catch (error) {
             console.log(error)
         }
@@ -151,7 +153,11 @@ export default function Access_user(){
                                 <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search Name:</label>
                                 <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                             </div>
-                            <DataTable columns={columns} data={users} pagination paginationPerPage={5} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}></DataTable>
+                            {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
+                            {!isDisplayLoading&&
+                                <DataTable columns={columns} data={users} pagination paginationPerPage={5} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}></DataTable>
+                            }
+                            
                         </div>
                         
                     </div>

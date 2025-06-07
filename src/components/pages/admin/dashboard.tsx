@@ -17,6 +17,7 @@ export default function Dashboard(){
     const [becList, setBecList] = useState([]);
     const [bec_id, setBEC_id] = useState(0)
     const [brgy_id, setBrgy_id] = useState(0)
+    const [isLoading, setIsLoading] = useState(true)
 
     const getBarangayList = async ()=>{
         const token = userData().token
@@ -72,6 +73,7 @@ export default function Dashboard(){
 
     const dashboardData = async (bec_data_id: number, brgy_data_id: number)=>{
         const token = userData().token
+        setIsLoading(true)
         try {
             const res = await axios.get(`${api_link()}/getdashboardData`,{
                 headers:{
@@ -80,6 +82,7 @@ export default function Dashboard(){
                 }
             })
             filterData(res.data, bec_data_id, brgy_data_id)
+            setIsLoading(false)
         } catch (error) {
             console.log(error)
         }
@@ -217,7 +220,7 @@ export default function Dashboard(){
                                         </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Population</div>
-                                            <div className='text-2xl'>{dataGraph[0]}</div>
+                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[0]}</div>
                                         </div>
                                     </div>
                                     <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
@@ -228,7 +231,7 @@ export default function Dashboard(){
                                         </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Roman Catholic</div>
-                                            <div className='text-2xl'>{dataGraph[1]}</div>
+                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[1]}</div>
                                         </div>
                                     </div>
                                     <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
@@ -240,7 +243,7 @@ export default function Dashboard(){
                                         </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Baptized</div>
-                                            <div className='text-2xl'>{dataGraph[2]}</div>
+                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[2]}</div>
                                         </div>
                                     </div>
                                     <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
@@ -251,7 +254,7 @@ export default function Dashboard(){
                                         </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Confirmation</div>
-                                            <div className='text-2xl'>{dataGraph[3]}</div>
+                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[3]}</div>
                                         </div>
                                     </div>
                                     <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
@@ -262,7 +265,7 @@ export default function Dashboard(){
                                         </div>
                                         <div className='w-[70%] flex flex-col'>
                                             <div className='text-2xl font-bold'>Married</div>
-                                            <div className='text-2xl'>{dataGraph[4]}</div>
+                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[4]}</div>
                                         </div>
                                     </div>
                                 </div>

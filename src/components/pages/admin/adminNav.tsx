@@ -7,6 +7,7 @@ import { useEffect, useState, type JSX } from "react";
 import {api_link, socket_link as socket_link_data, userData} from "../../../api_link"
 import axios from "axios";
 import { Socket, io as socketIoClient } from 'socket.io-client';
+import { CiMenuBurger } from "react-icons/ci";
 
 
 type nav = {
@@ -106,8 +107,13 @@ export default function MyAppNav() {
     return (
         <>
             <div className={`${!isNavBarShow?"h-auto":"h-screen"} md:w-auto w-full md:h-auto overflow-y-hidden bg-[#001656] flex flex-col md:relative fixed z-1`}>
-                <div className="fixed border border-white w-10 h-10 md:hidden block right-3 top-2" onClick={()=>setIsNavBarShow(!isNavBarShow)}>
-                    
+                <div className="fixed w-10 h-10 md:hidden block right-3 top-2 text-white" onClick={()=>setIsNavBarShow(!isNavBarShow)}>
+                    <div className="w-full flex items-center justify-center h-full">
+                        <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
+                            <CiMenuBurger/>
+                        </IconContext.Provider>
+                        
+                    </div>
                 </div>
                 <div className="flex flex-row border-b-3 border-white items-center md:justify-center md:py-5 gap-x-2 py-2">
                     <div className="md:w-[25%] w-[15%]">

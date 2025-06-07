@@ -31,6 +31,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     const [dataTable, setDataTable] = useState([])
     const [allData, setAllData] = useState([])
     const [isLoading, setLoading] = useState(false)
+    const [isDisplayLoading, setIsDisplayLoading] = useState(true)
     const getNumberData = async () =>{
         const token = userData().token
         try {
@@ -90,6 +91,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
 
     const getDataTable = async () =>{
         const token = userData().token
+        setIsDisplayLoading(true)
         try {
             const res = await axios.get(`${api_link()}/getHouseHoldDataTable`,{
                 headers:{
@@ -129,6 +131,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             })
             setDataTable(datas)
             setAllData(datas)
+            setIsDisplayLoading(false)
         } catch (error) {
             console.log(error)
         }
@@ -167,24 +170,24 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         tableData(0, 0)
     },[])
     const columns = [
-        {name: "Action", selector: ((row: any) => row["Action"]), grow: 2},
-        {name: "FAMILY NAME", selector: ((row: any) => row["FAMILY NAME"]), sortable: true},
-        {name: "WIFE NAME", selector: ((row: any) => row["WIFE NAME"]), sortable: true},
-        {name: "HUSBAND NAME", selector: ((row: any) => row["HUSBAND NAME"]), sortable: true},
-        {name: "OCCUPATION WIFE", selector: ((row: any) => row["OCCUPATION WIFE"]), sortable: true},
-        {name: "OCCUPATION HUSBAND", selector: ((row: any) => row["OCCUPATION HUSBAND"]), sortable: true},
-        {name: "BARANGAY NAME", selector: ((row: any) => row["BARANGAY NAME"]), sortable: true},
-        {name: "BEC NAME", selector: ((row: any) => row["BEC NAME"]), sortable: true},
-        {name: "HOUSEHOLDS", selector: ((row: any) => row["HOUSEHOLDS"]), sortable: true},
-        {name: "CATHOLIC", selector: ((row: any) => row["CATHOLIC"]), sortable: true},
-        {name: "ATTENDANTS", selector: ((row: any) => row["ATTENDANTS"]), sortable: true},
-        {name: "BAPTISM", selector: ((row: any) => row["BAPTISM"]), sortable: true},
-        {name: "CONFIRMATION", selector: ((row: any) => row["CONFIRMATION"]), sortable: true},
-        {name: "MARRIED", selector: ((row: any) => row["MARRIED"]), sortable: true},
-        {name: "PROFESSIONAL", selector: ((row: any) => row["PROFESSIONAL"]), sortable: true},
-        {name: "HIGH SCHOOL", selector: ((row: any) => row["HIGH SCHOOL"]), sortable: true},
-        {name: "COLLECE", selector: ((row: any) => row["COLLECE"]), sortable: true},
-        {name: "LIVING CONDITION", selector: ((row: any) => row["LIVING CONDITION"])},
+        {width: "200px", name: "Action", selector: ((row: any) => row["Action"]), grow: 2},
+        {width: "200px", name: "FAMILY NAME", selector: ((row: any) => row["FAMILY NAME"]), sortable: true},
+        {width: "200px", name: "WIFE NAME", selector: ((row: any) => row["WIFE NAME"]), sortable: true},
+        {width: "200px", name: "HUSBAND NAME", selector: ((row: any) => row["HUSBAND NAME"]), sortable: true},
+        {width: "200px", name: "OCCUPATION WIFE", selector: ((row: any) => row["OCCUPATION WIFE"]), sortable: true},
+        {width: "200px", name: "OCCUPATION HUSBAND", selector: ((row: any) => row["OCCUPATION HUSBAND"]), sortable: true},
+        {width: "200px", name: "BARANGAY NAME", selector: ((row: any) => row["BARANGAY NAME"]), sortable: true},
+        {width: "200px", name: "BEC NAME", selector: ((row: any) => row["BEC NAME"]), sortable: true},
+        {width: "200px", name: "HOUSEHOLDS", selector: ((row: any) => row["HOUSEHOLDS"]), sortable: true},
+        {width: "200px", name: "CATHOLIC", selector: ((row: any) => row["CATHOLIC"]), sortable: true},
+        {width: "200px", name: "ATTENDANTS", selector: ((row: any) => row["ATTENDANTS"]), sortable: true},
+        {width: "200px", name: "BAPTISM", selector: ((row: any) => row["BAPTISM"]), sortable: true},
+        {width: "200px", name: "CONFIRMATION", selector: ((row: any) => row["CONFIRMATION"]), sortable: true},
+        {width: "200px", name: "MARRIED", selector: ((row: any) => row["MARRIED"]), sortable: true},
+        {width: "200px", name: "PROFESSIONAL", selector: ((row: any) => row["PROFESSIONAL"]), sortable: true},
+        {width: "200px", name: "HIGH SCHOOL", selector: ((row: any) => row["HIGH SCHOOL"]), sortable: true},
+        {width: "200px", name: "COLLECE", selector: ((row: any) => row["COLLECE"]), sortable: true},
+        {width: "200px", name: "LIVING CONDITION", selector: ((row: any) => row["LIVING CONDITION"])},
         
     ]
     const handleSearch = (e: any)=>{
@@ -265,7 +268,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                     </div>
                                     <div className="flex flex-col px-3">
                                         <div className="text-2xl font-bold">Total Encode</div>
-                                        <div className="font-bold text-lg">{numberData.total_encoded}</div>
+                                        <div className="font-bold text-lg">{isDisplayLoading?"Loading..":numberData.total_encoded}</div>
                                         <div></div>
                                     </div>
                                 </div>
@@ -277,8 +280,8 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                     </div>
                                     <div className="flex flex-col px-3">
                                         <div className="text-2xl font-bold">Total Catholic</div>
-                                        <div className="font-bold text-lg">{numberData.total_catholic}</div>
-                                        <div>Catholic: <span>{numberData.total_encoded_catholic}</span></div>
+                                        <div className="font-bold text-lg">{isDisplayLoading?"Loading..":numberData.total_catholic}</div>
+                                        <div>Catholic: <span>{isDisplayLoading?"Loading..":numberData.total_encoded_catholic}</span></div>
                                     </div>
                                 </div>
                                 <div className="flex flex-row bg-[#001656] rounded-lg p-2 items-center">
@@ -289,8 +292,8 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                     </div>
                                     <div className="flex flex-col px-3">
                                         <div className="text-2xl font-bold">Total Populations</div>
-                                        <div className="font-bold text-lg">{numberData.total_population}</div>
-                                        <div>Households: <span>{numberData.total_household}</span></div>
+                                        <div className="font-bold text-lg">{isDisplayLoading?"Loading..":numberData.total_population}</div>
+                                        <div>Households: <span>{isDisplayLoading?"Loading..":numberData.total_household}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +302,10 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                     <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search: </label>
                                     <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                                 </div>
+                                {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
+                                {!isDisplayLoading&&
                                 <DataTable columns={columns} data={dataTable} pagination paginationPerPage={4} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}/>
+                                }
                             </div>
                         </div>
 
