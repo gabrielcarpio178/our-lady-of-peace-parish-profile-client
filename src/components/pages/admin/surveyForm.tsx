@@ -122,7 +122,7 @@ export default function SurveyForm(){
 
     return (
         <>
-            <div className="flex md:flex-row flex-col">
+            <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
                     {isLoading&&
                     <div className='absolute bg-black/50 z-40 w-full h-full'>
                         {/* how to make this first layer of the screen */}
@@ -133,13 +133,13 @@ export default function SurveyForm(){
                     } 
                     <MyAppNav/>
                     {/* add this to a file content */}
-                    <div className='md:w-[80%] h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
+                    <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
                         {/* content here */}
                         <div className='flex flex-col w-full h-full'>
-                            <div className='w-full h-[12.7%] flex flex-row'>
+                            <div className='w-full flex flex-row'>
                                 <AdminHeader/>
                             </div>
-                            <div className='w-full h-[87.3%] flex flex-row overflow-y-scroll'>
+                            <div className='w-full flex flex-row overflow-y-scroll'>
                                 <div className='w-full flex flex-col px-10'>
                                     <div className="">
                                         <h2 className='text-2xl text-black opacity-[50%]'>

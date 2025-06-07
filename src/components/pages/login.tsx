@@ -53,7 +53,7 @@ export default function Login(){
     
     return (
         <>
-            <div className="w-full h-screen relative flex flex-row">
+            <div className="w-full h-screen relative flex flex-row items-center justify-center">
                 {isLoading&&
                 <div className='absolute bg-black/50 z-1 w-full h-full'>
                     <div  className='flex items-center justify-center w-full h-full'>
@@ -61,8 +61,8 @@ export default function Login(){
                     </div>
                 </div>    
                 }
-                <div className='w-full flex md:flex-row'>
-                    <div className="md:w-[55%]  bg-[#44618E] h-full hidden md:block">
+                <div className='w-full flex md:flex-row h-full'>
+                    <div className="md:w-[55%] bg-[#44618E] h-full hidden md:block">
                         <img src={churchImg} alt="church" className='h-full w-full'/>
                     </div>
                     <div className="md:w-[45%] bg-[#86ACE2] relative w-full">
@@ -72,7 +72,7 @@ export default function Login(){
                     </div>
                 </div>
                 
-                <div className="absolute top-0 w-full h-screen md:py-40 md:px-64 px-10 py-36">
+                <div className="absolute md:w-auto w-full md:h-auto h-1/2 md:p-0 p-5">
                     <div className="w-full h-full bg-[#001656] rounded-2xl shadow-blue-500 shadow-2xl flex md:flex-row relative">
                         <div className="md:w-[55%] md:flex hidden items-center justify-center">
                             <div className="bg-[#86ACE2] rounded w-[95%] h-[95%] opacity-100">

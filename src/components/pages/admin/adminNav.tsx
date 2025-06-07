@@ -78,10 +78,11 @@ export default function MyAppNav() {
     const API_LINK = api_link()
     const SOCKET_LINK = socket_link_data()
     const [isNavBarShow, setIsNavBarShow] = useState(false)
+    const user_id = userData().user.id
     axios.defaults.withCredentials = true;
     
     const logout = async () => {
-        await axios.get(`${API_LINK}/logout`)
+        await axios.get(`${API_LINK}/logout/${user_id}`)
         localStorage.removeItem("user")
         var newSocket = socketIoClient(SOCKET_LINK)
         newSocket.emit("thereIsLogined", {
@@ -104,28 +105,34 @@ export default function MyAppNav() {
 
     return (
         <>
-            <div className={`md:w-[20%] w-full md:h-screen ${!isNavBarShow?" h-14":"h-screen"} overflow-y-hidden bg-[#001656] flex flex-col md:relative fixed z-1`}>
+            <div className={`${!isNavBarShow?"h-auto":"h-screen"} md:w-auto w-full md:h-auto overflow-y-hidden bg-[#001656] flex flex-col md:relative fixed z-1`}>
                 <div className="fixed border border-white w-10 h-10 md:hidden block right-3 top-2" onClick={()=>setIsNavBarShow(!isNavBarShow)}>
                     
                 </div>
-                <nav className="flex flex-col">
-                    <div className="flex flex-row border-b-3 border-white items-center md:justify-center md:py-5 gap-x-2 py-2">
-                        <div className="md:w-[25%] w-[15%]">
-                            <img src={ourLadyOfPeace} alt="Our Lady Of Peace" />
-                        </div>
-                        <header className="text-white text-2xl capitalize">
-                            {role}
-                        </header>
+                <div className="flex flex-row border-b-3 border-white items-center md:justify-center md:py-5 gap-x-2 py-2">
+                    <div className="md:w-[25%] w-[15%]">
+                        <img src={ourLadyOfPeace} alt="Our Lady Of Peace" />
                     </div>
-                    <div className="md:mt-5 mt-3">
-                        {NAVIGATIONDATA.map(n=>{
-                            return (<Navigation id={n.id} key={n.id} name={n.name} link={n.link} icon={n.icon} />)
-                        })}
-                    </div>
+                    <header className="text-white text-2xl capitalize">
+                        {role}
+                    </header>
+                </div>
                 
-                </nav>
+                <div className={`${!isNavBarShow?"hidden md:block":"block"}`}>
+                    <nav className="flex flex-col">
+                        <div className="md:mt-5 mt-3 overflow-hidden">
+                            {NAVIGATIONDATA.map(n=>{
+                                return (<Navigation id={n.id} key={n.id} name={n.name} link={n.link} icon={n.icon} />)
+                            })}
+                        </div>
+                    
+                    </nav>
+                </div>
 
-                <div className={`text-xl text-white border-t-3 border-white absolute bottom-0 w-full h-[15%] md:flex items-center justify-center md:pl-10 ${!isNavBarShow?"hidden":""}`}>
+                
+                
+
+                <div className={`text-xl text-white border-t-3 border-white absolute bottom-0 w-full h-[15%] md:flex items-center justify-center md:pl-10 ${!isNavBarShow?"hidden":""} z-1`}>
                     <div className="flex flex-row gap-x-5 w-full py-5 px-10 md:rounded-l-full rounded-full hover:bg-[#86ACE2] cursor-pointer mx-2" onClick={logout}>
                         <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                             <IoLogOut/>
@@ -148,7 +155,7 @@ function Navigation(props: navCard){
     let navContent;
     const masterListDiv = MASTER_LIST.map((master)=>{
                             return (
-                                <NavLink key={master.id} to={master.link} className={({ isActive }) => isActive ? "py-5 px-10 w-full bg-[#86ACE2] md:rounded-l-full rounded-full": "py-5 px-10 w-full rounded-l-full hover:bg-[#86ACE2] hover:rounded-l-full rounded-full"}>
+                                <NavLink key={master.id} to={master.link} className={({ isActive }) => isActive ? "py-2 px-5 w-full bg-[#86ACE2] rounded-l-full text-lg": "py-2 px-5 w-full rounded-l-full hover:bg-[#86ACE2] text-lg"}>
                                     {master.name}
                                 </NavLink>
                             )
@@ -182,7 +189,7 @@ function Navigation(props: navCard){
                     </div>
                 </IconContext.Provider> 
             </div>
-            <div className="flex flex-col items-center ml-10 pl-12">
+            <div className="flex flex-col items-center ml-32">
                 {isShowMasterList&&masterListDiv}
             </div>
             </>
@@ -200,7 +207,3 @@ function Navigation(props: navCard){
         </>
     )
 }
-function socket_link(): Partial<import("socket.io-client").ManagerOptions & import("socket.io-client").SocketOptions> | undefined {
-    throw new Error("Function not implemented.");
-}
-

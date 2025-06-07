@@ -118,7 +118,7 @@ export default function Access_user(){
 
     return (
         <>
-            <div className="flex md:flex-row flex-col">
+            <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
                 <MyAppNav/>
                 {isLoading&&
                 <div className='absolute bg-black/50 z-40 w-full h-full'>
@@ -131,18 +131,18 @@ export default function Access_user(){
                 {isShowAddForm&&<AddContent onClick={myFunction} refreshUserList={getData} setLoading={()=>setLoading(!isLoading)}/>}
                 {isShowEditForm&&<EditForm user={editUser} onClick={editFormShowfun} setLoading={()=>setLoading(!isLoading)}/>}
                 {/* add this to a file content */}
-                <div className='md:w-[80%] h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
+                <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
                     {/* content here */}
-                    <div className='flex flex-col w-full h-full'>
-                        <div className='w-full h-[12.7%] flex flex-row'>
+                    <div className='flex flex-col w-full'>
+                        <div className='w-full flex flex-row'>
                             <AdminHeader/>
                         </div>
-                        <div className='w-full h-[87.3%] flex flex-col p-10'>
+                        <div className='w-full flex flex-col px-10'>
                             <h2 className='text-2xl text-black opacity-[50%]'>
                                 List of Users
                             </h2>
                             {userData().user.rule==="admin"&&
-                            <div className='flex flex-col w-full'>
+                            <div className='flex flex-col'>
                                 <div className='flex flex-row items-center justify-end py-1'>
                                     <button type="button" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 flex flex-row items-center gap-x-1 cursor-pointer" onClick={()=>setAddFormShow(!isShowAddForm)}><FaPlus/> Add</button>
                                 </div>

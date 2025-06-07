@@ -99,23 +99,23 @@
 
         return (
             <>
-                <div className="flex md:flex-row flex-col">
+                <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
                     <MyAppNav/>
                     {/* add this to a file content */}
-                    <div className='md:w-[80%] h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
+                    <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
                         {/* content here */}
-                        <div className='flex flex-col w-full h-full'>
-                            <div className='w-full h-[12.7%] flex flex-row'>
+                        <div className='flex flex-col w-full'>
+                            <div className='w-full flex flex-row'>
                                 <AdminHeader/>
                             </div>
-                            <div className='w-full h-[87.3%] flex flex-col px-10'>
+                            <div className='w-full flex flex-col px-10'>
                                 <div className='w-full flex flex-row justify-between'>
                                     <h2 className='text-2xl text-black opacity-[50%]'>
                                         Settings
                                     </h2>
                                 </div>  
-                                <form className="md:px-8 pt-6 pb-8 mb-4 flex items-center justify-center" onSubmit={submitData}>
-                                    <div className="flex flex-col bg-white p-4 text-black rounded-md gap-y-2 m-10 md:w-[50%] w-full">
+                                <form className="flex items-center justify-center" onSubmit={submitData}>
+                                    <div className="flex flex-col bg-white px-4 py-1 text-black rounded-md gap-y-2 m-10 md:w-[50%] w-full">
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="d" className="block mb-2 text-sm font-medium ">Firstname</label>
                                             <input name="firstname" type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Firstname" value={firstname} onChange={(e)=>setfirstname(e.target.value)} required />

@@ -208,7 +208,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     }
     return(
         <>
-        <div className="flex md:flex-row flex-col">
+        <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
             {isLoading&&
             <div className='absolute bg-black/50 z-40 w-full h-full'>
                 <div  className='flex items-center justify-center w-full h-full'>
@@ -219,13 +219,13 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             <MyAppNav/>
             {/* add this to a file content */}
             {isTableSettingShow&&<TableSettings onClose={()=>setTableSettiingShow(!isTableSettingShow)} sendDataToHousehold={handleDataFromChild}/>}
-            <div className='md:w-[80%] md:h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
+            <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
                 {/* content here */}
                 <div className='flex flex-col w-full h-full'>
-                    <div className='w-full h-[12.7%] flex flex-row'>
+                    <div className='w-full flex flex-row'>
                         <AdminHeader/>
                     </div>
-                    <div className='w-full h-[87.3%] flex flex-col p-4'>
+                    <div className='w-full flex flex-col p-4'>
                         <div className='w-full'>
                             <div className='flex flex-row justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
@@ -257,7 +257,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                         </div>
                         <div className="flex flex-col-reverse md:flex-col">
                             <div className="grid md:grid-cols-3 w-full mt-10 gap-4">
-                                <div className="flex flex-row bg-[#001656] rounded-lg p-4 items-center">
+                                <div className="flex flex-row bg-[#001656] rounded-lg p-2 items-center">
                                     <div className="bg-gray-500 rounded-sm p-3">
                                         <IconContext.Provider value={{ color: "white", size: "3em" }}>
                                             <RiSurveyFill/>                        
@@ -269,7 +269,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                         <div></div>
                                     </div>
                                 </div>
-                                <div className="flex flex-row bg-[#001656] rounded-lg p-4 items-center">
+                                <div className="flex flex-row bg-[#001656] rounded-lg p-2 items-center">
                                     <div className="bg-gray-500 rounded-sm p-3">
                                         <IconContext.Provider value={{ color: "white", size: "3em" }}>
                                             <FaCross/>                           
@@ -281,7 +281,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                         <div>Catholic: <span>{numberData.total_encoded_catholic}</span></div>
                                     </div>
                                 </div>
-                                <div className="flex flex-row bg-[#001656] rounded-lg p-4 items-center">
+                                <div className="flex flex-row bg-[#001656] rounded-lg p-2 items-center">
                                     <div className="bg-gray-500 rounded-sm p-3">
                                         <IconContext.Provider value={{ color: "white", size: "3em" }}>
                                             <FaPeopleGroup/>                        
@@ -294,7 +294,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-10">
+                            <div className="mt-3">
                                 <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3'>
                                     <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search: </label>
                                     <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>

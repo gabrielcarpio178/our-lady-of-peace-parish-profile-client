@@ -172,16 +172,16 @@ export default function Dashboard(){
 
     return (
         <>
-            <div className="flex md:flex-row flex-col">
+            <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
                 <MyAppNav/>
                 {/* add this to a file content */}
-                <div className='md:w-[80%] md:h-screen bg-[#86ACE2] text-white w-full md:mt-0 mt-10'>
+                <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
                     {/* content here */}
-                    <div className='flex flex-col w-full h-full'>
-                        <div className='w-full h-[12.7%] flex flex-row'>
+                    <div className='flex flex-col w-full'>
+                        <div className='w-full flex flex-row'>
                             <AdminHeader/>
                         </div>
-                        <div className='w-full h-[87.3%] flex flex-col px-10'>
+                        <div className='w-full flex flex-col px-10'>
                             <div className='w-full flex md:flex-row flex-col items-center justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
                                     Dashboard
@@ -207,9 +207,9 @@ export default function Dashboard(){
                                     </div>
                                 </div>
                             </div> 
-                            <div className='w-full mt-3 flex md:flex-row flex-col-reverse gap-3 md:h-[70vh]'>
+                            <div className='w-full mt-3 flex md:flex-row flex-col-reverse gap-3'>
                                 <div className='flex flex-col md:w-[30%] gap-2 w-full md:p-0 pb-4'>
-                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
                                         <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
                                             <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
                                                 <FaPeopleGroup/>                        
@@ -220,7 +220,7 @@ export default function Dashboard(){
                                             <div className='text-2xl'>{dataGraph[0]}</div>
                                         </div>
                                     </div>
-                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
                                         <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
                                             <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
                                                 <FaCross/>                           
@@ -231,7 +231,7 @@ export default function Dashboard(){
                                             <div className='text-2xl'>{dataGraph[1]}</div>
                                         </div>
                                     </div>
-                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
                                         <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
                                             <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
                                                 <FaChild  />                           
@@ -243,7 +243,7 @@ export default function Dashboard(){
                                             <div className='text-2xl'>{dataGraph[2]}</div>
                                         </div>
                                     </div>
-                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
                                         <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
                                             <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
                                                 <FaCheckCircle />                           
@@ -254,7 +254,7 @@ export default function Dashboard(){
                                             <div className='text-2xl'>{dataGraph[3]}</div>
                                         </div>
                                     </div>
-                                    <div className='w-full p-2 h-[20%] bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
                                         <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
                                             <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
                                                 <FaUserFriends />                           
@@ -266,7 +266,7 @@ export default function Dashboard(){
                                         </div>
                                     </div>
                                 </div>
-                                <div className='md:w-[70%] h-[100%] bg-white p-5 rounded-lg'>
+                                <div className='md:w-[70%] bg-white p-5 rounded-lg'>
                                     <canvas ref={chartRef}></canvas>
                                 </div>
                             </div>
