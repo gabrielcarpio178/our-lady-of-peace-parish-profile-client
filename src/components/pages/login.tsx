@@ -1,6 +1,6 @@
 
 import churchImg from'./../../assets/image/church-image.png';
-import { FaUser, FaEye  } from "react-icons/fa";
+import { FaUser, FaEye, FaEyeSlash  } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import ourLadyOfPeace from'./../../assets/image/our-lady-of-peace.png';
 import {api_link, socket_link as socket_linkData} from "../../api_link"
@@ -15,6 +15,7 @@ export default function Login(){
     axios.defaults.withCredentials = true;
     const [resultInput, setResult] = useState("")
     const [isLoading, setLoading] = useState(false)
+    const [isShowPassword, setShowPassword] = useState(false)
     useEffect(()=>{
         setResult("")
         setLoading(false)
@@ -101,14 +102,14 @@ export default function Login(){
                                 <div>
                                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-white">Password</label>
                                     <div className='relative'>
-                                        <div className='absolute right-[3%] w-10 h-10 flex items-center justify-center'>
+                                        <div className='absolute right-[3%] w-10 h-10 flex items-center justify-center cursor-pointer' onClick={()=>setShowPassword(!isShowPassword)}>
                                             <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                                                 <div>
-                                                    <FaEye/>
+                                                    {!isShowPassword? <FaEye/>:<FaEyeSlash/>}
                                                 </div>
                                             </IconContext.Provider>   
                                         </div>
-                                        <input name='password' type="password" id="password" className={`border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500`} placeholder="Password" required />
+                                        <input name='password' type={!isShowPassword?"password":"text"} id="password" className={`border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500`} placeholder="Password" required />
                                     </div>
                                 </div>
                                 <div className="flex items-center text-sm text-red-800 capitalize" role="alert">
