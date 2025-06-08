@@ -89,7 +89,7 @@ export default function MyAppNav() {
         newSocket.emit("thereIsLogined", {
             message: true
         })
-        window.location.href = '/';
+        window.location.href = '/login';
     }
 
     const userRole = ()=>{
