@@ -2,7 +2,7 @@
 import MyAppNav from './adminNav'
 import AdminHeader from './adminHeader'
 import axios from 'axios'
-import { userData, api_link, socket_link } from '../../../api_link'
+import { userData, api_link } from '../../../api_link'
 import { useEffect, useState, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import { IconContext } from 'react-icons';
