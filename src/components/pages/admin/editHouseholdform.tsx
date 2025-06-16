@@ -138,6 +138,26 @@ export default function EditSurveyForm(){
             wife_name: formData.get("wife_name"),
             lumon: formData.get("lumon")
         }
+
+        const numericFields = [
+            'no_catholic',
+            'no_catholic_residence',
+            'no_college',
+            'no_high_school',
+            'no_professional',
+            'marrige',
+            'lumon',
+            'baptism',
+            'confirmation'
+        ];
+
+        const hasNegative = numericFields.some(field => {
+            const value = Number(formData.get(field));
+            return !isNaN(value) && value < 0;
+        });
+
+        if (hasNegative) return;
+
         try {
             const token = userData().token;
             const res = await axios.put(`${api_link()}/editHousehold`, formValues, {
@@ -237,11 +257,11 @@ export default function EditSurveyForm(){
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="no_catholic" className="block mb-2 text-sm font-medium capitalize">no. of household members</label>
-                                                    <input name="no_catholic" type="number" id="no_catholic" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={household_member} onChange={e=>sethousehold_member(e.target.value)} />
+                                                    <input name="no_catholic" type="number" min="0" id="no_catholic" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={household_member} onChange={e=>sethousehold_member(e.target.value)} />
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="no_catholic_residence" className="block mb-2 text-sm font-medium capitalize">No. of catholic residence</label>
-                                                    <input name="no_catholic_residence" type="number" id="no_catholic_residence" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={catholic_member} onChange={e=>setcatholic_member(e.target.value)}/>
+                                                    <input name="no_catholic_residence" type="number" min="0" id="no_catholic_residence" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={catholic_member} onChange={e=>setcatholic_member(e.target.value)}/>
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="barangay" className="block mb-2 text-sm font-medium capitalize">barangay</label>
@@ -258,10 +278,7 @@ export default function EditSurveyForm(){
                                                         {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id} >{bec.bec_name}</option>)})}
                                                     </select>
                                                 </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="lumon" className="block mb-2 text-sm font-medium capitalize">Lumon</label>
-                                                    <input name="lumon" type="number" min="0" id="lumon" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" value={lumon} onChange={e=>setlumon(e.target.value)} required />
-                                                </div>
+                                                
                                             </div>
                                         </div>
 
@@ -286,21 +303,21 @@ export default function EditSurveyForm(){
                                                         <div>Baptism</div>
                                                         <p className="capitalize text-[0.7rem] opacity-70">How many are <span className="uppercase">not yet baptized?</span></p>
                                                     </label>
-                                                    <input name="baptism" type="number" id="baptism" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={baptism} onChange={e=>setbaptism(e.target.value)} />
+                                                    <input name="baptism" type="number" min="0" id="baptism" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={baptism} onChange={e=>setbaptism(e.target.value)} />
                                                 </div>  
                                                 <div className="w-full">
                                                     <label htmlFor="confirmation" className="mb-2 text-sm font-medium capitalize flex flex-col">
                                                         <div>Confirmation</div>
                                                         <p className="capitalize text-[0.7rem] opacity-70">How many are <span className="uppercase">not yet Confirmed?</span></p>
                                                     </label>
-                                                    <input name="confirmation" type="number" id="confirmation" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={confirmation} onChange={e=>setconfirmation(e.target.value)} />
+                                                    <input name="confirmation" type="number" min="0" id="confirmation" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={confirmation} onChange={e=>setconfirmation(e.target.value)} />
                                                 </div>  
                                                 <div className="w-full">
                                                     <label htmlFor="marrige" className="mb-2 text-sm font-medium capitalize flex flex-col">
                                                         <div>Marriage</div>
                                                         <p className="capitalize text-[0.7rem] opacity-70">How many couple are <span className="uppercase">not yet married in the church?</span></p>
                                                     </label>
-                                                    <input name="marrige" type="number" id="marrige" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={marriage} onChange={e=>setmarriage(e.target.value)} />
+                                                    <input name="marrige" type="number" min="0" id="marrige" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={marriage} onChange={e=>setmarriage(e.target.value)} />
                                                 </div>  
                                             </div>
                                         </div>    
@@ -313,19 +330,19 @@ export default function EditSurveyForm(){
                                             <div className="grid grid-cols-2 mt-2 gap-5">
                                                 <div className="col-span-2">
                                                     <label htmlFor="no_professional" className="block mb-2 text-sm font-medium capitalize">How many are professional?</label>
-                                                    <input name="no_professional" type="number" id="no_professional" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-[49%]" required value={professional} onChange={e=>setprofessional(e.target.value)} />
+                                                    <input name="no_professional" type="number" min="0" id="no_professional" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-[49%]" required value={professional} onChange={e=>setprofessional(e.target.value)} />
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="no_high_school" className="mb-2 text-sm font-medium capitalize flex flex-col">
                                                         How many did STOP studying in HIGH SCHOOL?
                                                     </label>
-                                                    <input name="no_high_school" type="number" id="no_high_school" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={high_school} onChange={e=>sethigh_school(e.target.value)} />
+                                                    <input name="no_high_school" type="number" min="0" id="no_high_school" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={high_school} onChange={e=>sethigh_school(e.target.value)} />
                                                 </div>  
                                                 <div className="w-full">
                                                     <label htmlFor="no_college" className="mb-2 text-sm font-medium capitalize flex flex-col">
                                                         How many did STOP studying in COLLEGE?
                                                     </label>
-                                                    <input name="no_college" type="number" id="no_college" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={college} onChange={e=>setcollege(e.target.value)} />
+                                                    <input name="no_college" type="number" min="0" id="no_college" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={college} onChange={e=>setcollege(e.target.value)} />
                                                 </div>  
                                             </div>
                                         </div> 
@@ -335,10 +352,14 @@ export default function EditSurveyForm(){
                                                 Others
                                             </h2>
                                             <div className="w-full h-[0.5vh] bg-black opacity-50 mt-2"></div>
-                                            <div className="grid grid-cols-2">
-                                                <div className="col-span-2">
+                                            <div className="grid grid-cols-2 gap-5">
+                                                <div className="w-full">
+                                                    <label htmlFor="lumon" className="block mb-2 text-sm font-medium capitalize">Lumon</label>
+                                                    <input name="lumon" type="number" min="0" id="lumon" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" value={lumon} onChange={e=>setlumon(e.target.value)} required />
+                                                </div>
+                                                <div className="w-full">
                                                     <label htmlFor="living_condition" className="block mb-2 text-sm font-medium capitalize">living condition</label>
-                                                    <select name="living_condition" id="living_condition" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-[49%]" required value={living_condition} onChange={e=>setliving_condition(e.target.value)}>
+                                                    <select name="living_condition" id="living_condition" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={living_condition} onChange={e=>setliving_condition(e.target.value)}>
                                                         <option value="upper class">Upper Class</option>
                                                         <option value="middle class">Middle Class</option>
                                                         <option value="poor">Poor</option>

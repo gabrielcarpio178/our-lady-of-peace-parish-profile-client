@@ -10,7 +10,7 @@ import Household from './components/pages/admin/household'
 import EditSurveyForm from './components/pages/admin/editHouseholdform'
 import Records from './components/pages/admin/records'
 import Settings from './components/pages/admin/settings'
-import Coverpage from './components/pages/coverPage'
+import CoverPage from './components/pages/coverPage'
 
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Coverpage />} />
+          <Route path="/" element={<CoverPage />} />
           <Route path="/login" element={<Login />} />
           <Route element={<ProtectedRoutes/>}>
             <Route path="/dashboard" element={<Dashboard />} />

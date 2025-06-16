@@ -173,14 +173,6 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     {data.bec_name}
                                 </div>
                             </div>
-                            <div className="col-span-1">
-                                <div className="capitalize text-sm">
-                                    Lumon:
-                                </div>
-                                <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.lumon}
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -272,11 +264,19 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                             {/* line */}
                         </div>
                         <div className="grid grid-cols-2 gap-y-1 gap-x-3">
-                            <div className="col-span-2">
+                            <div className="col-span-1">
+                                <div className="capitalize text-sm">
+                                    Lumon:
+                                </div>
+                                <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
+                                    {data.lumon}
+                                </div>
+                            </div>
+                            <div className="col-span-1">
                                 <div className="capitalize text-sm">
                                     living condition
                                 </div>
-                                <div className="capitalize bg-gray-700 text-white w-[48%] p-1 rounded-sm">
+                                <div className="capitalize bg-gray-700 text-white p-1 rounded-sm w-full">
                                     {data.living_condition}
                                 </div>
                             </div>

@@ -4,7 +4,7 @@ import { FaClock, FaFolderOpen, FaUsers, FaFile, FaWpforms, FaChevronRight , FaC
 import { IoLogOut, IoSettings } from "react-icons/io5";
 import { IconContext } from "react-icons";
 import { useEffect, useState, type JSX } from "react";
-import {api_link, socket_link as socket_link_data, userData} from "../../../api_link"
+import {api_link, userData} from "../../../api_link"
 import axios from "axios";
 import { CiMenuBurger } from "react-icons/ci";
 
@@ -76,7 +76,6 @@ const MASTER_LIST = [
 export default function MyAppNav() {
     const [role, setrole] = useState("loading..")
     const API_LINK = api_link()
-    const SOCKET_LINK = socket_link_data()
     const [isNavBarShow, setIsNavBarShow] = useState(false)
     const user_id = userData().user.id
     axios.defaults.withCredentials = true;

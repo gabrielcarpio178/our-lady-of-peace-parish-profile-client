@@ -6,7 +6,8 @@ import john from './../../assets/image/fr.johnrey.png'
 import React, { useEffect, useState } from 'react';
 import { FaSquareFacebook } from "react-icons/fa6";
 import { IconContext } from 'react-icons';
-export default function Coverpage(){
+
+export default function CoverPage(){
     const [datacontent, setDataContent] = useState<ContentData[]>([])
 
     const content = [

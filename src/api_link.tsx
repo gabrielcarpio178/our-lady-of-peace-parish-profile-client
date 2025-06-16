@@ -4,10 +4,6 @@ export function api_link(){
     return "https://our-lady-of-peace-parish-profile-backend.onrender.com/auth";
 };
 
-export function socket_link()
-{
-    return "https://our-lady-of-peace-parish-profile-backend.onrender.com/";
-}
 export function userData(){
     try {
         const user = localStorage.getItem("user");

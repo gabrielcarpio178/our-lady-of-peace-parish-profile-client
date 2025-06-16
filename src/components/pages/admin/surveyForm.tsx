@@ -218,10 +218,7 @@ export default function SurveyForm(){
                                                         {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id}>{bec.bec_name}</option>)})}
                                                     </select>
                                                 </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="lumon" className="block mb-2 text-sm font-medium capitalize">Lumon</label>
-                                                    <input name="lumon" type="number" min="0" id="lumon" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required />
-                                                </div>
+                                                
                                             </div>
                                         </div>
 
@@ -295,10 +292,14 @@ export default function SurveyForm(){
                                                 Others
                                             </h2>
                                             <div className="w-full h-[0.5vh] bg-black opacity-50 mt-2"></div>
-                                            <div className="grid grid-cols-2">
-                                                <div className="col-span-2">
+                                            <div className="grid grid-cols-2 gap-5">
+                                                <div className="w-full">
+                                                    <label htmlFor="lumon" className="block mb-2 text-sm font-medium capitalize">Lumon</label>
+                                                    <input name="lumon" type="number" min="0" id="lumon" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required />
+                                                </div>
+                                                <div className="w-full">
                                                     <label htmlFor="living_condition" className="block mb-2 text-sm font-medium capitalize">living condition</label>
-                                                    <select name="living_condition" id="living_condition" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-[49%]" required >
+                                                    <select name="living_condition" id="living_condition" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required >
                                                         <option value="upper class">Upper Class</option>
                                                         <option value="middle class">Middle Class</option>
                                                         <option value="poor">Poor</option>
