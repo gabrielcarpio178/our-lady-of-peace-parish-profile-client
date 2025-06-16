@@ -139,66 +139,68 @@ export default function EditSurveyForm(){
             lumon: formData.get("lumon")
         }
 
-        const numericFields = [
-            'no_catholic',
-            'no_catholic_residence',
-            'no_college',
-            'no_high_school',
-            'no_professional',
-            'marrige',
-            'lumon',
-            'baptism',
-            'confirmation'
-        ];
+        console.log(formValues)
 
-        const hasNegative = numericFields.some(field => {
-            const value = Number(formData.get(field));
-            return !isNaN(value) && value < 0;
-        });
+        // const numericFields = [
+        //     'no_catholic',
+        //     'no_catholic_residence',
+        //     'no_college',
+        //     'no_high_school',
+        //     'no_professional',
+        //     'marrige',
+        //     'lumon',
+        //     'baptism',
+        //     'confirmation'
+        // ];
 
-        if (hasNegative) return;
+        // const hasNegative = numericFields.some(field => {
+        //     const value = Number(formData.get(field));
+        //     return !isNaN(value) && value < 0;
+        // });
 
-        try {
-            const token = userData().token;
-            const res = await axios.put(`${api_link()}/editHousehold`, formValues, {
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+        // if (hasNegative) return;
 
-            if (res.status === 200) {
-                Swal.fire({
-                    position: "center",
-                    title: `Update Success`,
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1000,
-                }).then(()=>{
-                    setLoading(false)
-                    window.location.reload()
-                })
-            } else {
-                Swal.fire({
-                    position: "center",
-                    title: `Something want wrong`,
-                    icon: "error",
-                    showConfirmButton: false,
-                    timer: 1000,
-                })
-            }
-        } catch (err) {
-            console.error(err);
-            Swal.fire({
-                position: "center",
-                title: `Server error occurred.`,
-                icon: "error",
-                showConfirmButton: false,
-                timer: 1000,
-            })
-        } finally {
-            setLoading(false);
-        }
+        // try {
+        //     const token = userData().token;
+        //     const res = await axios.put(`${api_link()}/editHousehold`, formValues, {
+        //         headers: {
+        //             "Content-Type": "application/x-www-form-urlencoded",
+        //             Authorization: `Bearer ${token}`,
+        //         },
+        //     });
+
+        //     if (res.status === 200) {
+        //         Swal.fire({
+        //             position: "center",
+        //             title: `Update Success`,
+        //             icon: "success",
+        //             showConfirmButton: false,
+        //             timer: 1000,
+        //         }).then(()=>{
+        //             setLoading(false)
+        //             window.location.reload()
+        //         })
+        //     } else {
+        //         Swal.fire({
+        //             position: "center",
+        //             title: `Something want wrong`,
+        //             icon: "error",
+        //             showConfirmButton: false,
+        //             timer: 1000,
+        //         })
+        //     }
+        // } catch (err) {
+        //     console.error(err);
+        //     Swal.fire({
+        //         position: "center",
+        //         title: `Server error occurred.`,
+        //         icon: "error",
+        //         showConfirmButton: false,
+        //         timer: 1000,
+        //     })
+        // } finally {
+        //     setLoading(false);
+        // }
     }
     return (
         <>
