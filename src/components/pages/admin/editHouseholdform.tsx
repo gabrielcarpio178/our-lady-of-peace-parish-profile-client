@@ -30,6 +30,7 @@ export default function EditSurveyForm(){
     const [college, setcollege] = useState("")
     const [living_condition, setliving_condition] = useState("")
     const [comment, setcomment] = useState("")
+    const [lumon, setlumon] = useState("")
 
     function capitalizeFirstLetter(item: string) {
         return item.charAt(0).toUpperCase() + item.slice(1);
@@ -64,6 +65,7 @@ export default function EditSurveyForm(){
             setliving_condition(user.living_condition ?? "")
             setcomment(user.comment ?? "")
             getBEClist(user.barangay_id ?? 0)
+            setlumon(user.lumon ?? "");
         } catch (error) {
             console.log(error)
         }
@@ -134,6 +136,7 @@ export default function EditSurveyForm(){
             occupation_husband: formData.get("occupation_husband"),
             occupation_wife: formData.get("occupation_wife"),
             wife_name: formData.get("wife_name"),
+            lumon: formData.get("lumon")
         }
         try {
             const token = userData().token;
@@ -254,6 +257,10 @@ export default function EditSurveyForm(){
                                                         {becList.length==0?<option value="" disabled selected>No BEC Name for this Barangay</option>:""}
                                                         {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id} >{bec.bec_name}</option>)})}
                                                     </select>
+                                                </div>
+                                                <div className="w-full">
+                                                    <label htmlFor="lumon" className="block mb-2 text-sm font-medium capitalize">Lumon</label>
+                                                    <input name="lumon" type="number" min="0" id="lumon" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" value={lumon} onChange={e=>setlumon(e.target.value)} required />
                                                 </div>
                                             </div>
                                         </div>
