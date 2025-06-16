@@ -57,7 +57,7 @@ export default function EditSurveyForm(){
             setbec_id(user.bec_id ?? "")
             setattendants(user.mass_attendants ?? "");
             setbaptism(user.baptism ?? "")
-            setconfirmation(user.confirmation)
+            setconfirmation(user.isNotBaptismConfirmation)
             setmarriage(user.marrige ?? "")
             setprofessional(user.no_professional ?? "")
             sethigh_school(user.no_high_school ?? "")
