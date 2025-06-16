@@ -313,7 +313,7 @@ export default function SurveyForm(){
                                                 </div>  
                                             </div>
                                         </div>       
-                                        <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-gray-700 hover:bg-gray-700 focus:outline-none focus:ring-gray-700">{"Submit"}</button>
+                                        <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-gray-700">{"Submit"}</button>
                                     </form>
                                 </div>
                             </div>
