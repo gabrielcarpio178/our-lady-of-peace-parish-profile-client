@@ -3,7 +3,7 @@ import churchImg from'./../../assets/image/church-image.png';
 import { FaUser, FaEye, FaEyeSlash  } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import ourLadyOfPeace from'./../../assets/image/our-lady-of-peace.png';
-import {api_link, socket_link as socket_linkData} from "../../api_link"
+import {api_link} from "../../api_link"
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BounceLoader } from 'react-spinners';
