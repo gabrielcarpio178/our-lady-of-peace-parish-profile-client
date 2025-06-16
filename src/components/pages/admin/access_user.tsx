@@ -6,7 +6,7 @@ import { MdOutlineCancel  } from "react-icons/md";
 import { useEffect, useState } from 'react'
 import { IconContext } from "react-icons";
 import DataTable from 'react-data-table-component';
-import { userData, api_link, socket_link } from '../../../api_link';
+import { userData, api_link } from '../../../api_link';
 import axios from 'axios';
 import moment from 'moment';
 import { BounceLoader } from 'react-spinners';
