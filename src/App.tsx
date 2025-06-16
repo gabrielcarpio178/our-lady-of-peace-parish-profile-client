@@ -9,7 +9,6 @@ import SurveyForm from './components/pages/admin/surveyForm'
 import Household from './components/pages/admin/household'
 import EditSurveyForm from './components/pages/admin/editHouseholdform'
 import Records from './components/pages/admin/records'
-import { SocketProvider } from './util/socketContext'
 import Settings from './components/pages/admin/settings'
 import Coverpage from './components/pages/coverPage'
 
@@ -18,9 +17,6 @@ function App() {
   
   return (
     <>
-    
-    <SocketProvider>
-
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Coverpage />} />
@@ -38,8 +34,6 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-      
-    </SocketProvider>
     </>
   )
 }

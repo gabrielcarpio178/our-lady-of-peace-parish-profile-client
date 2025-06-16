@@ -6,7 +6,6 @@ import { IconContext } from "react-icons";
 import { useEffect, useState, type JSX } from "react";
 import {api_link, socket_link as socket_link_data, userData} from "../../../api_link"
 import axios from "axios";
-import { Socket, io as socketIoClient } from 'socket.io-client';
 import { CiMenuBurger } from "react-icons/ci";
 
 
@@ -85,10 +84,7 @@ export default function MyAppNav() {
     const logout = async () => {
         await axios.get(`${API_LINK}/logout/${user_id}`)
         localStorage.removeItem("user")
-        var newSocket = socketIoClient(SOCKET_LINK)
-        newSocket.emit("thereIsLogined", {
-            message: true
-        })
+        localStorage.removeItem("token")
         window.location.href = '/login';
     }
 

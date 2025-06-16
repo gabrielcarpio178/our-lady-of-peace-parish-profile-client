@@ -124,8 +124,8 @@ const BarangayTable:React.FC<IProps> = (props)=> {
             <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50'>
                 <div className="w-full max-w-lg bg-[#86ACE2] border border-black shadow-lg rounded mx-5 md:mx-0">
                     <div className='relative'>
-                        {isShowformEdit&&<FormEdit dataObj={editName} onClick={()=>setShowformEdit(!isShowformEdit)} setLoading={()=>props.setLoading()}/>}
-                        {isShowformAdd&&<AddForm onClick={()=>setShowformAdd(!isShowformAdd)} setLoading={()=>props.setLoading()}/>}
+                        {isShowformEdit&&<FormEdit dataObj={editName} onClick={()=>setShowformEdit(!isShowformEdit)} setLoading={()=>props.setLoading}/>}
+                        {isShowformAdd&&<AddForm onClick={()=>setShowformAdd(!isShowformAdd)} setLoading={()=>props.setLoading}/>}
                         <div className='flex flex-row p-3 gap-x-3'>
                             <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                                 <div>
@@ -158,7 +158,7 @@ const BarangayTable:React.FC<IProps> = (props)=> {
                             </button>
                             <div className='flex flex-col'>
                                 <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search Name:</label>
-                                <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-full" placeholder="Search Name" onChange={handleSearch} required/>
+                                <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-700 placeholder-white text-white focus:border-blue-500 w-full" placeholder="Search Name" onChange={handleSearch} required/>
                             </div>
                             
                         </div>
@@ -196,17 +196,31 @@ const AddForm: React.FC<IAddForm> = (props)=>{
                 "authorization" : `bearer ${token}`,
             }
         })
-        if(res.status===200){
-            Swal.fire({
-                position: "center",
-                title: `Add Success`,
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1000,
-            }).then(()=>{
-                window.location.reload()
-            })
-        }else{
+        if(res.status==200){
+            if(res.data.msg === "invalid barangay name"){
+                Swal.fire({
+                    position: "center",
+                    title: `Barangay Name is Already used`,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 1000,
+                }).then(()=>{
+                    props.setLoading()
+                    setLoading(false)
+                })
+            }else{
+                Swal.fire({
+                    position: "center",
+                    title: `Add Success`,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1000,
+                }).then(()=>{
+                    window.location.reload()
+                })
+            }
+        }
+        else{
             Swal.fire({
                 position: "center",
                 title: `Something want wrong`,
@@ -214,24 +228,13 @@ const AddForm: React.FC<IAddForm> = (props)=>{
                 showConfirmButton: false,
                 timer: 1000,
             }).then(()=>{
-                window.location.reload()
+                props.setLoading()
+                setLoading(false)
             })
         }
-        
         } catch (error) {
-            Swal.fire({
-                position: "center",
-                title: `Something want wrong`,
-                icon: "error",
-                showConfirmButton: false,
-                timer: 1000,
-            }).then(()=>{
-                window.location.reload()
-            })
             console.log(error)
         }
-        setLoading(false)
-        props.setLoading()
     }
     return(
         <>
@@ -251,7 +254,7 @@ const AddForm: React.FC<IAddForm> = (props)=>{
                         <div className="mb-4 flex flex-col mt-5 bg-white p-5 rounded-sm">
                             <div className='flex flex-col w-full'>
                                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-black">Name</label>
-                                <input name="barangay" type="text" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500" placeholder="Name" required />
+                                <input name="barangay" type="text" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-white text-white focus:border-blue-500" placeholder="Name" required />
                             </div>
                             <div className='flex flex-col w-full mt-2.5'>
 
@@ -289,28 +292,58 @@ const FormEdit: React.FC<IForm> = (props) => {
             id: id
         }
         const token = userData().token;
-        try {
-            await axios.put(`${api_link()}/editBarangay`,
-                formValue,
-                {
-                    headers:{
-                        'Content-type':'application/x-www-form-urlencoded',
-                        "authorization" : `bearer ${token}`,
+        if(barangay_name.toLowerCase()!==name){
+            try {
+                const res = await axios.put(`${api_link()}/editBarangay`,
+                    formValue,
+                    {
+                        headers:{
+                            'Content-type':'application/x-www-form-urlencoded',
+                            "authorization" : `bearer ${token}`,
+                        }
+                    })
+                if(res.status===200){
+                    if(res.data.msg==="invalid barangay name"){
+                        Swal.fire({
+                            position: "center",
+                            title: `Barangay Name is Already used`,
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        }).then(()=>{
+                            setLoading(false)
+                            props.setLoading()
+                        })
+                    }else {
+                        Swal.fire({
+                            position: "center",
+                            title: `Edit Success`,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        }).then(()=>{
+                            setLoading(false)
+                            props.setLoading()
+                            window.location.reload()
+                        })
                     }
-                })
+                    
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        else{
             Swal.fire({
                 position: "center",
-                title: `Edit Success`,
-                icon: "success",
+                title: `Please Update Barangay Name`,
+                icon: "warning",
                 showConfirmButton: false,
                 timer: 1000,
             }).then(()=>{
                 setLoading(false)
                 props.setLoading()
-                window.location.reload()
             })
-        } catch (error) {
-            console.log(error)
         }
     }
     return(
@@ -331,7 +364,7 @@ const FormEdit: React.FC<IForm> = (props) => {
                         <div className="mb-4 flex flex-col mt-5 bg-white p-5">
                             <div className='flex flex-col w-full'>
                                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-black">Name</label>
-                                <input name="name" type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-gray-400 focus:border-blue-500 text-black" placeholder="Name" required />
+                                <input name="name" type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-bg-gray-700 placeholder-gray-400 focus:border-blue-500 text-white" placeholder="Name" required />
                             </div>
                             <div className='flex flex-col w-full mt-2.5'>
 

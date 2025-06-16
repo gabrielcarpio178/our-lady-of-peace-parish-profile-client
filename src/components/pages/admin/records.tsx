@@ -107,7 +107,7 @@ export default function Records(){
                             <div className='mt-10'>
                                 <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3'>
                                     <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search User: </label>
-                                    <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
+                                    <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                                 </div>
                                 {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
                                 {!isDisplayLoading&&

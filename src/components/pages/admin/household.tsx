@@ -2,17 +2,18 @@ import AdminHeader from "./adminHeader";
 import MyAppNav from "./adminNav";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { RiSurveyFill } from "react-icons/ri";
-import { FaCross, FaEdit, FaFileExport } from "react-icons/fa";
+import { FaCross, FaEye, FaFileExport } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { IconContext } from "react-icons";
 import { useEffect, useState } from "react";
 import { api_link, userData } from "../../../api_link";
 import axios from "axios";
-import { MdOutlineCancel, MdDelete  } from "react-icons/md";
+import { MdOutlineCancel, MdBusiness  } from "react-icons/md";
 import DataTable from "react-data-table-component";
 import * as XLSX from 'xlsx';
-import Swal from "sweetalert2";
 import { BounceLoader } from "react-spinners";
+import ViewHouseholdData from "./subpage/viewHouseholdData"
+import React from "react";
 
 interface dataToHouseholdProps {}
 interface sendData {
@@ -24,7 +25,7 @@ interface sendData {
 
 const Household:React.FC<dataToHouseholdProps> = ()=>{
     const [numberData, setnumberData] = useState({
-        total_catholic : "0",  total_encoded : "0", total_encoded_catholic : "0" , total_household : "0", total_population : "0"
+        total_lumon : "0",  total_encoded : "0", total_encoded_catholic : "0" , total_household : "0", total_population : "0"
     })
     const [tableSettingData, settableSettingData] = useState( {barangay: "0", bec: "0", barangay_name: "All Barangay", bec_name: "All BEC"} )
     const [isTableSettingShow, setTableSettiingShow] = useState(false)
@@ -32,6 +33,32 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     const [allData, setAllData] = useState([])
     const [isLoading, setLoading] = useState(false)
     const [isDisplayLoading, setIsDisplayLoading] = useState(true)
+    const [isHouseholdDataShow, setHouseholdDataShow] = useState(false)
+    const [householdData, setHouseholdData] = useState({
+                                                baptism: 0, 
+                                                barangay_id: 0,
+                                                barangay_name: '',
+                                                bec_id: 0,
+                                                bec_name: '',
+                                                comment: '',
+                                                family_name: '',
+                                                household: 0,
+                                                husband_name: '',
+                                                id: 0,
+                                                isNotBaptismConfirmation: 0,
+                                                living_condition: '',
+                                                marrige: 0,
+                                                mass_attendants: '',
+                                                no_catholic_residence: 0,
+                                                no_college: 0,
+                                                no_high_school: 0,
+                                                no_professional: 0, 
+                                                occupation_husband: '',
+                                                occupation_wife: '',
+                                                wife_name: '',
+                                                lumon: 0
+                                            });
+
     const getNumberData = async () =>{
         const token = userData().token
         try {
@@ -46,47 +73,12 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             console.log(error)
         }
     }
-    const deleteHouseHold = async (id: any) =>{
-        Swal.fire({
-            title: "Are you sure?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const token = userData().token
-                setLoading(true)
-                try {
-                    await axios.delete(`${api_link()}/deleteHousehold`,{
-                        headers:{
-                                'Content-type':'application/x-www-form-urlencoded',
-                                "authorization" : `bearer ${token}`,
-                            },
-                            data: {
-                                id: id
-                            }
-                    })
-                    Swal.fire({
-                        position: "center",
-                        title: `Delete Success`,
-                        icon: "success",
-                        showConfirmButton: false,
-                        timer: 1000,
-                    }).then(()=>{
-                        setLoading(false)
-                        window.location.reload()
-                    })
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-        })
-    }
+    
 
-    const editHousehold = async (id: any)=>{
-        window.location.href = `/survey_form/${id}`
+    
+    const editHousehold = async (data: any)=>{
+        setHouseholdDataShow(!isHouseholdDataShow)
+        setHouseholdData(data)
     }
 
     const getDataTable = async () =>{
@@ -103,9 +95,9 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             const datas = res.data.map((data:any)=>{
                 return (
                     {
+                        "id": data.id,
                         "Action": <div>
-                                    <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>editHousehold(data.id)}><FaEdit/></button>
-                                    <button type="button" className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-red-800" onClick={()=>deleteHouseHold(data.id)}><MdDelete/></button>
+                                    <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>editHousehold(data)}><FaEye/></button>
                                 </div>,
                         "BARANGAY_ID": data.barangay_id,
                         "BEC_ID": data.bec_id,
@@ -116,6 +108,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                         "OCCUPATION HUSBAND": data.occupation_husband,
                         "BARANGAY NAME": data.barangay_name,
                         "BEC NAME": data.bec_name,
+                        "LUMON": data.lumon,
                         "HOUSEHOLDS": data.household,
                         "CATHOLIC": data.no_catholic_residence,
                         "ATTENDANTS": data.mass_attendants,
@@ -125,7 +118,8 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                         "PROFESSIONAL": data.no_professional,
                         "HIGH SCHOOL": data.no_high_school,
                         "COLLECE": data.no_college,
-                        "LIVING CONDITION": data.living_condition
+                        "LIVING CONDITION": data.living_condition,
+                        "COMMENT": data.comment
                     }
                 )
             })
@@ -170,7 +164,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         tableData(0, 0)
     },[])
     const columns = [
-        {width: "200px", name: "Action", selector: ((row: any) => row["Action"]), grow: 2},
+        { name: "Action", selector: ((row: any) => row["Action"])},
         {width: "200px", name: "FAMILY NAME", selector: ((row: any) => row["FAMILY NAME"]), sortable: true},
         {width: "200px", name: "WIFE NAME", selector: ((row: any) => row["WIFE NAME"]), sortable: true},
         {width: "200px", name: "HUSBAND NAME", selector: ((row: any) => row["HUSBAND NAME"]), sortable: true},
@@ -178,6 +172,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         {width: "200px", name: "OCCUPATION HUSBAND", selector: ((row: any) => row["OCCUPATION HUSBAND"]), sortable: true},
         {width: "200px", name: "BARANGAY NAME", selector: ((row: any) => row["BARANGAY NAME"]), sortable: true},
         {width: "200px", name: "BEC NAME", selector: ((row: any) => row["BEC NAME"]), sortable: true},
+        {width: "200px", name: "LUMON", selector: ((row: any) => row["LUMON"]), sortable: true},
         {width: "200px", name: "HOUSEHOLDS", selector: ((row: any) => row["HOUSEHOLDS"]), sortable: true},
         {width: "200px", name: "CATHOLIC", selector: ((row: any) => row["CATHOLIC"]), sortable: true},
         {width: "200px", name: "ATTENDANTS", selector: ((row: any) => row["ATTENDANTS"]), sortable: true},
@@ -188,7 +183,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         {width: "200px", name: "HIGH SCHOOL", selector: ((row: any) => row["HIGH SCHOOL"]), sortable: true},
         {width: "200px", name: "COLLECE", selector: ((row: any) => row["COLLECE"]), sortable: true},
         {width: "200px", name: "LIVING CONDITION", selector: ((row: any) => row["LIVING CONDITION"])},
-        
+        {width: "200px", name: "COMMENT", selector: ((row: any) => row["COMMENT"])},
     ]
     const handleSearch = (e: any)=>{
         let query = e.target.value;
@@ -209,6 +204,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "household.xlsx");
     }
+
     return(
         <>
         <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
@@ -222,6 +218,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             <MyAppNav/>
             {/* add this to a file content */}
             {isTableSettingShow&&<TableSettings onClose={()=>setTableSettiingShow(!isTableSettingShow)} sendDataToHousehold={handleDataFromChild}/>}
+            {isHouseholdDataShow&&<ViewHouseholdData data={householdData} onClose={()=>setHouseholdDataShow(!isHouseholdDataShow)} onLoading={()=>setLoading(!isLoading)} />}
             <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
                 {/* content here */}
                 <div className='flex flex-col w-full h-full'>
@@ -259,7 +256,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                             </div>
                         </div>
                         <div className="flex flex-col-reverse md:flex-col">
-                            <div className="grid md:grid-cols-3 w-full mt-10 gap-4">
+                            <div className="grid md:grid-cols-4 w-full mt-10 gap-4">
                                 <div className="flex flex-row bg-[#001656] rounded-lg p-2 items-center">
                                     <div className="bg-gray-500 rounded-sm p-3">
                                         <IconContext.Provider value={{ color: "white", size: "3em" }}>
@@ -279,9 +276,8 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                         </IconContext.Provider>  
                                     </div>
                                     <div className="flex flex-col px-3">
-                                        <div className="text-2xl font-bold">Total Catholic</div>
-                                        <div className="font-bold text-lg">{isDisplayLoading?"Loading..":numberData.total_catholic}</div>
-                                        <div>Catholic: <span>{isDisplayLoading?"Loading..":numberData.total_encoded_catholic}</span></div>
+                                        <div className="text-2xl font-bold">Catholic</div>
+                                        <div className="font-bold text-lg">{isDisplayLoading?"Loading..":numberData.total_encoded_catholic}</div>
                                     </div>
                                 </div>
                                 <div className="flex flex-row bg-[#001656] rounded-lg p-2 items-center">
@@ -291,21 +287,31 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                         </IconContext.Provider>
                                     </div>
                                     <div className="flex flex-col px-3">
-                                        <div className="text-2xl font-bold">Total Populations</div>
+                                        <div className="text-2xl font-bold">Populations</div>
                                         <div className="font-bold text-lg">{isDisplayLoading?"Loading..":numberData.total_population}</div>
-                                        <div>Households: <span>{isDisplayLoading?"Loading..":numberData.total_household}</span></div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-row bg-[#001656] rounded-lg p-2 items-center">
+                                    <div className="bg-gray-500 rounded-sm p-3">
+                                        <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
+                                            <MdBusiness/>                     
+                                        </IconContext.Provider>
+                                    </div>
+                                    <div className="flex flex-col px-3">
+                                        <div className="text-2xl font-bold">Lumon</div>
+                                        <div className="font-bold text-lg">{isDisplayLoading?"Loading..":numberData.total_lumon }</div>
                                     </div>
                                 </div>
                             </div>
                             <div className="mt-3">
                                 <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3'>
                                     <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search: </label>
-                                    <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
+                                    <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                                 </div>
                                 {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
                                 {!isDisplayLoading&&
-                                <DataTable columns={columns} data={dataTable} pagination paginationPerPage={4} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}/>
-                                }
+                                <DataTable columns={columns} data={dataTable} pagination paginationPerPage={4} responsive paginationRowsPerPageOptions={[1,2,3,4,5]} />
+                                } 
                             </div>
                         </div>
 
@@ -419,12 +425,12 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
                     <form className="flex flex-col m-3 bg-white text-black rounded-sm p-2" onSubmit={procced}>
                         <div>Select Barangay</div>
                         <div className="flex flex-row gap-x-1 p-3">
-                            <select name="barangay" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e: any)=>getDataBangay(e)} value={barangay_id}>
+                            <select name="barangay" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e: any)=>getDataBangay(e)} value={barangay_id}>
                                 {barangayList.map((brgy: any)=>{
                                     return(<option value={brgy.id} key={brgy.id}>{brgy.name}</option>)
                                 })}
                             </select>
-                            <select name="bec" id="bec" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required disabled={becList.length==0} onChange={(e: any)=>getBec_name(e)} value={bec_id}>
+                            <select name="bec" id="bec" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required disabled={becList.length==0} onChange={(e: any)=>getBec_name(e)} value={bec_id}>
                                 {becList.length==0?<option value="" disabled>No BEC Name for this Barangay</option>:""}
                                 <option value="all" >All</option>
                                 {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id}>{bec.bec_name}</option>)})}
@@ -439,6 +445,8 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
         </>
     )
 }
+
+
 
 
 export default Household;

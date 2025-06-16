@@ -118,17 +118,17 @@
                                     <div className="flex flex-col bg-white px-4 py-1 text-black rounded-md gap-y-2 m-10 md:w-[50%] w-full">
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="d" className="block mb-2 text-sm font-medium ">Firstname</label>
-                                            <input name="firstname" type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Firstname" value={firstname} onChange={(e)=>setfirstname(e.target.value)} required />
+                                            <input name="firstname" type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 text-white border-gray-700 placeholder-gray-700  focus:border-blue-500" placeholder="Firstname" value={firstname} onChange={(e)=>setfirstname(e.target.value)} required />
                                         </div>
 
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="lastname" className="block mb-2 text-sm font-medium ">Lastname</label>
-                                            <input name="lastname" type="text" id="lastname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Lastname" required value={lastname} onChange={(e)=>setlastname(e.target.value)}/>
+                                            <input name="lastname" type="text" id="lastname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 text-white border-gray-700 placeholder-gray-700  focus:border-blue-500" placeholder="Lastname" required value={lastname} onChange={(e)=>setlastname(e.target.value)}/>
                                         </div>
 
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="username" className="block mb-2 text-sm font-medium ">Username</label>
-                                            <input name="username" type="text" id="username" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Username" required value={username} onChange={(e)=>setusername(e.target.value)} />
+                                            <input name="username" type="text" id="username" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 text-white border-gray-700 placeholder-gray-700  focus:border-blue-500" placeholder="Username" required value={username} onChange={(e)=>setusername(e.target.value)} />
                                         </div>
 
                                         <div className='flex flex-col w-full text-sm text-red-800 capitalize'>
@@ -137,12 +137,12 @@
 
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="old_password" className="block mb-2 text-sm font-medium ">Old Password</label>
-                                            <input name="old_password" type="password" id="old_password" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Old Password" required onChange={()=>setmessage("")}/>
+                                            <input name="old_password" type="password" id="old_password" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 text-white border-gray-700 placeholder-gray-700  focus:border-blue-500" placeholder="Old Password" required onChange={()=>setmessage("")}/>
                                         </div>
                                         
                                         <div className='flex flex-col w-full'>
                                             <label htmlFor="new_password" className="block mb-2 text-sm font-medium ">New Password</label>
-                                            <input name="new_password" type="password" id="new_password" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="New Password" required/>
+                                            <input name="new_password" type="password" id="new_password" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 text-white border-gray-700 placeholder-gray-700  focus:border-blue-500" placeholder="New Password" required/>
                                         </div>
                                         <div className='flex flex-col w-full mt-2.5'>
 

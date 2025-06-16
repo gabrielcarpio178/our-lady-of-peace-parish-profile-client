@@ -12,7 +12,6 @@ import moment from 'moment';
 import { BounceLoader } from 'react-spinners';
 import Swal from 'sweetalert2';
 import React from 'react';
-import { Socket, io as socketIoClient } from 'socket.io-client';
 
 
 export default function Access_user(){
@@ -95,12 +94,6 @@ export default function Access_user(){
 
     useEffect(()=>{
         getData()
-        var newSocket = socketIoClient(socket_link())
-        newSocket.on("receive-message", data=>{
-            if(data.message){
-                getData()
-            }
-        })
     },[])
 
 
@@ -124,7 +117,6 @@ export default function Access_user(){
                 <MyAppNav/>
                 {isLoading&&
                 <div className='absolute bg-black/50 z-40 w-full h-full'>
-                    {/* how to make this first layer of the screen */}
                     <div  className='flex items-center justify-center w-full h-full'>
                         <BounceLoader color='#ffffff' size={120}/>
                     </div>
@@ -132,9 +124,7 @@ export default function Access_user(){
                 } 
                 {isShowAddForm&&<AddContent onClick={myFunction} refreshUserList={getData} setLoading={()=>setLoading(!isLoading)}/>}
                 {isShowEditForm&&<EditForm user={editUser} onClick={editFormShowfun} setLoading={()=>setLoading(!isLoading)}/>}
-                {/* add this to a file content */}
                 <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
-                    {/* content here */}
                     <div className='flex flex-col w-full'>
                         <div className='w-full flex flex-row'>
                             <AdminHeader/>
@@ -196,27 +186,51 @@ const AddContent: React.FC<IProps> = (props)=> {
         };
         const token = userData().token
         setLoading(true)
-        props.setLoading()
+        props.setLoading
         try {
-            await axios.post(`${api_link()}/addUsers`, formValues, 
+            const res = await axios.post(`${api_link()}/addUsers`, formValues, 
             {
             headers:{
                 'Content-type':'application/x-www-form-urlencoded',
                 "authorization" : `bearer ${token}`,
             }
         })
-        Swal.fire({
-            position: "center",
-            title: `Add Success`,
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1000,
-        }).then(()=>{
-            props.setLoading();
-            window.location.reload()
-        })
+        if(res.status===200){
+            if(res.data.msg==="invalid user"){
+                Swal.fire({
+                    position: "center",
+                    title: `The username or password is already in use.`,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 1000,
+                }).then(()=>{
+                    setLoading(false)
+                })
+            }else{
+                props.setLoading()
+                Swal.fire({
+                    position: "center",
+                    title: `Add Successfully`,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1000,
+                }).then(()=>{
+                    props.setLoading();
+                    window.location.reload()
+                })
+            }
+        }
+        
         } catch (error) {
-            console.log(error)
+            Swal.fire({
+                position: "center",
+                title: `Something want wrong`,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 1000,
+            }).then(()=>{
+                setLoading(false)
+            })
         }
     }    
 

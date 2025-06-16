@@ -1,6 +1,6 @@
 
 import churchImg from'./../../assets/image/church-image.png';
-import { FaUser, FaEye  } from "react-icons/fa";
+import { FaUser, FaEye, FaEyeSlash  } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import ourLadyOfPeace from'./../../assets/image/our-lady-of-peace.png';
 import {api_link, socket_link as socket_linkData} from "../../api_link"
@@ -8,13 +8,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BounceLoader } from 'react-spinners';
 import React from 'react';
-import { Socket, io as socketIoClient } from 'socket.io-client';
 
 export default function Login(){
     const API_LINK = api_link()
     axios.defaults.withCredentials = true;
     const [resultInput, setResult] = useState("")
     const [isLoading, setLoading] = useState(false)
+    const [isShowPassword, setShowPassword] = useState(false)
     useEffect(()=>{
         setResult("")
         setLoading(false)
@@ -37,10 +37,6 @@ export default function Login(){
             }else{
                 localStorage.setItem("user", JSON.stringify(res.data.user))
                 localStorage.setItem("token", res.data.token)
-                var newSocket = socketIoClient(socket_linkData())
-                newSocket.emit("thereIsLogined", {
-                    message: true
-                })
                 window.location.href = '/dashboard';
             }
         } catch (error) {
@@ -101,14 +97,14 @@ export default function Login(){
                                 <div>
                                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-white">Password</label>
                                     <div className='relative'>
-                                        <div className='absolute right-[3%] w-10 h-10 flex items-center justify-center'>
+                                        <div className='absolute right-[3%] w-10 h-10 flex items-center justify-center cursor-pointer' onClick={()=>setShowPassword(!isShowPassword)}>
                                             <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                                                 <div>
-                                                    <FaEye/>
+                                                    {!isShowPassword? <FaEye/>:<FaEyeSlash/>}
                                                 </div>
                                             </IconContext.Provider>   
                                         </div>
-                                        <input name='password' type="password" id="password" className={`border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500`} placeholder="Password" required />
+                                        <input name='password' type={!isShowPassword?"password":"text"} id="password" className={`border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500`} placeholder="Password" required />
                                     </div>
                                 </div>
                                 <div className="flex items-center text-sm text-red-800 capitalize" role="alert">
@@ -122,8 +118,4 @@ export default function Login(){
             </div>
         </>
     )
-}
-
-function socket_link(): Partial<import("socket.io-client").ManagerOptions & import("socket.io-client").SocketOptions> | undefined {
-    throw new Error('Function not implemented.');
 }
