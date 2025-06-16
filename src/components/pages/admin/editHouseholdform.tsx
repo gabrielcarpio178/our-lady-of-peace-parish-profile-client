@@ -214,35 +214,35 @@ export default function EditSurveyForm(){
                                             <div className="grid grid-cols-2 mt-2 gap-5">
                                                 <div className="col-span-2">
                                                     <label htmlFor="family_name" className="block mb-2 text-sm font-medium capitalize">family name</label>
-                                                    <input name="family_name" type="text" id="family_name" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-[49%]" required value={family_name} onChange={(e)=>setfamily_name(e.target.value)} />
+                                                    <input name="family_name" type="text" id="family_name" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-[49%]" required value={family_name} onChange={(e)=>setfamily_name(e.target.value)} />
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="husband_name" className="block mb-2 text-sm font-medium capitalize">Husband name</label>
-                                                    <input name="husband_name" type="text" id="husband_name" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" value={husband_name}  onChange={e=>sethusband_name(e.target.value)} required />
+                                                    <input name="husband_name" type="text" id="husband_name" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" value={husband_name}  onChange={e=>sethusband_name(e.target.value)} required />
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="occupation_husband" className="block mb-2 text-sm font-medium capitalize">occupation</label>
-                                                    <input name="occupation_husband" type="text" id="occupation_husband" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={husband_occupation} onChange={e=>sethusband_occupation(e.target.value)} />
+                                                    <input name="occupation_husband" type="text" id="occupation_husband" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={husband_occupation} onChange={e=>sethusband_occupation(e.target.value)} />
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="wife_name" className="block mb-2 text-sm font-medium capitalize">Wife Name</label>
-                                                    <input name="wife_name" type="text" id="wife_name" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={wife_name} onChange={e=>setwife_name(e.target.value)}/>
+                                                    <input name="wife_name" type="text" id="wife_name" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={wife_name} onChange={e=>setwife_name(e.target.value)}/>
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="occupation_wife" className="block mb-2 text-sm font-medium capitalize">occupation</label>
-                                                    <input name="occupation_wife" type="text" id="occupation_wife" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={wife_occupation} onChange={e=>setwife_occupation(e.target.value)} />
+                                                    <input name="occupation_wife" type="text" id="occupation_wife" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={wife_occupation} onChange={e=>setwife_occupation(e.target.value)} />
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="no_catholic" className="block mb-2 text-sm font-medium capitalize">no. of household members</label>
-                                                    <input name="no_catholic" type="number" id="no_catholic" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={household_member} onChange={e=>sethousehold_member(e.target.value)} />
+                                                    <input name="no_catholic" type="number" id="no_catholic" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={household_member} onChange={e=>sethousehold_member(e.target.value)} />
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="no_catholic_residence" className="block mb-2 text-sm font-medium capitalize">No. of catholic residence</label>
-                                                    <input name="no_catholic_residence" type="number" id="no_catholic_residence" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={catholic_member} onChange={e=>setcatholic_member(e.target.value)}/>
+                                                    <input name="no_catholic_residence" type="number" id="no_catholic_residence" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={catholic_member} onChange={e=>setcatholic_member(e.target.value)}/>
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="barangay" className="block mb-2 text-sm font-medium capitalize">barangay</label>
-                                                    <select name="barangay" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e:any)=>{getBEClist(e.target.value)}} value={barangay_id}>
+                                                    <select name="barangay" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e:any)=>{getBEClist(e.target.value)}} value={barangay_id}>
                                                         {barangayList.map((brgy: any)=>{
                                                             return(<option value={brgy.id} key={brgy.id}>{brgy.name}</option>)
                                                         })}
@@ -250,7 +250,7 @@ export default function EditSurveyForm(){
                                                 </div>
                                                 <div className="w-full">
                                                     <label htmlFor="bec_id" className="block mb-2 text-sm font-medium capitalize">BEC name</label>
-                                                    <select name="bec_id" id="bec_id" value={bec_id} className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e:any)=>{setbec_id(e.target.value)}}>
+                                                    <select name="bec_id" id="bec_id" value={bec_id} className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e:any)=>{setbec_id(e.target.value)}}>
                                                         {becList.length==0?<option value="" disabled selected>No BEC Name for this Barangay</option>:""}
                                                         {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id} >{bec.bec_name}</option>)})}
                                                     </select>
