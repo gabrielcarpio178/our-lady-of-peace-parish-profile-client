@@ -137,7 +137,7 @@ export default function EditSurveyForm(){
         }
         try {
             const token = userData().token;
-            const res = await axios.put(`${api_link()}/editHousehold`, formValues, {
+            const res = await axios.put(`${api_link()}/auth/editHousehold`, formValues, {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                     Authorization: `Bearer ${token}`,
