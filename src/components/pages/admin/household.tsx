@@ -82,6 +82,11 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         setHouseholdData(data)
     }
 
+    const capitalize = (str: string)=>{
+        if (str.length === 0) return ''
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
     const getDataTable = async () =>{
         const token = userData().token
         setIsDisplayLoading(true)
@@ -111,7 +116,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                         "LUMON": data.lumon,
                         "HOUSEHOLDS": data.household,
                         "CATHOLIC": data.no_catholic_residence,
-                        "ATTENDANTS": <div className="capitalize">data.mass_attendants</div>,
+                        "ATTENDANTS": capitalize(data.mass_attendants),
                         "BAPTISM": data.baptism,
                         "CONFIRMATION": data.isNotBaptismConfirmation,
                         "MARRIED": data.marrige,
