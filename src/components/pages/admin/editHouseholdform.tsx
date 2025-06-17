@@ -6,7 +6,7 @@ import { userData, api_link } from "../../../api_link";
 import BounceLoader from "react-spinners/BounceLoader";
 import Swal from "sweetalert2";
 import { useParams } from 'react-router-dom';
-
+import 'animate.css'
 export default function EditSurveyForm(){
     const { id } = useParams();
     const [barangayList, setBarangayList] = useState([])
@@ -220,7 +220,7 @@ export default function EditSurveyForm(){
                                 <AdminHeader/>
                             </div>
                             <div className='w-full h-[87.3%] flex flex-row overflow-y-scroll'>
-                                <div className='w-full flex flex-col px-10'>
+                                <div className='w-full flex flex-col px-10  animate__animated animate__fadeIn'>
                                     <div className="">
                                         <h2 className='text-2xl text-black opacity-[50%]'>
                                             Edit Household Information
@@ -374,7 +374,7 @@ export default function EditSurveyForm(){
                                                 </div>  
                                             </div>
                                         </div>       
-                                        <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800" disabled={!bec_id}>{"Submit"}</button>
+                                        <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800" disabled={!bec_id}>{"Save"}</button>
                                     </form>
                                 </div>
                             </div>

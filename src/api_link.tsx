@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 export function api_link(){
     return "https://our-lady-of-peace-parish-profile-backend.onrender.com/auth";
 };

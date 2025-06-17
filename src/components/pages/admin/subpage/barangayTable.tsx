@@ -122,7 +122,7 @@ const BarangayTable:React.FC<IProps> = (props)=> {
     return (
         <>
             <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50'>
-                <div className="w-full max-w-lg bg-[#86ACE2] border border-black shadow-lg rounded mx-5 md:mx-0">
+                <div className="w-full max-w-lg bg-[#86ACE2] border border-black shadow-lg rounded mx-5 md:mx-0 animate__animated animate__fadeIn">
                     <div className='relative'>
                         {isShowformEdit&&<FormEdit dataObj={editName} onClick={()=>setShowformEdit(!isShowformEdit)} setLoading={()=>props.setLoading}/>}
                         {isShowformAdd&&<AddForm onClick={()=>setShowformAdd(!isShowformAdd)} setLoading={()=>props.setLoading}/>}
@@ -240,7 +240,7 @@ const AddForm: React.FC<IAddForm> = (props)=>{
         <>
             <div className='w-full h-fit absolute z-1 top-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2'>
                 <div className='flex items-center justify-center'>
-                    <form className="px-8 pt-6 pb-8 mb-4 bg-[#86ACE2] border border-black shadow-lg rounded relative" onSubmit={addSubmit}>
+                    <form className="px-8 pt-6 pb-8 mb-4 bg-[#86ACE2] border border-black shadow-lg rounded relative  animate__animated animate__fadeIn" onSubmit={addSubmit}>
                         <div className='absolute right-2 top-2 cursor-pointer' onClick={props.onClick}>
                             <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                                 <div>
@@ -350,7 +350,7 @@ const FormEdit: React.FC<IForm> = (props) => {
         <>
             <div className='w-full h-fit absolute z-1 top-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2'>
                 <div className='flex items-center justify-center'>
-                    <form className="px-8 pt-6 pb-8 mb-4 bg-[#86ACE2] border border-black shadow-lg rounded relative" onSubmit={editSubmit}>
+                    <form className="px-8 pt-6 pb-8 mb-4 bg-[#86ACE2] border border-black shadow-lg rounded relative animate__animated animate__fadeIn" onSubmit={editSubmit}>
                         <div className='absolute right-2 top-2 cursor-pointer' onClick={props.onClick}>
                             <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                                 <div>

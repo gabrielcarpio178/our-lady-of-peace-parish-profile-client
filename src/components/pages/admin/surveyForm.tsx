@@ -5,7 +5,7 @@ import axios from "axios";
 import { userData, api_link } from "../../../api_link";
 import BounceLoader from "react-spinners/BounceLoader";
 import Swal from "sweetalert2";
-
+import 'animate.css'
 export default function SurveyForm(){
     const [barangayList, setBarangayList] = useState([])
     const [becList, setBecList] = useState([]);
@@ -160,7 +160,7 @@ export default function SurveyForm(){
                                 <AdminHeader/>
                             </div>
                             <div className='w-full flex flex-row overflow-y-scroll'>
-                                <div className='w-full flex flex-col px-10'>
+                                <div className='w-full flex flex-col px-10  animate__animated animate__fadeIn'>
                                     <div className="">
                                         <h2 className='text-2xl text-black opacity-[50%]'>
                                             Add Household Information

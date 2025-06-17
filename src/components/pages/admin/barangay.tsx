@@ -10,7 +10,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import { BounceLoader } from 'react-spinners'
 import DataTable from 'react-data-table-component'
-
+import 'animate.css';
 
 
 export default function Baranagay(){
@@ -175,7 +175,7 @@ export default function Baranagay(){
                         <div className='w-full flex flex-row'>
                             <AdminHeader/>
                         </div>
-                        <div className='w-full flex flex-col px-10'>
+                        <div className='w-full flex flex-col px-10 animate__animated animate__fadeIn'>
                             <div className='flex flex-row w-full items-center justify-between'>
                                 <div className=''>
                                     <h2 className='text-2xl text-black opacity-[50%]'>
@@ -300,7 +300,7 @@ const AddBECForm:React.FC<AddBECFormData> = (props)=>{
     return(
         <>
             <div className='absolute w-full h-full flex items-center justify-center text-white z-2 bg-black/50'>
-                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3">
+                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3 animate__animated animate__fadeIn">
                     <div className='relative'>
                         <div className='flex flex-row p-3 gap-x-3'> 
                             <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
@@ -431,7 +431,7 @@ const EditBECFormData: React.FC<Data> = (props) => {
         <>
             <div className='absolute w-full h-full flex items-center justify-center text-white z-2 bg-black/50'>
             
-                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded">
+                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded  animate__animated animate__fadeIn">
                     <div className='relative'>
                         <div className='flex flex-row p-3 gap-x-3'> 
                             <div className='text-xl'>

@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BounceLoader } from 'react-spinners';
 import React from 'react';
+import 'animate.css'
 
 export default function Login(){
     const API_LINK = api_link()
@@ -68,7 +69,7 @@ export default function Login(){
                     </div>
                 </div>
                 
-                <div className="absolute md:w-auto w-full md:h-auto h-1/2 md:p-0 p-5">
+                <div className="absolute md:w-auto w-full md:h-auto h-1/2 md:p-0 p-5 animate__animated animate__fadeIn">
                     <div className="w-full h-full bg-[#001656] rounded-2xl shadow-blue-500 shadow-2xl flex md:flex-row relative">
                         <div className="md:w-[55%] md:flex hidden items-center justify-center">
                             <div className="bg-[#86ACE2] rounded w-[95%] h-[95%] opacity-100">

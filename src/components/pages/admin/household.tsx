@@ -14,6 +14,7 @@ import * as XLSX from 'xlsx';
 import { BounceLoader } from "react-spinners";
 import ViewHouseholdData from "./subpage/viewHouseholdData"
 import React from "react";
+import 'animate.css'
 
 interface dataToHouseholdProps {}
 interface sendData {
@@ -95,7 +96,6 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             const datas = res.data.map((data:any)=>{
                 return (
                     {
-                        "id": data.id,
                         "Action": <div>
                                     <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>editHousehold(data)}><FaEye/></button>
                                 </div>,
@@ -225,7 +225,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                     <div className='w-full flex flex-row'>
                         <AdminHeader/>
                     </div>
-                    <div className='w-full flex flex-col p-4'>
+                    <div className='w-full flex flex-col p-4 animate__animated animate__fadeIn'>
                         <div className='w-full'>
                             <div className='flex flex-row justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
@@ -266,7 +266,6 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                     <div className="flex flex-col px-3">
                                         <div className="text-2xl font-bold">Total Encode</div>
                                         <div className="font-bold text-lg">{isDisplayLoading?"Loading..":numberData.total_encoded}</div>
-                                        <div></div>
                                     </div>
                                 </div>
                                 <div className="flex flex-row bg-[#001656] rounded-lg p-2 items-center">
@@ -407,7 +406,7 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
     return (
         <>
             <div className='md:absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50 fixed'>
-                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded mx-5">
+                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded mx-5 animate__animated animate__fadeIn">
                     <div className='relative'>
                         <div className='flex flex-row p-3 gap-x-3'>
                             <div className='text-xl'>

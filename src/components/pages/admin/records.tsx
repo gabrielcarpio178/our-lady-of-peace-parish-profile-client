@@ -8,7 +8,7 @@ import { IconContext } from 'react-icons';
 import axios from 'axios';
 import { userData, api_link } from '../../../api_link';
 import DataTable from 'react-data-table-component';
-
+import 'animate.css'
 export default function Records(){
     const [datetime, setDatetime] = useState("Loading...")
     const [recordsData, setRecordsData] = useState([])
@@ -87,7 +87,7 @@ export default function Records(){
                         <div className='w-full flex flex-row'>
                             <AdminHeader/>
                         </div>
-                        <div className='w-full flex flex-col px-10'>
+                        <div className='w-full flex flex-col px-10  animate__animated animate__fadeIn'>
                             <div className='w-full flex md:flex-row flex-col justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
                                     Records

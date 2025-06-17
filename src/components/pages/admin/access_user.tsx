@@ -1,7 +1,7 @@
 
 import MyAppNav from './adminNav'
 import AdminHeader from './adminHeader'
-import { FaPlus, FaUserPlus, FaEdit } from 'react-icons/fa'
+import { FaPlus, FaUserPlus, FaEdit, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { MdOutlineCancel  } from "react-icons/md";
 import { useEffect, useState } from 'react'
 import { IconContext } from "react-icons";
@@ -12,8 +12,7 @@ import moment from 'moment';
 import { BounceLoader } from 'react-spinners';
 import Swal from 'sweetalert2';
 import React from 'react';
-
-
+import 'animate.css'
 export default function Access_user(){
     const [isShowAddForm, setAddFormShow] = useState(false)
     const [users, setUser] = useState([]);
@@ -129,7 +128,7 @@ export default function Access_user(){
                         <div className='w-full flex flex-row'>
                             <AdminHeader/>
                         </div>
-                        <div className='w-full flex flex-col px-10'>
+                        <div className='w-full flex flex-col px-10 animate__animated animate__fadeIn'>
                             <h2 className='text-2xl text-black opacity-[50%]'>
                                 List of Users
                             </h2>
@@ -141,7 +140,7 @@ export default function Access_user(){
                             </div>}
                             <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3 mt-4'>
                                 <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search Name:</label>
-                                <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2] text-black focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
+                                <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-700 placeholder-gray-700 focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                             </div>
                             {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
                             {!isDisplayLoading&&
@@ -172,6 +171,7 @@ const AddContent: React.FC<IProps> = (props)=> {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setLoading] = useState(false)
+    const [isShowPassword, setShowPassword] = useState(false)
 
 
     const loginData = async (e: React.FormEvent<HTMLFormElement>) =>{
@@ -237,7 +237,7 @@ const AddContent: React.FC<IProps> = (props)=> {
     return (
         <>
         <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50'>
-            <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3">
+            <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3 animate__animated animate__fadeIn">
                 <div className='relative'>
                     <div className='flex flex-row p-3 gap-x-3'>
                         <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
@@ -263,17 +263,17 @@ const AddContent: React.FC<IProps> = (props)=> {
                     <div className="mb-4 flex flex-col bg-white px-2 text-black rounded-md gap-y-2">
                         <div className='flex flex-col w-full'>
                             <label htmlFor="d" className="block mb-2 text-sm font-medium ">Firstname</label>
-                            <input name="firstname" value={firstname} onChange={(e) => setFirstname(e.target.value)} type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Firstname" required />
+                            <input name="firstname" value={firstname} onChange={(e) => setFirstname(e.target.value)} type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white  focus:border-blue-500" placeholder="Firstname" required />
                         </div>
 
                         <div className='flex flex-col w-full'>
                             <label htmlFor="lastname" className="block mb-2 text-sm font-medium ">Lastname</label>
-                            <input name="lastname" value={lastname} onChange={(e) => setLastname(e.target.value)} type="text" id="lastname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Lastname" required />
+                            <input name="lastname" value={lastname} onChange={(e) => setLastname(e.target.value)} type="text" id="lastname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white  focus:border-blue-500" placeholder="Lastname" required />
                         </div>
 
                         <div className='flex flex-col w-full'>
                             <label htmlFor="role" className="block mb-2 text-sm font-medium ">Role</label>
-                            <select name="role" value={role} onChange={(e) => setRole(e.target.value)} id="role" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" required>
+                            <select name="role" value={role} onChange={(e) => setRole(e.target.value)} id="role" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white  focus:border-blue-500" required>
                                 <option value="admin">Admin</option>
                                 <option value="encoder">Encoder</option>
                             </select>
@@ -281,12 +281,21 @@ const AddContent: React.FC<IProps> = (props)=> {
 
                         <div className='flex flex-col w-full'>
                             <label htmlFor="username" className="block mb-2 text-sm font-medium ">Username</label>
-                            <input name="username" value={username} onChange={(e) => setUsername(e.target.value)} type="text" id="username" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Username" required />
+                            <input name="username" value={username} onChange={(e) => setUsername(e.target.value)} type="text" id="username" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white  focus:border-blue-500" placeholder="Username" required />
                         </div>
 
                         <div className='flex flex-col w-full'>
                             <label htmlFor="password" className="block mb-2 text-sm font-medium ">Password</label>
-                            <input name="password"   value={password} onChange={(e) => setPassword(e.target.value)}type="password" id="password" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="password" required />
+                            <div className='relative'>
+                                <input name="password"   value={password} onChange={(e) => setPassword(e.target.value)}type={!isShowPassword?"password":"text"} id="password" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white  focus:border-blue-500" placeholder="password" required />
+                                <div className='absolute right-[3%] top-1/4' onClick={()=>setShowPassword(!isShowPassword)}>
+                                <IconContext.Provider value={{ color: "white", size: "1.5em" }}>  
+                                    {!isShowPassword?<FaEye/>:<FaEyeSlash/>}
+                                    
+                                </IconContext.Provider>      
+                                </div>
+                            </div>
+                            
                         </div>
                         <div className='flex flex-col w-full mt-2.5'>
 
@@ -363,8 +372,8 @@ const EditForm: React.FC<EditUSerData> = (content) =>{
 
     return (
         <>
-        <div className='absolute w-full h-full flex items-center justify-center text-white z-1'>
-            <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded">
+        <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50'>
+            <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded animate__animated animate__fadeIn">
                 <div className='relative'>
                     <div className='flex flex-row p-3 gap-x-3'>
                         <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
@@ -389,17 +398,17 @@ const EditForm: React.FC<EditUSerData> = (content) =>{
                     <div className="mb-4 flex flex-col bg-white px-2 text-black rounded-md gap-y-2">
                         <div className='flex flex-col w-full'>
                             <label htmlFor="firstname" className="block mb-2 text-sm font-medium ">Firstname</label>
-                            <input name="firstname" value={firstname} onChange={(e) => setFirstname(e.target.value)} type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Firstname" required />
+                            <input name="firstname" value={firstname} onChange={(e) => setFirstname(e.target.value)} type="text" id="firstname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white focus:border-blue-500" placeholder="Firstname" required />
                         </div>
 
                         <div className='flex flex-col w-full'>
                             <label htmlFor="lastname" className="block mb-2 text-sm font-medium ">Lastname</label>
-                            <input name="lastname" value={lastname} onChange={(e) => setLastname(e.target.value)} type="text" id="lastname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" placeholder="Lastname" required />
+                            <input name="lastname" value={lastname} onChange={(e) => setLastname(e.target.value)} type="text" id="lastname" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white  focus:border-blue-500" placeholder="Lastname" required />
                         </div>
 
                         <div className='flex flex-col w-full'>
                             <label htmlFor="role" className="block mb-2 text-sm font-medium ">Role</label>
-                            <select name="role" value={rule} onChange={(e) => setRole(e.target.value)} id="role" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-[#86ACE2] border-[#86ACE2] placeholder-[#86ACE2]  focus:border-blue-500" required>
+                            <select name="role" value={rule} onChange={(e) => setRole(e.target.value)} id="role" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white  focus:border-blue-500" required>
                                 <option value="admin">Admin</option>
                                 <option value="encoder">Encoder</option>
                             </select>

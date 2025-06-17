@@ -46,12 +46,12 @@ export default function CoverPage(){
                 <img src={churchImg} alt="churchImg" className='w-full h-full absolute z-20' />
 
                 <div className='static z-[999]'>
-                    <div className='p-14 w-full flex flex-row justify-between items-center'>
-                        <div className='text-white w-[40%] text-5xl font-serif'>
+                    <div className='p-14 w-full flex md:flex-row flex-col justify-between items-center gap-y-5'>
+                        <div className='text-white md:w-[40%] w-full text-center md:text-start text-2xl font-serif md:text-5xl'>
                             Our Lady of Peace Parish Diocese of Bacolod
                         </div>
                         <div className=''>
-                            <Link to="/login" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">Login</Link>
+                            <Link to="/login" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full">Login</Link>
                         </div>
                     </div>
                 </div>
@@ -73,14 +73,14 @@ export default function CoverPage(){
                             <div className={`${img_id!=0?"bg-gray-400":"bg-black"} opacity-50 cursor-pointer w-4 h-4 rounded-full`} onClick={()=>handleSetImgId(0)}></div>
                             <div className={`${img_id!=1?"bg-gray-400":"bg-black"} opacity-50 cursor-pointer w-4 h-4 rounded-full`} onClick={()=>handleSetImgId(1)}></div>
                         </div>
-                        <div className='flex flex-row items-center gap-x-2 bg-[#001656] text-white p-1 w-full'>
+                        <div className='flex flex-row items-center gap-x-2 bg-[#001656] text-white p-1 w-full md:text-lg text-sm'>
                             <div>
                                 <IconContext.Provider value={{ color: "white", size: "2em" }}>
                                     <FaSquareFacebook/>
                                 </IconContext.Provider>
                                 
                             </div>
-                            <div className='text-lg'>
+                            <div>
                                 Our Lady of Peace Parish - Diocese of Bacolod
                             </div>
                             
@@ -115,15 +115,15 @@ const ContentCard:React.FC<ContentData> = (props) =>{
         <>
             
                     <div className='flex items-center'>
-                        <div className='flex flex-row items-center w-full justify-center gap-x-10'>
-                            <div className='w-[20%] overflow-hidden flex items-center justify-center'>
+                        <div className='flex md:flex-row flex-col items-center w-full justify-center gap-x-10'>
+                            <div className='md:w-[20%] w-[40%] overflow-hidden flex items-center justify-center'>
                                 <img src={img} alt={name} className='w-full object-cover' />
                             </div>
-                            <div className='w-[60%]'>
-                                <div className='text-5xl font-serif'>
+                            <div className='md:w-[60%]'>
+                                <div className='md:text-5xl text-2xl font-serif'>
                                     {name}
                                 </div>
-                                <div className='text-3xl font-semibold opacity-[71%]'>
+                                <div className='md:text-3xl text-xl font-semibold opacity-[71%] md:text-start text-center'>
                                     {position}
                                 </div>
                             </div>

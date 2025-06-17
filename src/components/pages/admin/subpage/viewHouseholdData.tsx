@@ -80,8 +80,8 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
     
     return (
         <>
-        <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50 p-4'>
-            <div className="w-auto md:h-auto h-[80%] md:overflow-y-visible overflow-y-scroll bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3 relative p-3">
+        <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50 p-4 overflow-hidden'>
+            <div className="w-auto md:h-auto h-[80%] md:overflow-y-visible overflow-y-scroll bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3 relative p-3 animate__animated animate__fadeIn">
                 <div className='absolute right-2 top-2 cursor-pointer' onClick={onClose}>
                     <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                         <div>

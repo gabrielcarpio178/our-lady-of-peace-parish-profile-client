@@ -9,6 +9,7 @@ import { IconContext } from 'react-icons';
 import { FaPeopleGroup } from 'react-icons/fa6';
 import { MdBusiness } from 'react-icons/md'
 import { FaCross, FaChild, FaCheckCircle, FaUserFriends } from 'react-icons/fa';
+import 'animate.css';
 
 export default function Dashboard(){
     const chartRef = useRef<HTMLCanvasElement | null>(null)
@@ -137,7 +138,7 @@ export default function Dashboard(){
                             'rgb(237, 221, 128)',
                             'rgb(98, 169, 240)',
                             'rgb(230, 119, 242)',
-                            'rgb(237, 221, 128)'
+                            'rgb(255,82,82)'
                         ],
                         borderColor: [
                             'rgb(2, 3, 3)',
@@ -188,7 +189,7 @@ export default function Dashboard(){
                         <div className='w-full flex flex-row'>
                             <AdminHeader/>
                         </div>
-                        <div className='w-full flex flex-col px-10'>
+                        <div className='w-full flex flex-col px-10 animate__animated animate__fadeIn'>
                             <div className='w-full flex md:flex-row flex-col items-center justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
                                     Dashboard
