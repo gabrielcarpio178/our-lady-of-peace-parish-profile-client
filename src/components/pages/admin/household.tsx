@@ -111,7 +111,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                         "LUMON": data.lumon,
                         "HOUSEHOLDS": data.household,
                         "CATHOLIC": data.no_catholic_residence,
-                        "ATTENDANTS": data.mass_attendants,
+                        "ATTENDANTS": <div className="capitalize">data.mass_attendants</div>,
                         "BAPTISM": data.baptism,
                         "CONFIRMATION": data.isNotBaptismConfirmation,
                         "MARRIED": data.marrige,
