@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 import { BounceLoader } from 'react-spinners';
 import React from 'react';
 import 'animate.css'
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { Link } from 'react-router-dom';
 
 export default function Login(){
     const API_LINK = api_link()
@@ -71,9 +73,19 @@ export default function Login(){
                 
                 <div className="absolute md:w-auto w-full md:h-auto h-1/2 md:p-0 p-5 animate__animated animate__fadeIn">
                     <div className="w-full h-full bg-[#001656] rounded-2xl shadow-blue-500 shadow-2xl flex md:flex-row relative">
-                        <div className="md:w-[55%] md:flex hidden items-center justify-center">
+                        <div className="md:w-[55%] md:flex hidden items-center justify-center relative">
                             <div className="bg-[#86ACE2] rounded w-[95%] h-[95%] opacity-100">
                                 <img src={churchImg} alt="church" className='h-full w-full'/>
+                            </div>
+                            <div className='absolute self-start w-full h-full flex flex-col items-center p-5 gap-y-2'>
+                                <Link to={"/"} className='self-start cursor-pointer'>
+                                    <IconContext.Provider value={{ color: "white", size: "2em" }}>
+                                        <IoMdArrowRoundBack/>
+                                    </IconContext.Provider>
+                                </Link>
+                                <div className='text-white text-3xl font-semibold text-center font-serif'>
+                                    Our Lady of Peace Parish Diocese of Bacolod
+                                </div>
                             </div>
                         </div>
                         <form className='md:w-[44%] absolute md:static w-full h-full flex flex-col justify-center md:block md:p-0 p-16' method="post" onSubmit={loginData}>
