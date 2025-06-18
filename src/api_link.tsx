@@ -1,5 +1,5 @@
 export function api_link(){
-    return "https://our-lady-of-peace-parish-profile-backend.onrender.com/auth";
+    return "http://localhost:8080/auth";
 };
 
 export function userData(){
