@@ -170,7 +170,7 @@ export default function EditSurveyForm(){
             if (res.status === 200) {
                 Swal.fire({
                     position: "center",
-                    title: `Update Success`,
+                    title: `Update Successfully`,
                     icon: "success",
                     showConfirmButton: false,
                     timer: 1000,
@@ -354,10 +354,6 @@ export default function EditSurveyForm(){
                                             <div className="w-full h-[0.5vh] bg-black opacity-50 mt-2"></div>
                                             <div className="grid grid-cols-2 gap-5">
                                                 <div className="w-full">
-                                                    <label htmlFor="lumon" className="block mb-2 text-sm font-medium capitalize">Lumon</label>
-                                                    <input name="lumon" type="number" min="0" id="lumon" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" value={lumon} onChange={e=>setlumon(e.target.value)} required />
-                                                </div>
-                                                <div className="w-full">
                                                     <label htmlFor="living_condition" className="block mb-2 text-sm font-medium capitalize">living condition</label>
                                                     <select name="living_condition" id="living_condition" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required value={living_condition} onChange={e=>setliving_condition(e.target.value)}>
                                                         <option value="upper class">Upper Class</option>
@@ -365,6 +361,10 @@ export default function EditSurveyForm(){
                                                         <option value="poor">Poor</option>
                                                         <option value="very poor">Very poor</option>
                                                     </select>
+                                                </div>
+                                                <div className="w-full">
+                                                    <label htmlFor="lumon" className="block mb-2 text-sm font-medium capitalize">Lumon</label>
+                                                    <input name="lumon" type="number" min="0" id="lumon" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" value={lumon} onChange={e=>setlumon(e.target.value)} required />
                                                 </div>
                                                 <div className="col-span-2">
                                                     <label htmlFor="comment" className="mb-2 text-sm font-medium capitalize flex flex-col">

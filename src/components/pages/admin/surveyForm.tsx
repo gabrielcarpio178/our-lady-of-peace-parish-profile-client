@@ -123,7 +123,7 @@ export default function SurveyForm(){
         }else{
             Swal.fire({
                 position: "center",
-                title: `Add Success`,
+                title: `Add Successfully`,
                 icon: "success",
                 showConfirmButton: false,
                 timer: 1000,
@@ -294,10 +294,6 @@ export default function SurveyForm(){
                                             <div className="w-full h-[0.5vh] bg-black opacity-50 mt-2"></div>
                                             <div className="grid grid-cols-2 gap-5">
                                                 <div className="w-full">
-                                                    <label htmlFor="lumon" className="block mb-2 text-sm font-medium capitalize">Lumon</label>
-                                                    <input name="lumon" type="number" min="0" id="lumon" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required />
-                                                </div>
-                                                <div className="w-full">
                                                     <label htmlFor="living_condition" className="block mb-2 text-sm font-medium capitalize">living condition</label>
                                                     <select name="living_condition" id="living_condition" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required >
                                                         <option value="upper class">Upper Class</option>
@@ -305,6 +301,10 @@ export default function SurveyForm(){
                                                         <option value="poor">Poor</option>
                                                         <option value="very poor">Very poor</option>
                                                     </select>
+                                                </div>
+                                                <div className="w-full">
+                                                    <label htmlFor="lumon" className="block mb-2 text-sm font-medium capitalize">Lumon</label>
+                                                    <input name="lumon" type="number" min="0" id="lumon" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required />
                                                 </div>
                                                 <div className="col-span-2">
                                                     <label htmlFor="comment" className="mb-2 text-sm font-medium capitalize flex flex-col">
