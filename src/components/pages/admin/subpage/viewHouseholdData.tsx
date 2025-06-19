@@ -62,7 +62,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                     })
                     Swal.fire({
                         position: "center",
-                        title: `Delete Success`,
+                        title: `Delete Successfully`,
                         icon: "success",
                         showConfirmButton: false,
                         timer: 1000,
