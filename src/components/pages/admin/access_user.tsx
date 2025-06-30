@@ -13,6 +13,7 @@ import { BounceLoader } from 'react-spinners';
 import Swal from 'sweetalert2';
 import React from 'react';
 import 'animate.css'
+import { BiReset } from "react-icons/bi";
 export default function Access_user(){
     const [isShowAddForm, setAddFormShow] = useState(false)
     const [users, setUser] = useState([]);
@@ -41,7 +42,7 @@ export default function Access_user(){
         { name: "USERNAME", selector: (row: any) => row.USERNAME, sortable: true },
         { name: "ROLE", selector: (row: any) => row.ROLE },
         { name: "STATUS", selector: (row: any) => row.STATUS },
-        { name: "DATE", selector: (row: any) => row.DATE, sortable: true },
+        { name: "DATE", selector: (row: any) => row.DATE, sortable: true, width: "200px"},
     ];
 
     const actionColumn = {
@@ -51,6 +52,40 @@ export default function Access_user(){
     };
 
     const columns = userData().user.rule==="admin" ? [...baseColumns, actionColumn] : baseColumns;
+
+    const resetPass = (data: {id: number, username: string}) =>{
+        const token = userData().token
+        Swal.fire({
+                title: "Are you sure?",
+                text: "You want to reset this user's access account",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, reset it!"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const res = await axios.put(`${api_link()}/resetPass`,data, {
+                            headers:{
+                                'Content-type':'application/x-www-form-urlencoded',
+                                "authorization" : `bearer ${token}`,
+                            }
+                        })
+                        console.log(res)
+                        if(res.status===200){
+                            Swal.fire({
+                                title: "Successfully!",
+                                text: "Use the username as the password.",
+                                icon: "success"
+                            });
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            });
+    }
 
     async function getData(){
         const token = userData().token
@@ -75,7 +110,10 @@ export default function Access_user(){
                             ROLE: <div className='capitalize'>{user.rule}</div>, 
                             STATUS: user.isActive==0?"DEACTIVE":"ACTIVE",
                             DATE: moment(user.addDate).format("MMM D, YYYY"),
-                            ACTION: <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>edit(user)}><FaEdit/></button>
+                            ACTION: <div>
+                                        <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>edit(user)}><FaEdit/></button>
+                                        <button type="button" className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-red-800" onClick={()=>resetPass({id: user.id, username: user.username})}><BiReset/></button>
+                                    </div>
                                     
                             
                         }
