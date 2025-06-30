@@ -65,6 +65,7 @@ export default function Access_user(){
                 confirmButtonText: "Yes, reset it!"
             }).then(async (result) => {
                 if (result.isConfirmed) {
+                    setLoading(true)
                     try {
                         const res = await axios.put(`${api_link()}/resetPass`,data, {
                             headers:{
@@ -79,8 +80,10 @@ export default function Access_user(){
                                 text: "Use the username as the password.",
                                 icon: "success"
                             });
+                            setLoading(false)
                         }
                     } catch (error) {
+                        setLoading(false)
                         console.log(error)
                     }
                 }
