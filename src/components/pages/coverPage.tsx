@@ -55,20 +55,20 @@ export default function CoverPage(){
                         </div>
                     </div>
                 </div>
-                <div className='static z-[999] overflow-hidden'>
-                    {img_id!==2&&
-                        <div className={`bg-center bg-no-repeat bg-cover py-5 animate__animated ${animationContent}`} style={{ backgroundImage: `url('${coverpage_bg}')`}}>
-                            <div className='grid grid-cols-1 h-full w-full'>
-                                <ContentCard img={content[img_id].img} position={content[img_id].position} name={content[img_id].name}/> 
-                            </div>
-                        </div>
-                    }
-                    
-                </div>
 
-                <div className='static z-[999]'>
-                    <div className='w-full flex flex-col items-center gap-5'>
-                        <div className='flex flex-row gap-5'>
+                <div className='z-[999]'>
+                    <div className='w-full flex flex-col items-center relative'>
+                        <div className='z-[999] overflow-hidden w-full'>
+                            {img_id!==2&&
+                                <div className={`bg-center bg-no-repeat bg-cover py-5 animate__animated ${animationContent}`} style={{ backgroundImage: `url('${coverpage_bg}')`}}>
+                                    <div className='grid grid-cols-1 h-full w-full'>
+                                        <ContentCard img={content[img_id].img} position={content[img_id].position} name={content[img_id].name}/> 
+                                    </div>
+                                </div>
+                            }
+                            
+                        </div>
+                        <div className='flex flex-row gap-5 absolute bottom-13 z-[999]'>
                             <div className={`${img_id!=2?"bg-gray-400":"bg-black"}  opacity-50 cursor-pointer w-4 h-4 rounded-full`} onClick={()=>handleSetImgId(2)}></div>
                             <div className={`${img_id!=0?"bg-gray-400":"bg-black"} opacity-50 cursor-pointer w-4 h-4 rounded-full`} onClick={()=>handleSetImgId(0)}></div>
                             <div className={`${img_id!=1?"bg-gray-400":"bg-black"} opacity-50 cursor-pointer w-4 h-4 rounded-full`} onClick={()=>handleSetImgId(1)}></div>
