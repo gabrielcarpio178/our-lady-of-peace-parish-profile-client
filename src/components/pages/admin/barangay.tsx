@@ -83,6 +83,7 @@ export default function Baranagay(){
             })
             const datas = res.data.map((data: any)=>{
                 data.percentage = getPercentage(data.total_household, parseInt(data.population));
+                console.log(data)
                 return {
                     "": <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>edit({bec_id: data.id, barangay_name: data.barangay_name, bec_name: data.bec_name, population: data.population})}><FaEdit/></button>,
                     "BARANGAY NAME": <div className='capitalize'>{data.barangay_name}</div>,
