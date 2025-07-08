@@ -154,27 +154,26 @@ export default function Baranagay(){
 
     return (
         <>
-            
-            <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
-                <MyAppNav/>
-                {isLoading&&
-                <div className='absolute bg-black/50 z-40 w-full h-full'>
-                    <div  className='flex items-center justify-center w-full h-full'>
-                        <BounceLoader color='#ffffff' size={120}/>
-                    </div>
-                </div>    
-                } 
-                {/*add subpage content */}
-                {isShowAddFormBEC&&<AddBECForm barangayList={barangayList} onClick={()=>setShowAddFormBEC(!isShowAddFormBEC)} setLoading={()=>setLoading(!isLoading)}/>}
-                {isBarangayTableShow&&<BarangayTable onClick={showBarangayTableFun} setLoading={()=>setLoading(!isLoading)}/>}
-                {isViewBEC&&<EditBECFormData onClose={()=>setViewBEC(!isViewBEC)} setLoading={()=>setLoading(!isLoading)} data={viewBECData}  />}
+            <MyAppNav isOpenMasterList={true}/>
+            {isLoading&&
+            <div className='absolute bg-black/50 z-40 w-full h-full'>
+                <div  className='flex items-center justify-center w-full h-full'>
+                    <BounceLoader color='#ffffff' size={120}/>
+                </div>
+            </div>    
+            } 
+            {/*add subpage content */}
+            {isShowAddFormBEC&&<AddBECForm barangayList={barangayList} onClick={()=>setShowAddFormBEC(!isShowAddFormBEC)} setLoading={()=>setLoading(!isLoading)}/>}
+            {isBarangayTableShow&&<BarangayTable onClick={showBarangayTableFun} setLoading={()=>setLoading(!isLoading)}/>}
+            {isViewBEC&&<EditBECFormData onClose={()=>setViewBEC(!isViewBEC)} setLoading={()=>setLoading(!isLoading)} data={viewBECData}  />}
+            <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
                 {/* add this to a file content */}
-                <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
+                <div className='text-white w-full md:mt-0 mt-10'>
+                    <div className='w-full flex flex-row'>
+                        <AdminHeader/>
+                    </div>
                     {/* content here */}
                     <div className='flex flex-col w-full h-full'>
-                        <div className='w-full flex flex-row'>
-                            <AdminHeader/>
-                        </div>
                         <div className='w-full flex flex-col px-10 animate__animated animate__fadeIn'>
                             <div className='flex flex-row w-full items-center justify-between'>
                                 <div className=''>

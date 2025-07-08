@@ -18,7 +18,6 @@ export default function Records(){
         const now = moment();
         const formattedDateTime = now.format('MMMM DD, YYYY h:mm:ss a');
         setDatetime(formattedDateTime);
-        
     }
 
     const getRecordData = async ()=>{
@@ -31,8 +30,6 @@ export default function Records(){
                         "authorization" : `bearer ${token}`,
                     }
                 })
-
-                console.log(res.data)
 
                 const filteredData = res.data.filter((data: any) => {
                     if (userData().user.rule === "admin") return true; 
@@ -78,10 +75,10 @@ export default function Records(){
     },[])
     return (
         <>
-            <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
-                <MyAppNav/>
+            <MyAppNav/>
+            <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
                 {/* add this to a file content */}
-                <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
+                <div className='text-white w-full md:mt-0 mt-10'>
                     {/* content here */}
                     <div className='flex flex-col w-full'>
                         <div className='w-full flex flex-row'>
@@ -111,7 +108,7 @@ export default function Records(){
                                 </div>
                                 {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
                                 {!isDisplayLoading&&
-                                    <DataTable columns={columns} data={recordsData} pagination paginationPerPage={6} responsive paginationRowsPerPageOptions={[1,2,3,4,5, 6]}></DataTable>
+                                    <DataTable columns={columns} data={recordsData} pagination paginationPerPage={5} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}></DataTable>
                                 }
                                 
                             </div>

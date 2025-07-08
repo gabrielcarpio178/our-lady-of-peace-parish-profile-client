@@ -212,25 +212,27 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
 
     return(
         <>
-        <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
-            {isLoading&&
-            <div className='absolute bg-black/50 z-40 w-full h-full'>
-                <div  className='flex items-center justify-center w-full h-full'>
-                    <BounceLoader color='#ffffff' size={120}/>
+        <MyAppNav isOpenMasterList={true}/>
+
+        {isLoading&&
+        <div className='absolute bg-black/50 z-40 w-full h-full'>
+            <div  className='flex items-center justify-center w-full h-full'>
+                <BounceLoader color='#ffffff' size={120}/>
+            </div>
+        </div>    
+        } 
+
+        {/* add this to a file content */}
+        {isTableSettingShow&&<TableSettings onClose={()=>setTableSettiingShow(!isTableSettingShow)} sendDataToHousehold={handleDataFromChild}/>}
+        {isHouseholdDataShow&&<ViewHouseholdData data={householdData} onClose={()=>setHouseholdDataShow(!isHouseholdDataShow)} onLoading={()=>setLoading(!isLoading)} />}
+        <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
+            <div className='text-white w-full'>
+                <div className='w-full flex flex-row'>
+                    <AdminHeader/>
                 </div>
-            </div>    
-            } 
-            <MyAppNav/>
-            {/* add this to a file content */}
-            {isTableSettingShow&&<TableSettings onClose={()=>setTableSettiingShow(!isTableSettingShow)} sendDataToHousehold={handleDataFromChild}/>}
-            {isHouseholdDataShow&&<ViewHouseholdData data={householdData} onClose={()=>setHouseholdDataShow(!isHouseholdDataShow)} onLoading={()=>setLoading(!isLoading)} />}
-            <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
                 {/* content here */}
-                <div className='flex flex-col w-full h-full'>
-                    <div className='w-full flex flex-row'>
-                        <AdminHeader/>
-                    </div>
-                    <div className='w-full flex flex-col p-4 animate__animated animate__fadeIn'>
+                <div className='flex flex-col w-full'>
+                    <div className='w-full flex flex-col px-10 animate__animated animate__fadeIn'>
                         <div className='w-full'>
                             <div className='flex flex-row justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
@@ -314,7 +316,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                 </div>
                                 {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
                                 {!isDisplayLoading&&
-                                <DataTable columns={columns} data={dataTable} pagination paginationPerPage={4} responsive paginationRowsPerPageOptions={[1,2,3,4,5]} />
+                                <DataTable columns={columns} data={dataTable} pagination paginationPerPage={4} responsive paginationRowsPerPageOptions={[1,2,3,4]} />
                                 } 
                             </div>
                         </div>

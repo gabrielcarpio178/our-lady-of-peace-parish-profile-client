@@ -11,7 +11,6 @@ import Records from './components/pages/admin/records'
 import Settings from './components/pages/admin/settings'
 import CoverPage from './components/pages/coverPage'
 
-
 function App() {
   
   return (
@@ -23,9 +22,9 @@ function App() {
           <Route element={<ProtectedRoutes/>}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/access_users" element={<Access_user />} />
-            <Route path="/barangay" element={<Baranagay />} />
+            <Route path="master_list/barangay" element={<Baranagay />} />
+            <Route path="master_list/household" element={<Household />} />
             <Route path="/survey_form" element={<SurveyForm />} />
-            <Route path="/household" element={<Household />} />
             <Route path="/survey_form/:id" element={<EditSurveyForm />} />
             <Route path='/records' element={<Records/>}></Route>
             <Route path='/settings' element={<Settings/>}></Route>

@@ -7,6 +7,7 @@ import { useEffect, useState, type JSX } from "react";
 import {api_link, userData} from "../../../api_link"
 import axios from "axios";
 import { CiMenuBurger } from "react-icons/ci";
+import { FaX } from "react-icons/fa6";
 
 
 type nav = {
@@ -16,7 +17,7 @@ type nav = {
     icon: JSX.Element,
 }
 
-const NAVIGATIONDATA = [
+const NAVIGATIONDATA: nav[] = [
     {
         id: 1,
         link: '/dashboard',
@@ -55,29 +56,34 @@ const NAVIGATIONDATA = [
     },
 ]
 
+type Tmaster_list ={id: number, link:string, name: string}
 
-const MASTER_LIST = [
+
+const MASTER_LIST: Tmaster_list[] = [
     {
         id: 1,
-        link: '/barangay',
+        link: '/master_list/barangay',
         name: 'Barangay',
         
     },
     {
         id: 2,
-        link: '/household',
+        link: '/master_list/household',
         name: 'Households',
     },
 ]
 
 
+type MyAppNavProps = {
+    isOpenMasterList?: boolean
+};
 
-
-export default function MyAppNav() {
+export default function MyAppNav({isOpenMasterList}:MyAppNavProps) {
     const [role, setrole] = useState("loading..")
     const API_LINK = api_link()
     const [isNavBarShow, setIsNavBarShow] = useState(false)
     const user_id = userData().user.id
+    const [isShowMasterList, setShowMasterList] = useState(!isOpenMasterList?false:true)
     axios.defaults.withCredentials = true;
     
     const logout = async () => {
@@ -92,6 +98,11 @@ export default function MyAppNav() {
         setrole(user.user.rule==="admin"?"admin":"encoder")
     }
 
+    const handleDisable = (event: React.MouseEvent<HTMLAnchorElement>) =>{
+        setShowMasterList(!isShowMasterList)
+        event.preventDefault()
+    }
+
     useEffect(()=>{
         userRole()
     },[])
@@ -100,111 +111,82 @@ export default function MyAppNav() {
 
 
     return (
-        <>
-            <div className={`${!isNavBarShow?"h-auto":"h-screen"} md:w-auto w-full md:h-auto overflow-y-hidden bg-[#001656] flex flex-col md:relative fixed z-1`}>
-                <div className="fixed w-10 h-10 md:hidden block right-3 top-2 text-white" onClick={()=>setIsNavBarShow(!isNavBarShow)}>
-                    <div className="w-full flex items-center justify-center h-full">
-                        <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
-                            <CiMenuBurger/>
-                        </IconContext.Provider>
-                        
-                    </div>
-                </div>
-                <div className="flex flex-row border-b-3 border-white items-center md:justify-center md:py-5 gap-x-2 py-2">
+        <>      
+            <div className="fixed z-40 w-full">
+                <div className="flex flex-row border-b-3 border-white items-center md:justify-center md:py-5 gap-x-2 py-2 bg-[#001656] md:w-64 sm:w-full w-full relative">
                     <div className="md:w-[25%] w-[15%]">
                         <img src={ourLadyOfPeace} alt="Our Lady Of Peace" />
                     </div>
-                    <header className="text-white text-2xl capitalize">
+                    <header className="text-white sm:text-2xl md:text-2xl text-xl capitalize">
                         {role}
                     </header>
-                </div>
-                
-                <div className={`${!isNavBarShow?"hidden md:block":"block"}`}>
-                    <nav className="flex flex-col">
-                        <div className="md:mt-5 mt-3 overflow-hidden">
-                            {NAVIGATIONDATA.map(n=>{
-                                return (<Navigation id={n.id} key={n.id} name={n.name} link={n.link} icon={n.icon} />)
-                            })}
-                        </div>
-                    
-                    </nav>
-                </div>
-
-                
-                
-
-                <div className={`text-xl text-white border-t-3 border-white absolute bottom-0 w-full h-[15%] md:flex items-center justify-center md:pl-10 ${!isNavBarShow?"hidden":""} z-1`}>
-                    <div className="flex flex-row gap-x-5 w-full py-5 px-10 md:rounded-l-full rounded-full hover:bg-[#86ACE2] cursor-pointer mx-2" onClick={logout}>
+                    <div onClick={()=>{setIsNavBarShow(!isNavBarShow)}} className="absolute right-2 cursor-pointer block sm:hidden md:hidden">
                         <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
-                            <IoLogOut/>
-                        </IconContext.Provider>  
-                        Log Out
+                            {!isNavBarShow?<CiMenuBurger/>:<FaX/>}
+                        </IconContext.Provider>
                     </div>
                 </div>
+                <div className={`absolute lg:top-21 left-0 w-64 h-screen transition-transform ${isNavBarShow ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 sm:translate-x-0  bg-[#001656]`}>
+                    <ul className="space-y-2 font-medium mt-5">
+                        {NAVIGATIONDATA.map((data: nav)=>{
+                            return (
+                                <li className="pl-5" key={data.id}>
+                                    {data.name!=="Master List"&&
+                                    <NavLink to={data.link} className={({ isActive }: { isActive: boolean }) => `${isActive ? "bg-[#86ACE2] text-white" : "text-white"} flex items-center p-3 rounded-l-full hover:bg-[#86ACE2] group`}>
+                                        <div>
+                                            {data.icon}
+                                        </div>
+                                        <span className="ms-3">{data.name}</span>
+                                    </NavLink>
+                                    }
+                                    {data.name==="Master List"&&
+                                        <>
+                                            <NavLink to="/master_list" onClick={handleDisable} className={({ isActive }: { isActive: boolean }) => `${isActive ? "bg-[#86ACE2] text-white" : "text-white"} flex items-center p-3 rounded-l-full hover:bg-[#86ACE2] group`} key={data.id}>
+                                                <div className="flex flex-row items-center justify-between">
+                                                    <div className="flex items-center">
+                                                        <div>
+                                                            {data.icon}
+                                                        </div>
+                                                        <span className="ms-3">{data.name}</span>
+                                                    </div>
+                                                    <div className="absolute right-10">
+                                                        {!isShowMasterList?<FaChevronRight/>:<FaChevronDown/>}
+                                                    </div>
+                                                </div>
+                                            </NavLink>
+                                            <div className={`ml-10 ${!isShowMasterList&&"hidden"} mt-1`} >
+                                                {MASTER_LIST.map((data: Tmaster_list)=>{
+                                                    return (
+                                                        <NavLink to={data.link} key={data.id} className={({ isActive }: { isActive: boolean }) => `${isActive ? "bg-[#86ACE2] text-white" : "text-white"} flex items-center p-3 rounded-l-full hover:bg-[#86ACE2] group`}>
+                                                            {data.name}
+                                                        </NavLink>
+                                                    )
+                                                })}
+                                            </div>
+                                        </>
+                                    }
+                                </li>
+                            )})
+                        }
+                        <li className="pl-5 absolute bottom-[12%] w-full cursor-pointer border-t-3 border-white">
+                            <div className="py-5">
+                                <div className={`text-white flex items-center p-3 rounded-l-full hover:bg-[#86ACE2] group`} onClick={logout}>
+                                    <div className="flex flex-row items-center justify-between">
+                                        <div className="flex items-center">
+                                            <div>
+                                            <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
+                                                <IoLogOut/>
+                                            </IconContext.Provider> 
+                                            </div>
+                                            <span className="ms-3">Log Out</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            
         </>
     );
-}
-
-type navCard = nav
-
-function Navigation(props: navCard){
-    const classDeActive = "flex flex-row gap-x-5 md:ml-10 mx-10 py-5 px-10 cursor-pointer hover:bg-[#86ACE2] md:hover:rounded-l-full hover:rounded-full md:w-full"
-    const classActive = "flex flex-row gap-x-5 md:ml-10 mx-10 py-5 px-10 bg-[#86ACE2] md:rounded-l-full rounded-full cursor-pointer md:w-full"
-    const [isShowMasterList, setShowMasterList] = useState(false)
-    let navContent;
-    const masterListDiv = MASTER_LIST.map((master)=>{
-                            return (
-                                <NavLink key={master.id} to={master.link} className={({ isActive }) => isActive ? "py-2 px-5 w-full bg-[#86ACE2] rounded-l-full text-lg": "py-2 px-5 w-full rounded-l-full hover:bg-[#86ACE2] text-lg"}>
-                                    {master.name}
-                                </NavLink>
-                            )
-                        })
-
-    if(props.id!==2){
-        navContent = 
-            <NavLink to={props.link} className={({ isActive }) => isActive ? classActive : classDeActive }>
-                <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
-                    <div>
-                        {props.icon}
-                    </div>
-                </IconContext.Provider>  
-                {props.name}
-            </NavLink>
-    }else{
-        navContent = 
-            <>
-                <div className={classDeActive} onClick={()=>setShowMasterList(!isShowMasterList)}>
-                <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
-                    <div>
-                        {props.icon}
-                    </div>
-                </IconContext.Provider>  
-                <div className="flex flex-row">
-                    {props.name}
-                </div>
-                <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
-                    <div>
-                        {!isShowMasterList?<FaChevronRight/>:<FaChevronDown/>}
-                    </div>
-                </IconContext.Provider> 
-            </div>
-            <div className="flex flex-col items-center ml-32">
-                {isShowMasterList&&masterListDiv}
-            </div>
-            </>
-            
-            
-    }
-
-    
-    return (
-        <>
-            <div className="text-white w-full text-xl whitespace-nowrap">
-                {navContent}
-            </div>
-            
-        </>
-    )
 }

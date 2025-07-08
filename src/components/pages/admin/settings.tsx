@@ -98,10 +98,10 @@ export default function Settings(){
 
     return (
         <>
-            <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
-                <MyAppNav/>
+            <MyAppNav/>
+            <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
                 {/* add this to a file content */}
-                <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
+                <div className='text-white w-full md:mt-0 mt-10'>
                     {/* content here */}
                     <div className='flex flex-col w-full'>
                         <div className='w-full flex flex-row'>

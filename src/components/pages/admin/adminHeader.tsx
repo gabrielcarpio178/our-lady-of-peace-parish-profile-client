@@ -13,7 +13,7 @@ export default function AdminHeader(){
     },[])
 
     return (
-        <div className='w-full flex items-center justify-end md:text-2xl md:p-10 p-5 font-bold'>
+        <div className='w-full flex items-center justify-end text-md md:text-2xl md:p-10 font-bold bg-[#86ACE2] pt-24 pr-4 text-white'>
             Current user: <span className="capitalize md:pl-4">{firstname+" "+lastname}</span> 
         </div>
     )

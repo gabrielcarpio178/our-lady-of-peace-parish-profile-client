@@ -3,13 +3,19 @@ import MyAppNav from './adminNav'
 import AdminHeader from './adminHeader'
 import axios from 'axios'
 import { userData, api_link } from '../../../api_link'
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, type JSX } from 'react';
 import Chart from 'chart.js/auto';
 import { IconContext } from 'react-icons';
 import { FaPeopleGroup } from 'react-icons/fa6';
 import { MdBusiness } from 'react-icons/md'
 import { FaCross, FaChild, FaCheckCircle, FaUserFriends } from 'react-icons/fa';
 import 'animate.css';
+
+type TdashboardData ={
+    icon:  JSX.Element,
+    title: string,
+    count: number
+}
 
 export default function Dashboard(){
     const chartRef = useRef<HTMLCanvasElement | null>(null)
@@ -118,6 +124,16 @@ export default function Dashboard(){
         })
         setDataGraph(dataContent);
     }
+
+    const dataContents: TdashboardData[] = [
+        {icon: <FaPeopleGroup/>, title: "Population", count: dataGraph[0]},
+        {icon:  <FaCross/> , title: "Roman Catholic", count: dataGraph[1]},
+        {icon: <FaChild  />, title: "Baptized", count: dataGraph[2]},
+        {icon:  <FaCheckCircle />, title: "Confirmation", count: dataGraph[3]},
+        {icon: <FaUserFriends /> , title: "Married", count: dataGraph[4]},
+        {icon: <MdBusiness/>, title: "Lumon", count: dataGraph[5]},
+    ]
+
     useEffect(()=>{
         getBarangayList();
         
@@ -177,124 +193,67 @@ export default function Dashboard(){
             chart.update();
         }
     }, [dataGraph]);
-
     return (
         <>
-            <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
-                <MyAppNav/>
-                {/* add this to a file content */}
-                <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
-                    {/* content here */}
-                    <div className='flex flex-col w-full'>
-                        <div className='w-full flex flex-row'>
-                            <AdminHeader/>
+            <MyAppNav/>
+            {/* content here */}
+            <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
+                <div className='flex flex-col px-10 animate__animated animate__fadeIn'>
+                    <div className='w-full flex flex-row'>
+                        <AdminHeader/>
+                    </div>
+                    <div className='w-full flex md:flex-row flex-col items-center justify-between'>
+                        <h2 className='text-2xl text-black opacity-[50%]'>
+                            Dashboard
+                        </h2>
+                        {/* data content */}
+                        <div className="flex flex-row text-white p-2 rounded-lg gap-x-2 bg-[#001656] md:w-[30%] w-full md:mt-0 mt-4">
+                            <div className='flex flex-col w-[50%]'>
+                                <label htmlFor="barangay" className="block mb-2 text-sm font-medium">Barangay</label>
+                                <select name="barangay" value={brgy_id} id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e:any)=>{getBEClist(e.target.value)}}>
+                                    <option value="0">All</option>
+                                    {barangayList.map((brgy: any)=>{
+                                        return(<option value={brgy.id} key={brgy.id}>{brgy.barangay_name}</option>)
+                                    })}
+                                </select>
+                            </div>
+                            <div className='flex flex-col w-[50%]'>
+                                <label htmlFor="bec_id" className="block mb-2 text-sm font-medium capitalize">BEC name</label>
+                                <select name="bec_id" id="bec_id" value={bec_id} className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required disabled={becList.length==0||brgy_id==0} onChange={(e:any)=>{setBEC_data_id(e)}}>
+                                    {becList.length==0?<option value="" disabled selected>No BEC Name for this Barangay</option>:""}
+                                    {becList.length!=0?<option value="0">All</option>:""}
+                                    {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id}>{bec.bec_name}</option>)})}
+                                </select>
+                            </div>
                         </div>
-                        <div className='w-full flex flex-col px-10 animate__animated animate__fadeIn'>
-                            <div className='w-full flex md:flex-row flex-col items-center justify-between'>
-                                <h2 className='text-2xl text-black opacity-[50%]'>
-                                    Dashboard
-                                </h2>
-                                {/* data content */}
-                                <div className="flex flex-row text-white p-2 rounded-lg gap-x-2 bg-[#001656] md:w-[30%] w-full md:mt-0 mt-4">
-                                    <div className='flex flex-col w-[50%]'>
-                                        <label htmlFor="barangay" className="block mb-2 text-sm font-medium">Barangay</label>
-                                        <select name="barangay" value={brgy_id} id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e:any)=>{getBEClist(e.target.value)}}>
-                                            <option value="0">All</option>
-                                            {barangayList.map((brgy: any)=>{
-                                                return(<option value={brgy.id} key={brgy.id}>{brgy.barangay_name}</option>)
-                                            })}
-                                        </select>
-                                    </div>
-                                    <div className='flex flex-col w-[50%]'>
-                                        <label htmlFor="bec_id" className="block mb-2 text-sm font-medium capitalize">BEC name</label>
-                                        <select name="bec_id" id="bec_id" value={bec_id} className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required disabled={becList.length==0||brgy_id==0} onChange={(e:any)=>{setBEC_data_id(e)}}>
-                                            {becList.length==0?<option value="" disabled selected>No BEC Name for this Barangay</option>:""}
-                                            {becList.length!=0?<option value="0">All</option>:""}
-                                            {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id}>{bec.bec_name}</option>)})}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div> 
-                            <div className='w-full mt-1 flex md:flex-row flex-col-reverse gap-3'>
-                                <div className='flex flex-col md:w-[30%] gap-2 w-full md:p-0 pb-4'>
-                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
+                    </div> 
+                    <div className='mt-1 flex md:flex-row flex-col-reverse gap-3'>
+                        <div className='flex flex-col md:w-[30%] gap-2 md:p-0 pb-4'>
+                            {dataContents.map((data: TdashboardData)=>{
+                                return (
+                                    <div key={data.title} className='p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
+                                        <div className='w-[30%] bg-gray-500 rounded-sm flex items-center justify-center'>
                                             <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
-                                                <FaPeopleGroup/>                        
+                                                {data.icon}                     
                                             </IconContext.Provider>
                                         </div>
                                         <div className='w-[70%] flex flex-col'>
-                                            <div className='text-2xl font-bold'>Population</div>
-                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[0]}</div>
+                                            <div className='text-2xl font-bold'>{data.title}</div>
+                                            <div className='text-2xl'>{isLoading?"Loading...":data.count}</div>
                                         </div>
                                     </div>
-                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
-                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
-                                                <FaCross/>                           
-                                            </IconContext.Provider>  
-                                        </div>
-                                        <div className='w-[70%] flex flex-col'>
-                                            <div className='text-2xl font-bold'>Roman Catholic</div>
-                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[1]}</div>
-                                        </div>
-                                    </div>
-                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
-                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
-                                                <FaChild  />                           
-                                            </IconContext.Provider>  
-                                            
-                                        </div>
-                                        <div className='w-[70%] flex flex-col'>
-                                            <div className='text-2xl font-bold'>Baptized</div>
-                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[2]}</div>
-                                        </div>
-                                    </div>
-                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
-                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
-                                                <FaCheckCircle />                           
-                                            </IconContext.Provider>  
-                                        </div>
-                                        <div className='w-[70%] flex flex-col'>
-                                            <div className='text-2xl font-bold'>Confirmation</div>
-                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[3]}</div>
-                                        </div>
-                                    </div>
-                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
-                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
-                                                <FaUserFriends />                           
-                                            </IconContext.Provider>  
-                                        </div>
-                                        <div className='w-[70%] flex flex-col'>
-                                            <div className='text-2xl font-bold'>Married</div>
-                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[4]}</div>
-                                        </div>
-                                    </div>
-                                    <div className='w-full p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] h-[100%] bg-gray-500 rounded-sm flex items-center justify-center'>
-                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
-                                                <MdBusiness/>                     
-                                            </IconContext.Provider>  
-                                        </div>
-                                        <div className='w-[70%] flex flex-col'>
-                                            <div className='text-2xl font-bold'>Lumon</div>
-                                            <div className='text-2xl'>{isLoading?"Loading...":dataGraph[5]}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='md:w-[70%] bg-white p-5 rounded-lg'>
-                                    <canvas ref={chartRef}></canvas>
-                                </div>
-                            </div>
+                                )
+                            })}
+                        </div>
+                        <div className='md:w-[70%] bg-white p-5 rounded-lg'>
+                            <canvas ref={chartRef}></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-            
+        
         </>
     )
+    
 }
 

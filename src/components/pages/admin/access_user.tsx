@@ -153,18 +153,18 @@ export default function Access_user(){
 
     return (
         <>
-            <div className="flex md:flex-row flex-col bg-[#86ACE2] md:h-[100vh] h-auto">
-                <MyAppNav/>
-                {isLoading&&
-                <div className='absolute bg-black/50 z-40 w-full h-full'>
-                    <div  className='flex items-center justify-center w-full h-full'>
-                        <BounceLoader color='#ffffff' size={120}/>
-                    </div>
-                </div>    
-                } 
-                {isShowAddForm&&<AddContent onClick={myFunction} refreshUserList={getData} setLoading={()=>setLoading(!isLoading)}/>}
-                {isShowEditForm&&<EditForm user={editUser} onClick={editFormShowfun} setLoading={()=>setLoading(!isLoading)}/>}
-                <div className='md:w-[80%] text-white w-full md:mt-0 mt-10'>
+            <MyAppNav/>
+            {isLoading&&
+            <div className='absolute bg-black/50 z-40 w-full h-full'>
+                <div  className='flex items-center justify-center w-full h-full'>
+                    <BounceLoader color='#ffffff' size={120}/>
+                </div>
+            </div>    
+            } 
+            {isShowAddForm&&<AddContent onClick={myFunction} refreshUserList={getData} setLoading={()=>setLoading(!isLoading)}/>}
+            {isShowEditForm&&<EditForm user={editUser} onClick={editFormShowfun} setLoading={()=>setLoading(!isLoading)}/>}
+            <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
+                <div className='text-white w-full md:mt-0 mt-10'>
                     <div className='flex flex-col w-full'>
                         <div className='w-full flex flex-row'>
                             <AdminHeader/>

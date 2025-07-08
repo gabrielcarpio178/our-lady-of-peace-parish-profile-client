@@ -1,5 +1,5 @@
 export function api_link(){
-    return "https://our-lady-of-peace-parish-profile-backend.onrender.com/auth";
+    return import.meta.env.VITE_APP_API_LNK+"/auth";
 };
 
 export function userData(){
