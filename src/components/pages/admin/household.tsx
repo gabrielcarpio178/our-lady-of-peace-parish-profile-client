@@ -398,7 +398,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                         <div className='w-full'>
                             <div className='flex flex-row justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
-                                    Household - <span>{tableSettingData==null?"All Barangay":tableSettingData.barangay_name+" - "+`${tableSettingData.bec_name==""||tableSettingData.bec_name==""?"All BEC":tableSettingData.bec_name}`}</span>
+                                    Households - <span>{tableSettingData==null?"All Barangay":tableSettingData.barangay_name+" - "+`${tableSettingData.bec_name==""||tableSettingData.bec_name==""?"All BEC":tableSettingData.bec_name}`}</span>
                                 </h2>
                                 <div className="flex flex-row border border-black rounded-sm">
                                     {/* <div className="flex flex-row bg-[#001656] items-center px-2 gap-x-1 cursor-pointer" onClick={()=>setTableSettiingShow(!isTableSettingShow)}>
