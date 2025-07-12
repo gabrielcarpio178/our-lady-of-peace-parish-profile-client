@@ -1,6 +1,6 @@
 
-import MyAppNav from './AdminNav'
-import AdminHeader from './AdminHeader'
+import MyAppNav from './adminNav'
+import AdminHeader from './adminHeader'
 import { FaPlus, FaUserPlus, FaEdit, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { MdOutlineCancel  } from "react-icons/md";
 import { useEffect, useState } from 'react'

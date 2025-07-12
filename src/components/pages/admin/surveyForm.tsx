@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import AdminHeader from "./AdminHeader";
-import MyAppNav from "./AdminNav";
+import AdminHeader from "./adminHeader";
+import MyAppNav from "./adminNav";
 import axios from "axios";
 import { userData, api_link } from "../../../api_link";
 import BounceLoader from "react-spinners/BounceLoader";

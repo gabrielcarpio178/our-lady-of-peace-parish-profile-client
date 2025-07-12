@@ -1,5 +1,5 @@
-import AdminHeader from "./AdminHeader";
-import MyAppNav from "./AdminNav";
+import AdminHeader from "./adminHeader";
+import MyAppNav from "./adminNav";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { RiSurveyFill } from "react-icons/ri";
 import { FaCross, FaEye, FaFileExport } from "react-icons/fa";
@@ -12,7 +12,7 @@ import { MdOutlineCancel, MdBusiness  } from "react-icons/md";
 import DataTable from "react-data-table-component";
 import * as XLSX from 'xlsx';
 import { BounceLoader } from "react-spinners";
-import ViewHouseholdData from "./subpage/ViewHouseholdData"
+import ViewHouseholdData from "./subpage/viewHouseholdData"
 import React from "react";
 import 'animate.css'
 

@@ -1,6 +1,6 @@
 
-import MyAppNav from './AdminNav'
-import AdminHeader from './AdminHeader'
+import MyAppNav from './adminNav'
+import AdminHeader from './adminHeader'
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { FaClock } from "react-icons/fa";

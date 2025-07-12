@@ -1,6 +1,6 @@
 
-import MyAppNav from './AdminNav'
-import AdminHeader from './AdminHeader'
+import MyAppNav from './adminNav'
+import AdminHeader from './adminHeader'
 import ourLadyOfPeaceFull from './../../../assets/image/our-lady-of-peace-full.png'
 import 'animate.css';
 import { useEffect, useState } from 'react';
