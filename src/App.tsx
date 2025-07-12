@@ -1,4 +1,4 @@
-import Login from './components/pages/login'
+import Login from './components/pages/Login'
 import Dashboard from './components/pages/admin/Dashboard'
 import Access_user from './components/pages/admin/Access_user'
 import Baranagay from './components/pages/admin/Barangay'
@@ -9,7 +9,7 @@ import Household from './components/pages/admin/Household'
 import EditSurveyForm from './components/pages/admin/EditHouseholdform'
 import Records from './components/pages/admin/Records'
 import Settings from './components/pages/admin/Settings'
-import CoverPage from './components/pages/coverPage'
+import CoverPage from './components/pages/CoverPage'
 import Single_infoForm from './components/pages/admin/subpage/Single_infoForm';
 import Living_alone from './components/pages/admin/subpage/Living_alone';
 import Widowed from './components/pages/admin/subpage/Widowed';
