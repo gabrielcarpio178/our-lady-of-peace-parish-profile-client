@@ -15,7 +15,7 @@ interface datauser {
         comment: string, 
         family_name: string,
         household: number,
-        husband_name: string,
+        oname?: string,
         id: number,
         isNotBaptismConfirmation: number,
         living_condition: string,
@@ -25,11 +25,12 @@ interface datauser {
         no_college: number,
         no_high_school: number,
         no_professional: number, 
-        occupation_husband: string
-        occupation_wife:  string
-        wife_name: string,
-        lumon: number
-    }
+        ooccupation?: string
+        lumon: number,
+        mname?:string,
+        moccupation?: string,
+        life_status: string,
+    }|null
     onClose: () => void
     onLoading: ()=>void
 }
@@ -80,7 +81,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
     
     return (
         <>
-        <div className='absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50 p-4 overflow-hidden'>
+        <div className='absolute w-full h-full flex items-center justify-center text-white z-[999] bg-black/50 p-4 overflow-hidden'>
             <div className="w-auto md:h-auto h-[80%] md:overflow-y-visible overflow-y-scroll bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3 relative p-3 animate__animated animate__fadeIn">
                 <div className='absolute right-2 top-2 cursor-pointer' onClick={onClose}>
                     <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
@@ -106,15 +107,36 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Family Name:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white w-[48%] p-1 rounded-sm">
-                                    {data.family_name}
+                                    {data?.family_name}
                                 </div>
                             </div>
+                            {data?.oname?.toLocaleLowerCase()!=="n/a"&&
+                            <>
+
+                                <div className="col-span-1">
+                                    <div className="text-sm">
+                                        Husband name:
+                                    </div>
+                                    <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
+                                        {data?.oname}
+                                    </div>
+                                </div>
+                                <div className="col-span-1">
+                                    <div className="text-sm">
+                                        Occupation:
+                                    </div>
+                                    <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
+                                        {data?.ooccupation}
+                                    </div>
+                                </div>
+                            </>
+                            }
                             <div className="col-span-1">
                                 <div className="text-sm">
-                                    Husband name:
+                                    {data?.oname?.toLocaleLowerCase()==="n/a"?"First name: ":"Wife name:"}
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.husband_name}
+                                    {data?.mname}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -122,23 +144,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Occupation:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.occupation_husband}
-                                </div>
-                            </div>
-                            <div className="col-span-1">
-                                <div className="text-sm">
-                                    Wife name:
-                                </div>
-                                <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.wife_name}
-                                </div>
-                            </div>
-                            <div className="col-span-1">
-                                <div className="text-sm">
-                                    Occupation:
-                                </div>
-                                <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.occupation_wife}
+                                    {data?.moccupation}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -146,7 +152,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     no. of household members
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.household}
+                                    {data?.household}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -154,7 +160,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     No. of catholic residence
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.no_catholic_residence}
+                                    {data?.no_catholic_residence}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -162,7 +168,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     barangay:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.barangay_name}
+                                    {data?.barangay_name}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -170,7 +176,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     BEC name:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.bec_name}
+                                    {data?.bec_name}
                                 </div>
                             </div>
                         </div>
@@ -189,7 +195,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Mass attendants of family member:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white w-[48%] p-1 rounded-sm">
-                                    {data.mass_attendants}
+                                    {data?.mass_attendants}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -197,7 +203,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Baptism:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.baptism}
+                                    {data?.baptism}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -205,7 +211,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Confirmation:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.isNotBaptismConfirmation}
+                                    {data?.isNotBaptismConfirmation}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -213,7 +219,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Marriage
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.marrige}
+                                    {data?.marrige}
                                 </div>
                             </div>
                         </div>    
@@ -233,7 +239,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     How many are professional:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white w-[48%] p-1 rounded-sm">
-                                    {data.no_professional}
+                                    {data?.no_professional}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -241,7 +247,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     How many did STOP studying in HIGH SCHOOL:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.no_high_school}
+                                    {data?.no_high_school}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -249,7 +255,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     How many did STOP studying in COLLEGE:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.no_college}
+                                    {data?.no_college}
                                 </div>
                             </div>
                         </div>
@@ -269,7 +275,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Lumon:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.lumon}
+                                    {data?.lumon}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -277,7 +283,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     living condition
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm w-full">
-                                    {data.living_condition}
+                                    {data?.living_condition}
                                 </div>
                             </div>
                             <div className="col-span-2">
@@ -285,15 +291,15 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Comment
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data.comment}
+                                    {data?.comment}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="w-full flex flex-col md:flex-row mt-2">
-                    <Link to={`/survey_form/${data.id}`} className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full md:w-[50%] text-center">Edit</Link>
-                    <button className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-red-800 w-full md:w-[50%]"  onClick={()=>deleteHouseHold(data.id)}>Delete</button>
+                    <Link to={`/survey_form/${data?.id}/${data?.life_status}?life_status=${data?.life_status}`} className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full md:w-[50%] text-center">Edit</Link>
+                    <button className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-red-800 w-full md:w-[50%]"  onClick={()=>deleteHouseHold(data?.id)}>Delete</button>
                 </div>
             </div>    
         </div>

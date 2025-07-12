@@ -1,5 +1,5 @@
-import AdminHeader from "./adminHeader";
-import MyAppNav from "./adminNav";
+import AdminHeader from "./AdminHeader";
+import MyAppNav from "./AdminNav";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { RiSurveyFill } from "react-icons/ri";
 import { FaCross, FaEye, FaFileExport } from "react-icons/fa";
@@ -12,16 +12,120 @@ import { MdOutlineCancel, MdBusiness  } from "react-icons/md";
 import DataTable from "react-data-table-component";
 import * as XLSX from 'xlsx';
 import { BounceLoader } from "react-spinners";
-import ViewHouseholdData from "./subpage/viewHouseholdData"
+import ViewHouseholdData from "./subpage/ViewHouseholdData"
 import React from "react";
 import 'animate.css'
 
 interface dataToHouseholdProps {}
-interface sendData {
+
+type ThouseholdData = {
+    baptism: number, 
+    barangay_id: number,
+    life_status: string,
+    barangay_name: string,
+    bec_id: number,
+    bec_name: string,
+    comment: string,
+    family_name: string,
+    household: number,
+    husband_name?: string,
+    id: number,
+    isNotBaptismConfirmation: number,
+    living_condition: string,
+    marrige: number,
+    mass_attendants: string,
+    no_catholic_residence: number,
+    no_college: number,
+    no_high_school: number,
+    no_professional: number, 
+    occupation_husband?: string,
+    occupation_wife?: string,
+    wife_name?: string,
+    lumon: number,
+    mname?:string,
+    moccupation?: string
+}
+
+type TsickData = {
+    baptism: number, 
+    barangay_id: number,
+    life_status: string,
+    barangay_name: string,
+    bec_id: number,
+    bec_name: string,
+    comment: string,
+    family_name: string,
+    household: number,
+    oname: string,
+    id: number,
+    isNotBaptismConfirmation: number,
+    living_condition: string,
+    marrige: number,
+    mass_attendants: string,
+    no_catholic_residence: number,
+    no_college: number,
+    no_high_school: number,
+    no_professional: number, 
+    moccupation: string,
+    ooccupation: string,
+    mname: string,
+    lumon: number,
+}
+
+type TnotSick = {
+    baptism: number, 
+    barangay_id: number,
+    life_status: string,
+    barangay_name: string,
+    bec_id: number,
+    bec_name: string,
+    comment: string,
+    family_name: string,
+    household: number,
+    id: number,
+    isNotBaptismConfirmation: number,
+    living_condition: string,
+    marrige: number,
+    mass_attendants: string,
+    no_catholic_residence: number,
+    no_college: number,
+    no_high_school: number,
+    no_professional: number, 
+    lumon: number,
+    mname:string,
+    moccupation: string
+}
+
+type TtableContentData = {
+    columns: string[],
+    data: any[]
+}
+
+type TcolumnTableName = {
+    name: string,
+    selector: (row: any) => string | number | boolean,
+    width?: string,
+    sortable?: boolean
+}
+
+type TtableContent = {
+    columns: TcolumnTableName[],
+    data: any[]
+}
+
+type sendData = {
     barangay: string;
     bec: string;
     barangay_name: string;
     bec_name: string
+}
+
+type Tlife_statusCount = {
+    sick: number,
+    single: number,
+    widower: number
+    living_alone: number,
+    widowed: number
 }
 
 const Household:React.FC<dataToHouseholdProps> = ()=>{
@@ -30,35 +134,19 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     })
     const [tableSettingData, settableSettingData] = useState( {barangay: "0", bec: "0", barangay_name: "All Barangay", bec_name: "All BEC"} )
     const [isTableSettingShow, setTableSettiingShow] = useState(false)
-    const [dataTable, setDataTable] = useState([])
-    const [allData, setAllData] = useState([])
+    const [dataTables, setDataTable] = useState([])
     const [isLoading, setLoading] = useState(false)
     const [isDisplayLoading, setIsDisplayLoading] = useState(true)
     const [isHouseholdDataShow, setHouseholdDataShow] = useState(false)
-    const [householdData, setHouseholdData] = useState({
-                                                baptism: 0, 
-                                                barangay_id: 0,
-                                                barangay_name: '',
-                                                bec_id: 0,
-                                                bec_name: '',
-                                                comment: '',
-                                                family_name: '',
-                                                household: 0,
-                                                husband_name: '',
-                                                id: 0,
-                                                isNotBaptismConfirmation: 0,
-                                                living_condition: '',
-                                                marrige: 0,
-                                                mass_attendants: '',
-                                                no_catholic_residence: 0,
-                                                no_college: 0,
-                                                no_high_school: 0,
-                                                no_professional: 0, 
-                                                occupation_husband: '',
-                                                occupation_wife: '',
-                                                wife_name: '',
-                                                lumon: 0
-                                            });
+    const [householdData, setHouseholdData] = useState<ThouseholdData|null>(null); 
+    const [tableContent, setTableContent] = useState<TtableContent>({
+        columns: [],
+        data: []
+    })
+    const [allData, setAllData] = useState([])
+
+    const [tableSelectContent, setTableSelectContent] = useState("sick")
+    const [life_statusCount, setLife_statusCount] = useState<Tlife_statusCount|null>(null)
 
     const getNumberData = async () =>{
         const token = userData().token
@@ -97,114 +185,188 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                     "authorization" : `bearer ${token}`,
                 }
             })
-            
-            const datas = res.data.map((data:any)=>{
-                return (
-                    {
-                        "Action": <div>
-                                    <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>editHousehold(data)}><FaEye/></button>
-                                </div>,
-                        "BARANGAY_ID": data.barangay_id,
-                        "BEC_ID": data.bec_id,
-                        "FAMILY NAME": capitalize(data.family_name),
-                        "HUSBAND NAME": capitalize(data.husband_name),
-                        "WIFE NAME": capitalize(data.wife_name),
-                        "OCCUPATION HUSBAND": capitalize(data.occupation_husband),
-                        "OCCUPATION WIFE": capitalize(data.occupation_wife),
-                        "BARANGAY NAME": capitalize(data.barangay_name),
-                        "BEC NAME": capitalize(data.bec_name),
-                        "LUMON": data.lumon,
-                        "HOUSEHOLDS": data.household,
-                        "CATHOLIC": data.no_catholic_residence,
-                        "ATTENDANTS": capitalize(data.mass_attendants),
-                        "BAPTISM": data.baptism,
-                        "CONFIRMATION": data.isNotBaptismConfirmation,
-                        "MARRIED": data.marrige,
-                        "PROFESSIONAL": data.no_professional,
-                        "HIGH SCHOOL": data.no_high_school,
-                        "COLLECE": data.no_college,
-                        "LIVING CONDITION": capitalize(data.living_condition),
-                        "COMMENT": data.comment
-                    }
-                )
-            })
-            setDataTable(datas)
-            setAllData(datas)
+
+            const lifeCountdataTable: Tlife_statusCount = {
+                sick:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="sick")}).length,
+                single:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="single")}).length,
+                living_alone:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="living alone")}).length,
+                widowed:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="widowed")}).length,
+                widower:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="widower")}).length
+            }
+            setAllData(res.data)
+            setDataTable(res.data)
+            setLife_statusCount(lifeCountdataTable)
+            allTableData('sick')
             setIsDisplayLoading(false)
         } catch (error) {
             console.log(error)
         }
     }
-    const tableData = (bec_id: any, barangay_id: any) => {
-        barangay_id = barangay_id=="all"?0:parseInt(barangay_id)
-        bec_id = bec_id=="all"?0:parseInt(bec_id)
-        if(barangay_id!=0||bec_id!=0){
-            let searchRes = allData;
-            if(barangay_id!=0){
-                searchRes = allData.filter((data: any)=>{
-                    return (data["BARANGAY_ID"]===barangay_id)
-                })
-            }
-            if(bec_id!=0){
-                searchRes = allData.filter((data: any)=>{
-                    return (data["BEC_ID"]===bec_id)
-                })
-            }
-            if(bec_id!=0&&barangay_id!=0){
-                searchRes = allData.filter((data: any)=>{
-                    return (data["BEC_ID"]===bec_id&&data["BARANGAY_ID"]===barangay_id)
-                })
-            }
-            setDataTable(searchRes);
+
+
+    const allTableData = (selectTableContent: string) =>{
+        setTableSelectContent(selectTableContent)
+        const resultData = dataTables.filter((data: any)=>{return (data.life_status===selectTableContent)})
+        setAllData(resultData);
+        if(selectTableContent==="sick"){
+            sickContentData(resultData)
+        }else{
+            singleContentData(resultData)
         }
     }
-    const handleDataFromChild = (data: sendData): void => {
-        setTableSettiingShow(!isTableSettingShow)
-        settableSettingData(data)
-        tableData(data.bec, data.barangay)
-    };
+
+
+    
+
+    const singleContentData = (datas: TnotSick[]) =>{
+        const columnName = ["FAMILY NAME", "FIRST NAME", "OCCUPATION", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","BAPTISM", "CONFIRMATION","MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"];
+        const data = datas.map((data: TnotSick)=>{
+            return ({
+                "Action": <div>
+                            <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>editHousehold(data)}><FaEye/></button>
+                        </div>,
+                "BARANGAY_ID": data.barangay_id,
+                "BEC_ID": data.bec_id,
+                "FAMILY NAME": capitalize(data.family_name),
+                "FIRST NAME": capitalize(data.mname),
+                "OCCUPATION": capitalize(data.moccupation),
+                "BARANGAY NAME": capitalize(data.barangay_name),
+                "BEC NAME": capitalize(data.bec_name),
+                "LUMON": data.lumon,
+                "HOUSEHOLDS": data.household,
+                "CATHOLIC": data.no_catholic_residence,
+                "ATTENDANTS": capitalize(data.mass_attendants),
+                "BAPTISM": data.baptism,
+                "CONFIRMATION": data.isNotBaptismConfirmation,
+                "MARRIED": data.marrige,
+                "PROFESSIONAL": data.no_professional,
+                "HIGH SCHOOL": data.no_high_school,
+                "COLLECE": data.no_college,
+                "LIVING CONDITION": capitalize(data.living_condition),
+                "COMMENT": data.comment
+            })
+        })
+        displayTableData({columns: columnName, data: data})
+        
+    }
+
+    const sickContentData = (datas: TsickData[]) => {
+        const columnName = ["FAMILY NAME", "HUSBAND NAME", "WIFE NAME", "OCCUPATION HUSBAND", "OCCUPATION WIFE", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","BAPTISM", "CONFIRMATION","MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"]
+
+        const data = datas.map((data:TsickData)=>{
+            return ({
+                "Action": <div>
+                            <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>editHousehold(data)}><FaEye/></button>
+                        </div>,
+                "BARANGAY_ID": data.barangay_id,
+                "BEC_ID": data.bec_id,
+                "FAMILY NAME": capitalize(data.family_name),
+                "HUSBAND NAME": capitalize(data.oname),
+                "WIFE NAME": capitalize(data.mname),
+                "OCCUPATION HUSBAND": capitalize(data.ooccupation),
+                "OCCUPATION WIFE": capitalize(data.moccupation),
+                "BARANGAY NAME": capitalize(data.barangay_name),
+                "BEC NAME": capitalize(data.bec_name),
+                "LUMON": data.lumon,
+                "HOUSEHOLDS": data.household,
+                "CATHOLIC": data.no_catholic_residence,
+                "ATTENDANTS": capitalize(data.mass_attendants),
+                "BAPTISM": data.baptism,
+                "CONFIRMATION": data.isNotBaptismConfirmation,
+                "MARRIED": data.marrige,
+                "PROFESSIONAL": data.no_professional,
+                "HIGH SCHOOL": data.no_high_school,
+                "COLLECE": data.no_college,
+                "LIVING CONDITION": capitalize(data.living_condition),
+                "COMMENT": data.comment
+            })
+        })
+        displayTableData({columns: columnName, data: data})
+    }
+
+    const displayTableData = (contentdatas: TtableContentData)=>{
+        const {columns, data} = contentdatas;
+        const columnName: TcolumnTableName[] = columns.map((col: string) => ({
+            name: col,
+            selector: (row: any) => row[col],
+            sortable: true,
+            width: "200px"
+        }));
+        columnName.unshift({name: "Action", selector: ((row: any) => row["Action"])})
+        setTableContent({columns: columnName, data:data})
+    }
+
+    // const tableData = (bec_id: any, barangay_id: any) => {
+    //     barangay_id = barangay_id=="all"?0:parseInt(barangay_id)
+    //     bec_id = bec_id=="all"?0:parseInt(bec_id)
+    //     if(barangay_id!=0||bec_id!=0){
+    //         let searchRes = allData;
+    //         if(barangay_id!=0){
+    //             searchRes = allData.filter((data: any)=>{
+    //                 return (data["BARANGAY_ID"]===barangay_id)
+    //             })
+    //         }
+    //         if(bec_id!=0){
+    //             searchRes = allData.filter((data: any)=>{
+    //                 return (data["BEC_ID"]===bec_id)
+    //             })
+    //         }
+    //         if(bec_id!=0&&barangay_id!=0){
+    //             searchRes = allData.filter((data: any)=>{
+    //                 return (data["BEC_ID"]===bec_id&&data["BARANGAY_ID"]===barangay_id)
+    //             })
+    //         }
+    //         setDataTable(searchRes);
+    //     }
+    // }
+    // const handleDataFromChild = (data: sendData): void => {
+    //     setTableSettiingShow(!isTableSettingShow)
+    //     settableSettingData(data)
+    //     tableData(data.bec, data.barangay)
+    // };
     useEffect(()=>{
-        getNumberData()
         getDataTable()
-        tableData(0, 0)
+        getNumberData()
     },[])
-    const columns = [
-        { name: "Action", selector: ((row: any) => row["Action"])},
-        {width: "200px", name: "FAMILY NAME", selector: ((row: any) => row["FAMILY NAME"]), sortable: true},
-        {width: "200px", name: "HUSBAND NAME", selector: ((row: any) => row["HUSBAND NAME"]), sortable: true},
-        {width: "200px", name: "WIFE NAME", selector: ((row: any) => row["WIFE NAME"]), sortable: true},
-        {width: "200px", name: "OCCUPATION HUSBAND", selector: ((row: any) => row["OCCUPATION HUSBAND"]), sortable: true},
-        {width: "200px", name: "OCCUPATION WIFE", selector: ((row: any) => row["OCCUPATION WIFE"]), sortable: true},
-        {width: "200px", name: "BARANGAY NAME", selector: ((row: any) => row["BARANGAY NAME"]), sortable: true},
-        {width: "200px", name: "BEC NAME", selector: ((row: any) => row["BEC NAME"]), sortable: true},
-        {width: "200px", name: "LUMON", selector: ((row: any) => row["LUMON"]), sortable: true},
-        {width: "200px", name: "HOUSEHOLDS", selector: ((row: any) => row["HOUSEHOLDS"]), sortable: true},
-        {width: "200px", name: "CATHOLIC", selector: ((row: any) => row["CATHOLIC"]), sortable: true},
-        {width: "200px", name: "ATTENDANTS", selector: ((row: any) => row["ATTENDANTS"]), sortable: true},
-        {width: "200px", name: "BAPTISM", selector: ((row: any) => row["BAPTISM"]), sortable: true},
-        {width: "200px", name: "CONFIRMATION", selector: ((row: any) => row["CONFIRMATION"]), sortable: true},
-        {width: "200px", name: "MARRIED", selector: ((row: any) => row["MARRIED"]), sortable: true},
-        {width: "200px", name: "PROFESSIONAL", selector: ((row: any) => row["PROFESSIONAL"]), sortable: true},
-        {width: "200px", name: "HIGH SCHOOL", selector: ((row: any) => row["HIGH SCHOOL"]), sortable: true},
-        {width: "200px", name: "COLLECE", selector: ((row: any) => row["COLLECE"]), sortable: true},
-        {width: "200px", name: "LIVING CONDITION", selector: ((row: any) => row["LIVING CONDITION"])},
-        {width: "200px", name: "COMMENT", selector: ((row: any) => row["COMMENT"])},
-    ]
+
+    useEffect(() => {
+        if (dataTables.length > 0) {
+            allTableData('sick')
+        }
+    }, [dataTables]);
     const handleSearch = (e: any)=>{
         let query = e.target.value;
-        const searchRes = allData.filter((data: any)=>{
-            return (data["BEC NAME"].toLocaleLowerCase().includes(query.toLocaleLowerCase())||data["BARANGAY NAME"].toLocaleLowerCase().includes(query.toLocaleLowerCase())||data["FAMILY NAME"].toLocaleLowerCase().includes(query.toLocaleLowerCase())||data["WIFE NAME"].toLocaleLowerCase().includes(query.toLocaleLowerCase())||data["HUSBAND NAME"].toLocaleLowerCase().includes(query.toLocaleLowerCase()))
-        })
-        setDataTable(searchRes);
+        console.log(allData)
+        if(tableSelectContent==="sick"){
+            const resSearch = allData.filter((data: any)=>{
+                return (
+                    data.bec_name.toUpperCase().includes(query.toUpperCase())||data.family_name.toUpperCase().includes(query.toUpperCase())||data.mname.toUpperCase().includes(query.toUpperCase())||data.oname.toUpperCase().includes(query.toUpperCase())||data.mname.toUpperCase().includes(query.toUpperCase())
+                )
+            })
+            sickContentData(resSearch)
+        }else{
+            const resSearch = allData.filter((data: any)=>{
+                return (
+                    data.bec_name.toUpperCase().includes(query.toUpperCase())||data.family_name.toUpperCase().includes(query.toUpperCase())||data.mname.toUpperCase().includes(query.toUpperCase())||data.mname.toUpperCase().includes(query.toUpperCase())
+                )
+            })
+            singleContentData(resSearch)
+        }
     }
     const exportExcel = () =>{
-        const dataExport = dataTable.map((data: any)=>{
+        const dataExport = dataTables.map((data: any)=>{
             delete data["BARANGAY_ID"];
             delete data["BEC_ID"];
             delete data["Action"]
             return data;
         })
-        const worksheet = XLSX.utils.json_to_sheet(dataExport);
+        console.log(dataExport)
+        const downloadfileData = dataExport.map((data: any)=>{
+            return (
+                {id: data.id, "Family name": data.family_name, "Life Status": data.life_status, "Wife name": data.mname, "Husband name": data.oname, "Barangay name": data.barangay_name, "BEC name": data.bec_name, "Household": data.household, "Catholic": data.no_catholic_residence, "Lumon": data.lumon, "Attendants": data.mass_attendants, "Baptism": data.baptism, "Confirmation": data.isNotBaptismConfirmation, "Married": data.marrige, "Professional": data.no_professional, "College": data.no_college,"High School": data.no_high_school, "Living condition": data.living_condition, "Comment": data.comment}
+            )
+        })
+        const worksheet = XLSX.utils.json_to_sheet(downloadfileData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "household.xlsx");
@@ -223,7 +385,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         } 
 
         {/* add this to a file content */}
-        {isTableSettingShow&&<TableSettings onClose={()=>setTableSettiingShow(!isTableSettingShow)} sendDataToHousehold={handleDataFromChild}/>}
+        {/* {isTableSettingShow&&<TableSettings onClose={()=>setTableSettiingShow(!isTableSettingShow)} sendDataToHousehold={handleDataFromChild}/>} */}
         {isHouseholdDataShow&&<ViewHouseholdData data={householdData} onClose={()=>setHouseholdDataShow(!isHouseholdDataShow)} onLoading={()=>setLoading(!isLoading)} />}
         <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
             <div className='text-white w-full'>
@@ -239,7 +401,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                     Households - <span>{tableSettingData==null?"All Barangay":tableSettingData.barangay_name+" - "+`${tableSettingData.bec_name==""||tableSettingData.bec_name==""?"All BEC":tableSettingData.bec_name}`}</span>
                                 </h2>
                                 <div className="flex flex-row border border-black rounded-sm">
-                                    <div className="flex flex-row bg-[#001656] items-center px-2 gap-x-1 cursor-pointer" onClick={()=>setTableSettiingShow(!isTableSettingShow)}>
+                                    {/* <div className="flex flex-row bg-[#001656] items-center px-2 gap-x-1 cursor-pointer" onClick={()=>setTableSettiingShow(!isTableSettingShow)}>
                                         <div>
                                             <IconContext.Provider value={{ color: "white", size: "1em" }}>
                                                 <IoMdSettings/>
@@ -248,7 +410,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                         <div>
                                             Table Settings
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="flex flex-row items-center px-2 gap-x-1 cursor-pointer" onClick={exportExcel}>
                                         <div>
                                             <IconContext.Provider value={{ color: "white", size: "1em" }}>
@@ -310,13 +472,45 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <div className='flex flex-row justify-end items-center gap-x-2 bg-white p-3'>
-                                    <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search: </label>
-                                    <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
+                                <div className="flex flex-col md:flex-row md:items-end w-full justify-between bg-white gap-x-3 py-2 px-3">
+                                    <div className="flex flex-col w-full">
+                                        <div className="text-black">
+                                            Life Status
+                                        </div>
+                                        <div className="flex flex-col md:flex-row w-full gap-3">
+                                            <div onClick={()=>{allTableData("sick")}} className={(tableSelectContent==="sick"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                <span className={(tableSelectContent==="sick"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.sick!==null?life_statusCount?.sick:0}</span>
+                                                Sick
+                                            </div>
+                                            <div onClick={()=>{allTableData("single")}} className={(tableSelectContent==="single"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                <span className={(tableSelectContent==="single"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.single!==null?life_statusCount?.single:0}</span>
+                                                Single
+                                            </div>
+                                            <div onClick={()=>{allTableData("living alone")}} className={(tableSelectContent==="living alone"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full text-sm"}>
+                                                <span className={(tableSelectContent==="living alone"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.living_alone!==null?life_statusCount?.living_alone:0}</span>
+                                                Living Alone
+                                            </div>
+                                            <div onClick={()=>{allTableData('widowed')}} className={(tableSelectContent==="widowed"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                <span className={(tableSelectContent==="widowed"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.widowed!==null?life_statusCount?.widowed:0}</span>
+                                                Widowed
+                                            </div>
+                                            <div onClick={()=>{allTableData('widower')}} className={(tableSelectContent==="widower"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                <span className={(tableSelectContent==="widower"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.widower!==null?life_statusCount?.widower:0}</span>
+                                                Widower
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div className="w-[40%]">
+                                        <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search: </label>
+                                        <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white focus:border-blue-500 w-full" placeholder="Search Name" required onChange={handleSearch}/>
+                                    </div>
                                 </div>
+                                
                                 {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
+                                {/* columns is error. how this happen? */}
                                 {!isDisplayLoading&&
-                                <DataTable columns={columns} data={dataTable} pagination paginationPerPage={4} responsive paginationRowsPerPageOptions={[1,2,3,4]} />
+                                <DataTable columns={tableContent.columns} data={tableContent.data} pagination paginationPerPage={4} responsive paginationRowsPerPageOptions={[1,2,3,4]} />
                                 } 
                             </div>
                         </div>

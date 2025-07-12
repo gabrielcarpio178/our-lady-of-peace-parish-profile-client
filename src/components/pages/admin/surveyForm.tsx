@@ -1,61 +1,19 @@
 import { useEffect, useState } from "react";
-import AdminHeader from "./adminHeader";
-import MyAppNav from "./adminNav";
+import AdminHeader from "./AdminHeader";
+import MyAppNav from "./AdminNav";
 import axios from "axios";
 import { userData, api_link } from "../../../api_link";
 import BounceLoader from "react-spinners/BounceLoader";
 import Swal from "sweetalert2";
 import 'animate.css'
+import Basic_infoForm from "./subpage/Basic_infoForm";
+import { useSearchParams } from 'react-router-dom';
 export default function SurveyForm(){
-    const [barangayList, setBarangayList] = useState([])
-    const [becList, setBecList] = useState([]);
     const [isLoading, setLoading] = useState(false)
-    const [bec, getBEC] = useState("")
+    const [searchParams] = useSearchParams();
     function capitalizeFirstLetter(item: string) {
         return item.charAt(0).toUpperCase() + item.slice(1);
     }
-
-    const getBarangayList = async ()=>{
-    const token = userData().token
-    try {
-        const res = await axios.get(`${api_link()}/getBarangay`,{
-            headers:{
-                'Content-type':'application/x-www-form-urlencoded',
-                "authorization" : `bearer ${token}`,
-            }
-        })
-        const data  = res.data.map((result: any)=>{
-            return {
-                name: capitalizeFirstLetter(result.barangay_name),
-                id: result.id
-            }
-        })
-        setBarangayList(data);
-        getBEClist(data[0].id)
-    } catch (error) {
-        console.log(error)
-    }
-    }
-    const getBEClist = async (id: number)=>{
-        const token = userData().token
-        try {
-            const res = await axios.get(`${api_link()}/getBecList`,{
-                headers:{
-                    'Content-type':'application/x-www-form-urlencoded',
-                    "authorization" : `bearer ${token}`,
-                }
-            })
-            const datas = res.data.filter((data: any)=>{return data.barangay_id == id})
-            setBecList(datas)
-            
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    useEffect(()=>{
-        getBarangayList()
-        
-    },[])
 
     const addHousehold = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -64,27 +22,31 @@ export default function SurveyForm(){
         const formData = new FormData(e.currentTarget)
         const formValues = {
             user_id: user_id,
+            life_status: searchParams.get('life_status'),
             baptism: formData.get("baptism"),
             barangay: formData.get("barangay"),
             bec_id: formData.get("bec_id"),
             comment: formData.get("comment"),
             confirmation: formData.get("confirmation"),
             family_name: formData.get("family_name"),
-            husband_name: formData.get("husband_name"),
             living_condition: formData.get("living_condition"),
             marrige: formData.get("marrige"),
             mass_attendants: formData.get("mass_attendants"),
-            no_catholic: formData.get("no_catholic"),
-            no_catholic_residence: formData.get("no_catholic_residence"),
+            no_catholic: formData.get("no_catholic")??0,
+            no_catholic_residence: formData.get("no_catholic_residence")??0,
             no_college: formData.get("no_college"),
             no_high_school: formData.get("no_high_school"),
             no_professional: formData.get("no_professional"),
-            occupation_husband: formData.get("occupation_husband"),
-            occupation_wife: formData.get("occupation_wife"),
+            moccupation: formData.get("moccupation"),
+            mname: formData.get("mname"),
+            husband_name: formData.get("husband_name"),
+            husband_occupation: formData.get("husband_occupation"),
             wife_name: formData.get("wife_name"),
+            wife_occupation: formData.get("wife_occupation"),
             lumon: formData.get('lumon')
         }
 
+        setLoading(false)
         const numericFields = [
             'no_catholic',
             'no_catholic_residence',
@@ -168,60 +130,7 @@ export default function SurveyForm(){
                                         <p>This form is execlusively for encoders to filled out. If there is no information for a field, please input 0(zero)</p>
                                     </div>
                                     <form className="flex flex-col mt-8 text-black gap-y-4" onSubmit={addHousehold}>
-
-                                        <div className="w-full bg-white p-5 rounded-lg shadow-2xl">
-                                            <h2 className="uppercase">
-                                                Basic Information
-                                            </h2>
-                                            <div className="w-full h-[0.5vh] bg-black opacity-50 mt-2"></div>
-                                            <div className="grid md:grid-cols-2 mt-2 gap-5">
-                                                <div className="col-span-2">
-                                                    <label htmlFor="family_name" className="block mb-2 text-sm font-medium capitalize">family name</label>
-                                                    <input name="family_name" type="text" id="family_name" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-[49%] text-white" required />
-                                                </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="husband_name" className="block mb-2 text-sm font-medium capitalize">Husband name</label>
-                                                    <input name="husband_name" type="text" id="husband_name" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
-                                                </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="occupation_husband" className="block mb-2 text-sm font-medium capitalize">occupation</label>
-                                                    <input name="occupation_husband" type="text" id="occupation_husband" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
-                                                </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="wife_name" className="block mb-2 text-sm font-medium capitalize">Wife Name</label>
-                                                    <input  name="wife_name" type="text" id="wife_name" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
-                                                </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="occupation_wife" className="block mb-2 text-sm font-medium capitalize">occupation</label>
-                                                    <input name="occupation_wife" type="text" id="occupation_wife" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
-                                                </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="no_catholic" className="block mb-2 text-sm font-medium capitalize">no. of household members</label>
-                                                    <input name="no_catholic" type="number" min="0" id="no_catholic" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required />
-                                                </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="no_catholic_residence" className="block mb-2 text-sm font-medium capitalize">No. of catholic residence</label>
-                                                    <input name="no_catholic_residence" type="number" min="0" id="no_catholic_residence" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required />
-                                                </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="barangay" className="block mb-2 text-sm font-medium capitalize">barangay</label>
-                                                    <select name="barangay" id="barangay" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required onChange={(e:any)=>{getBEClist(e.target.value)}}>
-                                                        {barangayList.map((brgy: any)=>{
-                                                            return(<option value={brgy.id} key={brgy.id}>{brgy.name}</option>)
-                                                        })}
-                                                    </select>
-                                                </div>
-                                                <div className="w-full">
-                                                    <label htmlFor="bec_id" className="block mb-2 text-sm font-medium capitalize">BEC name</label>
-                                                    <select name="bec_id" id="bec_id" value={bec} className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required disabled={becList.length==0} onChange={(e:any)=>{getBEC(e.target.value)}}>
-                                                        {becList.length==0?<option value="" disabled>No BEC Name for this Barangay</option>:""}
-                                                        {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id}>{bec.bec_name}</option>)})}
-                                                    </select>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-
+                                        <Basic_infoForm/>
                                         <div className="w-full bg-white p-5 rounded-lg shadow-2xl">
                                             <h2 className="uppercase">
                                                 Sacraments

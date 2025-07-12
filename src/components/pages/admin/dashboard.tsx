@@ -1,203 +1,91 @@
 
-import MyAppNav from './adminNav'
-import AdminHeader from './adminHeader'
-import axios from 'axios'
-import { userData, api_link } from '../../../api_link'
-import { useEffect, useState, useRef, type JSX } from 'react';
-import Chart from 'chart.js/auto';
-import { IconContext } from 'react-icons';
-import { FaPeopleGroup } from 'react-icons/fa6';
-import { MdBusiness } from 'react-icons/md'
-import { FaCross, FaChild, FaCheckCircle, FaUserFriends } from 'react-icons/fa';
+import MyAppNav from './AdminNav'
+import AdminHeader from './AdminHeader'
+import ourLadyOfPeaceFull from './../../../assets/image/our-lady-of-peace-full.png'
 import 'animate.css';
+import { useEffect, useState } from 'react';
+import { api_link, userData } from '../../../api_link';
+import {BarGraph, CircleGraph} from './subpage/Graph'
+import axios from 'axios';
 
-type TdashboardData ={
-    icon:  JSX.Element,
-    title: string,
-    count: number
+type TboxesData = {
+    name: string,
+    countData: number|undefined
 }
 
+
 export default function Dashboard(){
-    const chartRef = useRef<HTMLCanvasElement | null>(null)
-    const chartInstanceRef = useRef<Chart | null>(null);
-    const [barangayList, setBarangayList] = useState([])
-    const [dataGraph, setDataGraph] = useState([0,0,0,0,0,0])
-    const [becList, setBecList] = useState([]);
-    const [bec_id, setBEC_id] = useState(0)
-    const [brgy_id, setBrgy_id] = useState(0)
     const [isLoading, setIsLoading] = useState(true)
+    const token = userData().token
+    const userAccount = userData().user
+    const [householdBox, setHouseholdBox] = useState<Record<string, number>>()
+    const [lifeStatusData, setLifeStatusData] = useState<Record<string, number>>()
 
-    const getBarangayList = async ()=>{
-        const token = userData().token
+    const getBoxesData = async () =>{
         try {
-            const res = await axios.get(`${api_link()}/getBarangay`,{
-                headers:{
-                    'Content-type':'application/x-www-form-urlencoded',
-                    "authorization" : `bearer ${token}`,
-                }   
-            })
-            setBarangayList(res.data)
-            dashboardData(bec_id, brgy_id)
-            getBEClist(0)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const getBEClist = async (id: number)=>{
-        const token = userData().token
-        setBrgy_id(id)
-        try {
-            const res = await axios.get(`${api_link()}/getBecList`,{
-                headers:{
+            const res = await axios.get(`${api_link()}/getDashboardBoxedData`, {
+                headers: {
                     'Content-type':'application/x-www-form-urlencoded',
                     "authorization" : `bearer ${token}`,
                 }
             })
-            if(id!=0){
-                const datas = res.data.filter((data: any)=>{return data.barangay_id == id})
-                setBEC_id(parseInt(datas.length==0?"":"0"))
-                setBecList(datas)
-                if(datas.length!=0){
-                    dashboardData(0, id)
-                }
-                
-            }else{
-                res.data = [{id: "0", bec_name: "All"}]
-                dashboardData(0, id)
-                setBEC_id(0)
-                setBecList(res.data)
-            }
-            
+            const lifeStatus = res.data.map((data:any)=>{
+                return (
+                    {[data.life_status]: data.total_life_status}
+                )
+            })
+            setLifeStatusData(getlifeStatus(lifeStatus))
+            setHouseholdBox(householdBoxDataByKey(res.data))
         } catch (error) {
             console.log(error)
         }
     }
 
-    const setBEC_data_id = (e: any)=>{
-        const id = e.target.value;
-        setBEC_id(id)
-        dashboardData(id, brgy_id)
-    }
-
-    const dashboardData = async (bec_data_id: number, brgy_data_id: number)=>{
-        const token = userData().token
-        setIsLoading(true)
-        try {
-            const res = await axios.get(`${api_link()}/getdashboardData`,{
-                headers:{
-                    'Content-type':'application/x-www-form-urlencoded',
-                    "authorization" : `bearer ${token}`,
-                }
-            })
-            filterData(res.data, bec_data_id, brgy_data_id)
-            setIsLoading(false)
-        } catch (error) {
-            console.log(error)
-        }
+    function getlifeStatus<T extends Record<string, number>>(dataArray: T[]): Record<string, number>{
+        const result: Record<string, number> = {};
+        dataArray.forEach(item => {
+            for (let key in item) {
+                result[key] = item[key];
+            }
+        });
+        return result
     }
 
 
-    const filterData = (datas: {barangay_id: any, bec_id: any, confirmation: any, total_baptism: any, total_catholic: any, total_household: any, total_married: any, total_lumon: any}[], BEC_id: number, barangay_id: number) =>{
-        let dataContent = [0,0,0,0,0,0]
-        let dataResult = datas
-        if(BEC_id!=0||barangay_id!=0){
-            if(barangay_id!=0){
-                const dataFIlter = datas.filter((data: any)=>data.barangay_id==barangay_id)
-                dataResult = dataFIlter
+    function householdBoxDataByKey<T extends Record<string, number>>(dataArray: T[]): Record<string, number> {
+        const result: Record<string, number> = {};
+        dataArray.forEach(item => {
+            for (let key in item) {
+                const value = Number(item[key]);
+                result[key] = (result[key] || 0) + (isNaN(value) ? 0 : value);
             }
-            if(BEC_id!=0){
-                const dataFIlter = datas.filter((data: any)=>data.bec_id==BEC_id)
-                dataResult = dataFIlter
-            }
-            if(barangay_id!=0&&BEC_id!=0){
-                const dataFIlter = datas.filter((data: any)=>data.bec_id==BEC_id)
-                dataResult = dataFIlter
-            }
-        }
-        dataResult.map((data: any)=>{
-            dataContent[0]=dataContent[0]+parseInt(data.total_household)
-            dataContent[1]=dataContent[1]+parseInt(data.total_catholic)
-            dataContent[2]=dataContent[2]+parseInt(data.total_baptism)
-            dataContent[3]=dataContent[3]+parseInt(data.confirmation)
-            dataContent[4]=dataContent[4]+parseInt(data.total_married)
-            dataContent[5]=dataContent[5]+parseInt(data.total_lumon)
-        })
-        setDataGraph(dataContent);
+        });
+        return result
     }
 
-    const dataContents: TdashboardData[] = [
-        {icon: <FaPeopleGroup/>, title: "Population", count: dataGraph[0]},
-        {icon:  <FaCross/> , title: "Roman Catholic", count: dataGraph[1]},
-        {icon: <FaChild  />, title: "Baptized", count: dataGraph[2]},
-        {icon:  <FaCheckCircle />, title: "Confirmation", count: dataGraph[3]},
-        {icon: <FaUserFriends /> , title: "Married", count: dataGraph[4]},
-        {icon: <MdBusiness/>, title: "Lumon", count: dataGraph[5]},
+    const boxesData: TboxesData[] = [
+        {name: "Population", countData: householdBox?.population??0},
+        {name: "Baptized", countData: householdBox?.baptism?? 0},
+        {name: "Confirmation", countData: householdBox?.confirmation?? 0},
+        {name: "Married", countData: householdBox?.married?? 0},
+        {name: "Lumon", countData: householdBox?.lumon?? 0},
+
+        {name: "sick", countData: lifeStatusData?.sick??0},
+        {name: "single", countData: lifeStatusData?.single??0},
+        {name: "living alone", countData: lifeStatusData?.["living alone"]??0},
+        {name: "widowed", countData: lifeStatusData?.widowed??0},
+        {name: "widower", countData: lifeStatusData?.widower??0},
     ]
 
     useEffect(()=>{
-        getBarangayList();
-        
-        if (chartRef.current) {
-            const ctx = chartRef.current.getContext('2d');
-            if (!ctx) return;
+        getBoxesData()
+    }, [])
 
-            const newChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Population', 'Roman Catholic', 'Baptized', 'Confirmation', 'Married', 'Lumon'],
-                    datasets: [{
-                        label: 'Survey Data Summary',
-                        data: dataGraph,
-                        backgroundColor: [
-                            'rgb(67, 204, 99)',
-                            'rgb(245, 250, 250)',
-                            'rgb(237, 221, 128)',
-                            'rgb(98, 169, 240)',
-                            'rgb(230, 119, 242)',
-                            'rgb(255,82,82)'
-                        ],
-                        borderColor: [
-                            'rgb(2, 3, 3)',
-                            'rgb(2, 3, 3)',
-                            'rgb(2, 3, 3)',
-                            'rgb(2, 3, 3)',
-                            'rgb(2, 3, 3)',
-                            'rgb(2, 3, 3)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            chartInstanceRef.current = newChart;
-            
-            return () => {
-                newChart.destroy();
-            };
-        }
-    },[])
-
-    useEffect(() => {
-        const chart = chartInstanceRef.current;
-        if (chart) {
-            chart.data.datasets[0].data = dataGraph;
-            chart.update();
-        }
-    }, [dataGraph]);
     return (
         <>
             <MyAppNav/>
             {/* content here */}
-            <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
+            <div className='flex flex-col m-0 md:ml-[200px] lg:ml-[250px] static text-white bg-[#86ACE2] py-1'>
                 <div className='flex flex-col px-10 animate__animated animate__fadeIn'>
                     <div className='w-full flex flex-row'>
                         <AdminHeader/>
@@ -206,52 +94,55 @@ export default function Dashboard(){
                         <h2 className='text-2xl text-black opacity-[50%]'>
                             Dashboard
                         </h2>
-                        {/* data content */}
-                        <div className="flex flex-row text-white p-2 rounded-lg gap-x-2 bg-[#001656] md:w-[30%] w-full md:mt-0 mt-4">
-                            <div className='flex flex-col w-[50%]'>
-                                <label htmlFor="barangay" className="block mb-2 text-sm font-medium">Barangay</label>
-                                <select name="barangay" value={brgy_id} id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e:any)=>{getBEClist(e.target.value)}}>
-                                    <option value="0">All</option>
-                                    {barangayList.map((brgy: any)=>{
-                                        return(<option value={brgy.id} key={brgy.id}>{brgy.barangay_name}</option>)
-                                    })}
-                                </select>
-                            </div>
-                            <div className='flex flex-col w-[50%]'>
-                                <label htmlFor="bec_id" className="block mb-2 text-sm font-medium capitalize">BEC name</label>
-                                <select name="bec_id" id="bec_id" value={bec_id} className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required disabled={becList.length==0||brgy_id==0} onChange={(e:any)=>{setBEC_data_id(e)}}>
-                                    {becList.length==0?<option value="" disabled selected>No BEC Name for this Barangay</option>:""}
-                                    {becList.length!=0?<option value="0">All</option>:""}
-                                    {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id}>{bec.bec_name}</option>)})}
-                                </select>
-                            </div>
-                        </div>
                     </div> 
-                    <div className='mt-1 flex md:flex-row flex-col-reverse gap-3'>
-                        <div className='flex flex-col md:w-[30%] gap-2 md:p-0 pb-4'>
-                            {dataContents.map((data: TdashboardData)=>{
-                                return (
-                                    <div key={data.title} className='p-2 bg-[#001656] flex flex-row items-center rounded-lg gap-x-2'>
-                                        <div className='w-[30%] bg-gray-500 rounded-sm flex items-center justify-center'>
-                                            <IconContext.Provider value={{ color: "white", size: "3.5em" }}>
-                                                {data.icon}                     
-                                            </IconContext.Provider>
+                    <div className='flex flex-col md:flex-row mt-3 gap-3'>
+                        <div className='w-full md:w-[30%] grid grid-cols-2 gap-1'>
+                            <div className='w-full rounded-sm shadow-lg bg-[#001656] p-2 col-span-2 relative overflow-hidden'>
+
+                                <div className='flex flex-col justify-content-between'>
+                                    <div className='text-2xl font-bold capitalize'>
+                                        welcome
+                                    </div>
+                                    <div className='w-[50%] bg-[#86ACE2] rounded-sm p-1 capitalize mt-2 text-black text-center'>
+                                        {userAccount.rule}
+                                    </div>
+                                </div>
+
+                                <div className='top-8 -right-6 w-[35%] max-w-full absolute'>
+                                    <img src={ourLadyOfPeaceFull} alt="Our lady of peace image" />
+                                </div>
+
+                            </div>
+
+                            {boxesData.map((data: TboxesData)=>{
+                                return(
+                                    <div className='w-full rounded-sm shadow-lg bg-[#001656] p-2' key={data.name}>
+
+                                        <div className='flex flex-col justify-content-between'>
+                                            <div className='text-xl font-bold capitalize'>
+                                                {data.name}
+                                            </div>
+                                            <div className='w-[50%] bg-[#86ACE2] rounded-sm p-1 capitalize mt-2 text-lg text-center text-black self-center'>
+                                                {data.countData}
+                                            </div>
                                         </div>
-                                        <div className='w-[70%] flex flex-col'>
-                                            <div className='text-2xl font-bold'>{data.title}</div>
-                                            <div className='text-2xl'>{isLoading?"Loading...":data.count}</div>
-                                        </div>
+
                                     </div>
                                 )
                             })}
+
                         </div>
-                        <div className='md:w-[70%] bg-white p-5 rounded-lg'>
-                            <canvas ref={chartRef}></canvas>
+                        <div className='w-full md:w-[70%] grid grid-cols-2 gap-2'>
+                            <div className='w-full bg-white rounded-sm shadow-sm p-3'>
+                                <BarGraph datas={[householdBox?.population??0,  householdBox?.baptism?? 0, householdBox?.confirmation?? 0, householdBox?.married?? 0, householdBox?.lumon?? 0]}/>
+                            </div>
+                            <div className='w-full bg-white rounded-lg shadow-sm p-3'>
+                                <CircleGraph datas={[lifeStatusData?.sick??0, lifeStatusData?.single??0, lifeStatusData?.["living alone"]??0, lifeStatusData?.widowed??0, lifeStatusData?.widower??0]}/>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        
         </>
     )
     

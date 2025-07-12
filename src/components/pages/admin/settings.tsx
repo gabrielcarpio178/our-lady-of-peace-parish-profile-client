@@ -1,5 +1,5 @@
-import MyAppNav from './adminNav'
-import AdminHeader from './adminHeader'
+import MyAppNav from './AdminNav'
+import AdminHeader from './AdminHeader'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { userData, api_link } from '../../../api_link';
