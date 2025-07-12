@@ -44,6 +44,7 @@ export default function Login(){
             }
         } catch (error) {
             console.log(error)
+            setResult("Time up - please check internet connection.")
         }
 
         setLoading(false)
