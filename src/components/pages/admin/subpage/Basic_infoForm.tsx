@@ -42,10 +42,10 @@ export default function Basic_infoForm({data_info}: IbasicInform) {
                 <div className="grid md:grid-cols-2 mt-2 gap-5">
                     <div className="w-full">
                         <div className="block mb-2 text-sm font-medium capitalize">Life Status</div>
-                        <div className='w-full flex flex-row items-center gap-x-3'>
+                        <div className='w-full flex flex-col md:flex-row items-center gap-3'>
                             {btnContent.map((data: TbtnContent)=>{
                                 return (
-                                    <NavLink to={data.to} className={({ isActive }: { isActive: boolean }) =>`${isActive?"bg-slate-600 text-white ":"text-black "}`+ "shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white w-[20%] text-center"} key={data.name}>{data.name}</NavLink>
+                                    <NavLink to={data.to} className={({ isActive }: { isActive: boolean }) =>`${isActive?"bg-slate-600 text-white ":"text-black "}`+ "shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white w-full md:w-[20%] text-center"} key={data.name}>{data.name}</NavLink>
                                 )
                             })}
                         </div>
