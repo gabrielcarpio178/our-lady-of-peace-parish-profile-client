@@ -121,6 +121,7 @@ type sendData = {
 }
 
 type Tlife_statusCount = {
+    normal: number,
     sick: number,
     single: number,
     widower: number
@@ -187,6 +188,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             })
 
             const lifeCountdataTable: Tlife_statusCount = {
+                normal:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="")}).length,
                 sick:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="sick")}).length,
                 single:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="single")}).length,
                 living_alone:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="living alone")}).length,
@@ -479,7 +481,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                         </div>
                                         <div className="flex flex-col md:flex-row w-full gap-3">
                                             <div onClick={()=>{allTableData("")}} className={(tableSelectContent===""?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
-                                                <span className={(tableSelectContent===""?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.sick!==null?life_statusCount?.sick:0}</span>
+                                                <span className={(tableSelectContent===""?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.normal!==null?life_statusCount?.normal:0}</span>
                                                 ---
                                             </div>
                                             <div onClick={()=>{allTableData("sick")}} className={(tableSelectContent==="sick"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>

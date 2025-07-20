@@ -36,6 +36,7 @@ export default function Dashboard(){
             })
             setLifeStatusData(getlifeStatus(lifeStatus))
             setHouseholdBox(householdBoxDataByKey(res.data))
+           
         } catch (error) {
             console.log(error)
         }
