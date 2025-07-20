@@ -98,7 +98,12 @@ export default function Living_alone() {
             </div>
             <div className="w-full">
                 <label htmlFor="moccupation" className="block mb-2 text-sm font-medium capitalize">occupation</label>
-                <input value={moccupation} onChange={e=>setmoccupation(e.target.value)} name="moccupation" type="text" id="moccupation" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
+                <input value={moccupation} list="moccupation_list" onChange={e=>setmoccupation(e.target.value)} name="moccupation" type="text" id="moccupation" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
+                <datalist id={'moccupation_list'}>
+                    {["OFW","Pensioner"].map((name: string)=>{
+                        return (<option key={name} value={name}>{name}</option>)
+                    })}
+                </datalist>
             </div>
             <div className="w-full">
                 <label htmlFor="no_catholic" className="block mb-2 text-sm font-medium capitalize">no. of household members</label>

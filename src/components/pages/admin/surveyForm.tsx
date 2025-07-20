@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AdminHeader from "./adminHeader";
 import MyAppNav from "./adminNav";
 import axios from "axios";
@@ -11,9 +11,10 @@ import { useSearchParams } from 'react-router-dom';
 export default function SurveyForm(){
     const [isLoading, setLoading] = useState(false)
     const [searchParams] = useSearchParams();
-    function capitalizeFirstLetter(item: string) {
-        return item.charAt(0).toUpperCase() + item.slice(1);
-    }
+
+    const checkNames = (husband_name: string, wife_name: string)=>{
+        return !(husband_name === '' && wife_name === '');
+    } 
 
     const addHousehold = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,28 +24,29 @@ export default function SurveyForm(){
         const formValues = {
             user_id: user_id,
             life_status: searchParams.get('life_status'),
-            baptism: formData.get("baptism"),
-            barangay: formData.get("barangay"),
-            bec_id: formData.get("bec_id"),
-            comment: formData.get("comment"),
-            confirmation: formData.get("confirmation"),
-            family_name: formData.get("family_name"),
-            living_condition: formData.get("living_condition"),
-            marrige: formData.get("marrige"),
-            mass_attendants: formData.get("mass_attendants"),
-            no_catholic: formData.get("no_catholic")??0,
-            no_catholic_residence: formData.get("no_catholic_residence")??0,
-            no_college: formData.get("no_college"),
-            no_high_school: formData.get("no_high_school"),
-            no_professional: formData.get("no_professional"),
-            moccupation: formData.get("moccupation"),
-            mname: formData.get("mname"),
-            husband_name: formData.get("husband_name"),
-            husband_occupation: formData.get("husband_occupation"),
-            wife_name: formData.get("wife_name"),
-            wife_occupation: formData.get("wife_occupation"),
-            lumon: formData.get('lumon')
+            baptism: formData.get("baptism") as string,
+            barangay: formData.get("barangay") as string,
+            bec_id: formData.get("bec_id") as string,
+            comment: formData.get("comment") as string,
+            confirmation: formData.get("confirmation") as string,
+            family_name: formData.get("family_name") as string,
+            living_condition: formData.get("living_condition") as string,
+            marrige: formData.get("marrige") as string,
+            mass_attendants: formData.get("mass_attendants") as string,
+            no_catholic: formData.get("no_catholic") ?? 0,
+            no_catholic_residence: formData.get("no_catholic_residence") ?? 0,
+            no_college: formData.get("no_college") as string,
+            no_high_school: formData.get("no_high_school") as string,
+            no_professional: formData.get("no_professional") as string,
+            moccupation: formData.get("moccupation") as string,
+            mname: formData.get("mname") as string,
+            husband_name: formData.get("husband_name") as string,
+            husband_occupation: formData.get("husband_occupation") as string,
+            wife_name: formData.get("wife_name") as string,
+            wife_occupation: formData.get("wife_occupation") as string,
+            lumon: formData.get('lumon') as string
         }
+
 
         setLoading(false)
         const numericFields = [
@@ -63,7 +65,19 @@ export default function SurveyForm(){
             const value = Number(formData.get(field));
             return !isNaN(value) && value < 0;
         });
-
+        if(searchParams.get('life_status')==='sick'||searchParams.get('life_status')==''){
+            if(!checkNames(formValues.husband_name, formValues.wife_name)){
+                Swal.fire({
+                    position: "center",
+                    title: `Please Add Name`,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 1000,
+                })
+                setLoading(false);
+                return;
+            }
+        }
         if (hasNegative) return;
         const token = userData().token
         try {
@@ -115,7 +129,7 @@ export default function SurveyForm(){
             <MyAppNav/>
             <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1'>
                     {/* add this to a file content */}
-                    <div className='text-white w-full md:mt-0 mt-10'>
+                    <div className='text-white w-full md:mt-0 mt-10 px-10'>
                         {/* content here */}
                         <div className='flex flex-col w-full h-full'>
                             <div className='w-full flex flex-row'>

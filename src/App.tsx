@@ -31,7 +31,7 @@ function App() {
             <Route path="master_list/barangay" element={<Baranagay />} />
             <Route path="master_list/household" element={<Household />} />
             <Route path="/survey_form" element={<SurveyForm />} >
-              <Route index element={<Navigate to="sick?life_status=sick" replace />} />
+              <Route index element={<Navigate to="sick?life_status=" replace />} />
               <Route path='single' element={<Single_infoForm />} />
               <Route path='living alone' element={<Living_alone />} />
               <Route path='widowed' element={<Widowed />} />

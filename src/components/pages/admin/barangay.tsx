@@ -59,18 +59,6 @@ export default function Baranagay(){
         }
     }
 
-    const getPercentage = (bec_num: number, population: number)=>{
-        if(population!=0){
-            if(bec_num!=0){
-                return `${((bec_num/population)*100).toFixed(2)}%`;
-            }
-            return `${0}%`
-        } else{
-            return `${0}%`
-        }
-        
-    }
-
     const getHousehold = async ()=>{
         const token = userData().token
         setIsLoadingTable(true)
@@ -82,16 +70,13 @@ export default function Baranagay(){
                 }
             })
             const datas = res.data.map((data: any)=>{
-                data.percentage = getPercentage(data.total_household, parseInt(data.population));
                 return {
                     "": <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>edit({bec_id: data.id, barangay_name: data.barangay_name, bec_name: data.bec_name, population: data.population})}><FaEdit/></button>,
                     "BARANGAY NAME": <div className='capitalize'>{data.barangay_name}</div>,
                     "BEC": <div className='capitalize'>{data.bec_name}</div>,
-                    "POPULATION": data.population,
                     "HOUSEHOLD": data.total_household,
                     "CATHOLIC RESIDINCES": data.total_catholic_residence,
                     "ENCODED": data.bec_count,
-                    "PERCENTAGE": data.percentage,
                     "NOT BAPTIZED": data.total_baptism,
                     "NOT CONFIRMED": data.total_isNotBaptismConfirmation,
                     "NOT MARRIED": data.total_marrige,
@@ -114,11 +99,9 @@ export default function Baranagay(){
         {name: "EDIT", selector: (row: any)=>row[""]},
         {name: "BARANGAY NAME", selector: (row: any) => row["BARANGAY NAME"], sortable: true, width: "200px" },
         {name: "BEC", selector: (row: any) => row["BEC"], sortable: true, width: "200px" },
-        {name: "POPULATION", selector: (row: any) => row["POPULATION"], sortable: true, width: "200px" },
         {name: "HOUSEHOLD", selector: (row: any) => row["HOUSEHOLD"], sortable: true, width: "200px" },
         {name: "CATHOLIC RESIDINCES", selector: (row: any) => row["CATHOLIC RESIDINCES"], sortable: true, width: "200px" },
         {name: "ENCODED", selector: (row: any) => row["ENCODED"], sortable: true, width: "200px" },
-        {name: "PERCENTAGE", selector: (row: any) => row["PERCENTAGE"], sortable: true, width: "200px" },
         {name: "NOT BAPTIZED", selector: (row: any) => row["NOT BAPTIZED"], sortable: true, width: "200px" },
         {name: "NOT CONFIRMED", selector: (row: any) => row["NOT CONFIRMED"], sortable: true, width: "200px" },
         {name: "NOT MARRIED", selector: (row: any) => row["NOT MARRIED"], width: "200px" },
@@ -168,7 +151,7 @@ export default function Baranagay(){
             {isViewBEC&&<EditBECFormData onClose={()=>setViewBEC(!isViewBEC)} setLoading={()=>setLoading(!isLoading)} data={viewBECData}  />}
             <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
                 {/* add this to a file content */}
-                <div className='text-white w-full md:mt-0 mt-10'>
+                <div className='text-white px-10 w-full md:mt-0 mt-10'>
                     <div className='w-full flex flex-row'>
                         <AdminHeader/>
                     </div>
@@ -236,7 +219,6 @@ const AddBECForm:React.FC<AddBECFormData> = (props)=>{
         const formValues = {
             barangay_id: formData.get("barangay_id"),
             bec_name: formData.get("bec_name"),
-            population: formData.get("population")
         }
 
         const token = userData().token
@@ -339,11 +321,6 @@ const AddBECForm:React.FC<AddBECFormData> = (props)=>{
                                     <input name="bec_name" type="text" id="bec_name" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-white text-white focus:border-blue-500" placeholder="BEC Name" required />
                                 </div>
 
-                                <div className='flex flex-col w-full'>
-                                    <label htmlFor="population" className="block mb-2 text-sm font-medium text-black">Population</label>
-                                    <input name="population" type="number" id="population" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-white text-white focus:border-blue-500" placeholder="Population" required />
-                                </div>
-
                                 <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full mt-4">{"Submit"}</button>
                             </div>
                         </div>
@@ -375,7 +352,6 @@ const EditBECFormData: React.FC<Data> = (props) => {
         const formData = new FormData(e.currentTarget)
         var formValues = {
             bec_name: formData.get("bec_name"),
-            population: formData.get("population"),
             bec_id: 0
         }
         formValues.bec_id = data.bec_id
@@ -462,12 +438,6 @@ const EditBECFormData: React.FC<Data> = (props) => {
                                     <label htmlFor="bec_name" className="block mb-2 text-sm font-medium text-black">BEC Name</label>
                                     <input name="bec_name" type="text" id="bec_name" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white focus:border-blue-500" placeholder="BEC Name" required value={bec_name} onChange={(e)=>setBecName(e.target.value)} />
                                 </div>
-
-                                <div className='flex flex-col w-full'>
-                                    <label htmlFor="population" className="block mb-2 text-sm font-medium">Population</label>
-                                    <input name="population" type="number" id="population" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white focus:border-blue-500" placeholder="Population" required value={population} onChange={(e)=>setPopulation(parseInt(e.target.value))}/>
-                                </div>
-    
                                 <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full mt-4">{"Submit"}</button>
                             </div>
                         </div>

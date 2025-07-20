@@ -145,7 +145,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     })
     const [allData, setAllData] = useState([])
 
-    const [tableSelectContent, setTableSelectContent] = useState("sick")
+    const [tableSelectContent, setTableSelectContent] = useState("")
     const [life_statusCount, setLife_statusCount] = useState<Tlife_statusCount|null>(null)
 
     const getNumberData = async () =>{
@@ -208,7 +208,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         setTableSelectContent(selectTableContent)
         const resultData = dataTables.filter((data: any)=>{return (data.life_status===selectTableContent)})
         setAllData(resultData);
-        if(selectTableContent==="sick"){
+        if(selectTableContent==="sick"||selectTableContent===""){
             sickContentData(resultData)
         }else{
             singleContentData(resultData)
@@ -243,7 +243,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                 "HIGH SCHOOL": data.no_high_school,
                 "COLLECE": data.no_college,
                 "LIVING CONDITION": capitalize(data.living_condition),
-                "COMMENT": data.comment
+                "COMMENT": data.comment===""?"---":data.comment
             })
         })
         displayTableData({columns: columnName, data: data})
@@ -261,10 +261,10 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                 "BARANGAY_ID": data.barangay_id,
                 "BEC_ID": data.bec_id,
                 "FAMILY NAME": capitalize(data.family_name),
-                "HUSBAND NAME": capitalize(data.oname),
-                "WIFE NAME": capitalize(data.mname),
-                "OCCUPATION HUSBAND": capitalize(data.ooccupation),
-                "OCCUPATION WIFE": capitalize(data.moccupation),
+                "HUSBAND NAME": data.oname!==""?capitalize(data.oname):"---",
+                "WIFE NAME": data.mname!==""?capitalize(data.mname):"---",
+                "OCCUPATION HUSBAND": data.ooccupation!==""?capitalize(data.ooccupation):"---",
+                "OCCUPATION WIFE":  data.moccupation!==""?capitalize(data.moccupation):"---",
                 "BARANGAY NAME": capitalize(data.barangay_name),
                 "BEC NAME": capitalize(data.bec_name),
                 "LUMON": data.lumon,
@@ -331,7 +331,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
 
     useEffect(() => {
         if (dataTables.length > 0) {
-            allTableData('sick')
+            allTableData('')
         }
     }, [dataTables]);
     const handleSearch = (e: any)=>{
@@ -363,7 +363,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         console.log(dataExport)
         const downloadfileData = dataExport.map((data: any)=>{
             return (
-                {id: data.id, "Family name": data.family_name, "Life Status": data.life_status, "Wife name": data.mname, "Husband name": data.oname, "Barangay name": data.barangay_name, "BEC name": data.bec_name, "Household": data.household, "Catholic": data.no_catholic_residence, "Lumon": data.lumon, "Attendants": data.mass_attendants, "Baptism": data.baptism, "Confirmation": data.isNotBaptismConfirmation, "Married": data.marrige, "Professional": data.no_professional, "College": data.no_college,"High School": data.no_high_school, "Living condition": data.living_condition, "Comment": data.comment}
+                {id: data.id, "Family name": data.family_name, "Life Status": data.life_status===""?"---":data.life_status, "Wife name": data.mname===""?"":data.mname, "Husband name - First Name": data.oname===""?"---":data.oname, "Barangay name": data.barangay_name, "BEC name": data.bec_name, "Household": data.household, "Catholic": data.no_catholic_residence, "Lumon": data.lumon, "Attendants": data.mass_attendants, "Baptism": data.baptism, "Confirmation": data.isNotBaptismConfirmation, "Married": data.marrige, "Professional": data.no_professional, "College": data.no_college,"High School": data.no_high_school, "Living condition": data.living_condition, "Comment": data.comment===""?"---":data.comment}
             )
         })
         const worksheet = XLSX.utils.json_to_sheet(downloadfileData);
@@ -478,6 +478,10 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                             Life Status
                                         </div>
                                         <div className="flex flex-col md:flex-row w-full gap-3">
+                                            <div onClick={()=>{allTableData("")}} className={(tableSelectContent===""?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                <span className={(tableSelectContent===""?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.sick!==null?life_statusCount?.sick:0}</span>
+                                                ---
+                                            </div>
                                             <div onClick={()=>{allTableData("sick")}} className={(tableSelectContent==="sick"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
                                                 <span className={(tableSelectContent==="sick"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.sick!==null?life_statusCount?.sick:0}</span>
                                                 Sick
@@ -501,7 +505,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                             
                                         </div>
                                     </div>
-                                    <div className="w-[40%]">
+                                    <div className="w-[30%]">
                                         <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search: </label>
                                         <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white focus:border-blue-500 w-full" placeholder="Search Name" required onChange={handleSearch}/>
                                     </div>
@@ -607,7 +611,7 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
     return (
         <>
             <div className='md:absolute w-full h-full flex items-center justify-center text-white z-1 bg-black/50 fixed'>
-                <div className="w-full max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded mx-5 animate__animated animate__fadeIn">
+                <div className="w-full px-10 max-w-2xl bg-[#86ACE2] border border-black shadow-lg rounded mx-5 animate__animated animate__fadeIn">
                     <div className='relative'>
                         <div className='flex flex-row p-3 gap-x-3'>
                             <div className='text-xl'>

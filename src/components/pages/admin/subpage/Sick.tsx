@@ -32,6 +32,7 @@ export default function Sick() {
     function capitalizeFirstLetter(item: string) {
         return item.charAt(0).toUpperCase() + item.slice(1);
     }
+
     const getBarangayList = async ()=>{
         const token = userData().token
         try {
@@ -93,23 +94,33 @@ export default function Sick() {
         <>
             <div className="w-full">
                 <label htmlFor="family_name" className="block mb-2 text-sm font-medium capitalize">family name</label>
-                <input value={family_name} onChange={e=>setfamily_name(e.target.value)} name="family_name" type="text" id="family_name" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
+                <input value={family_name} onChange={e=>setfamily_name(e.target.value)} name="family_name" type="text" id="family_name" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" />
             </div>
             <div className="w-full">
                 <label htmlFor="husband_name" className="block mb-2 text-sm font-medium capitalize">Husband Name</label>
-                <input value={husband_name} onChange={e=>sethusband_name(e.target.value)} name="husband_name" type="text" id="husband_name" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
+                <input value={husband_name} onChange={e=>sethusband_name(e.target.value)} name="husband_name" type="text" id="husband_name" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" />
             </div>
             <div className="w-full">
                 <label htmlFor="husband_occupation" className="block mb-2 text-sm font-medium capitalize">husband occupation</label>
-                <input value={husband_occupation} onChange={e=>sethusband_occupation(e.target.value)} name="husband_occupation" type="text" id="husband_occupation" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
+                <input value={husband_occupation} onChange={e=>sethusband_occupation(e.target.value)} name="husband_occupation" type="text" id="husband_occupation" list='husband_occupationList' className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white"  />
+                <datalist id={'husband_occupationList'}>
+                    {["OFW","Pensioner"].map((name: string)=>{
+                        return (<option key={name} value={name}>{name}</option>)
+                    })}
+                </datalist>
             </div>
             <div className="w-full">
                 <label htmlFor="wife_name" className="block mb-2 text-sm font-medium capitalize">wife Name</label>
-                <input value={wife_name} onChange={e=>setwife_name(e.target.value)} name="wife_name" type="text" id="wife_name" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
+                <input value={wife_name} onChange={e=>setwife_name(e.target.value)} name="wife_name" type="text" id="wife_name" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" />
             </div>
             <div className="w-full">
                 <label htmlFor="wife_occupation" className="block mb-2 text-sm font-medium capitalize">wife occupation</label>
-                <input name="wife_occupation" type="text" id="wife_occupation" value={wife_occupation} onChange={e=>setwife_occupation(e.target.value)} className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" required />
+                <input name="wife_occupation" type="text" id="wife_occupation" list='wife_occupationList' value={wife_occupation} onChange={e=>setwife_occupation(e.target.value)} className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full text-white" />
+                <datalist id={'wife_occupationList'}>
+                    {["OFW","Pensioner"].map((name: string)=>{
+                        return (<option key={name} value={name}>{name}</option>)
+                    })}
+                </datalist>
             </div>
             <div className="w-full">
                 <label htmlFor="no_catholic" className="block mb-2 text-sm font-medium capitalize">no. of household members</label>

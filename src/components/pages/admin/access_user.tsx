@@ -164,7 +164,7 @@ export default function Access_user(){
             {isShowAddForm&&<AddContent onClick={myFunction} refreshUserList={getData} setLoading={()=>setLoading(!isLoading)}/>}
             {isShowEditForm&&<EditForm user={editUser} onClick={editFormShowfun} setLoading={()=>setLoading(!isLoading)}/>}
             <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
-                <div className='text-white w-full md:mt-0 mt-10'>
+                <div className='text-white w-full md:mt-0 mt-10  px-10'>
                     <div className='flex flex-col w-full'>
                         <div className='w-full flex flex-row'>
                             <AdminHeader/>

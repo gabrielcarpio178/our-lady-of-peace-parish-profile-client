@@ -82,7 +82,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
     return (
         <>
         <div className='absolute w-full h-full flex items-center justify-center text-white z-[999] bg-black/50 p-4 overflow-hidden'>
-            <div className="w-auto md:h-auto h-[80%] md:overflow-y-visible overflow-y-scroll bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3 relative p-3 animate__animated animate__fadeIn">
+            <div className="w-auto px-10 md:h-auto h-[80%] md:overflow-y-visible overflow-y-scroll bg-[#86ACE2] border border-black shadow-lg rounded md:mx-0 mx-3 relative p-3 animate__animated animate__fadeIn">
                 <div className='absolute right-2 top-2 cursor-pointer' onClick={onClose}>
                     <IconContext.Provider value={{ color: "white", size: "1.5em" }}>
                         <div>
@@ -102,15 +102,23 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                             {/* line */}
                         </div>
                         <div className="grid grid-cols-2 gap-y-1 gap-x-3">
-                            <div className="col-span-2">
+                            <div className="col-span-1">
+                                <div className="text-sm">
+                                   Life Status:
+                                </div>
+                                <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
+                                    {data?.life_status==""?"---":data?.life_status}
+                                </div>
+                            </div>
+                            <div className="col-span-1">
                                 <div className="text-sm">
                                     Family Name:
                                 </div>
-                                <div className="capitalize bg-gray-700 text-white w-[48%] p-1 rounded-sm">
+                                <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
                                     {data?.family_name}
                                 </div>
                             </div>
-                            {data?.oname?.toLocaleLowerCase()!=="n/a"&&
+                            {data?.oname?.toLocaleLowerCase()!==""&&
                             <>
 
                                 <div className="col-span-1">
@@ -118,7 +126,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                         Husband name:
                                     </div>
                                     <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                        {data?.oname}
+                                        {data?.oname!==""?data?.oname:"---"}
                                     </div>
                                 </div>
                                 <div className="col-span-1">
@@ -126,17 +134,17 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                         Occupation:
                                     </div>
                                     <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                        {data?.ooccupation}
+                                        {data?.ooccupation!==""?data?.ooccupation:"---"}
                                     </div>
                                 </div>
                             </>
                             }
                             <div className="col-span-1">
                                 <div className="text-sm">
-                                    {data?.oname?.toLocaleLowerCase()==="n/a"?"First name: ":"Wife name:"}
+                                    {data?.life_status===""||data?.life_status==="sick"?"Wife name: ":"First name: "}
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data?.mname}
+                                    {data?.mname!==""?data?.mname:"---"}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -144,7 +152,7 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Occupation:
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data?.moccupation}
+                                    {data?.moccupation!==""?data?.moccupation:"---"}
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -291,14 +299,14 @@ const ViewHouseholdData: React.FC<datauser> = (props) =>{
                                     Comment
                                 </div>
                                 <div className="capitalize bg-gray-700 text-white p-1 rounded-sm">
-                                    {data?.comment}
+                                    {data?.comment===""?"---":data?.comment}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="w-full flex flex-col md:flex-row mt-2">
-                    <Link to={`/survey_form/${data?.id}/${data?.life_status}?life_status=${data?.life_status}`} className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full md:w-[50%] text-center">Edit</Link>
+                    <Link to={`/survey_form/${data?.id}/${data?.life_status===""?"sick":data?.life_status}?life_status=${data?.life_status}`} className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full md:w-[50%] text-center">Edit</Link>
                     <button className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-red-800 w-full md:w-[50%]"  onClick={()=>deleteHouseHold(data?.id)}>Delete</button>
                 </div>
             </div>    

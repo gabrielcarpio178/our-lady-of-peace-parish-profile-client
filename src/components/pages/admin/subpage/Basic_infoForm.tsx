@@ -1,4 +1,5 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink, Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 type TbtnContent = {
     to: string,
@@ -25,13 +26,24 @@ interface IbasicInform{
 
 export default function Basic_infoForm({data_info}: IbasicInform) {
 
+    const [searchParams] = useSearchParams();
+    const life_status = searchParams.get('life_status');
+    const navigate = useNavigate();
     const btnContent: TbtnContent[] = [
-        {to: "sick?life_status=sick", name:"Sick"},
-        {to: "single?life_status=single", name:"Single"},
-        {to: "living alone?life_status=living alone", name:"Living Alone"},
-        {to: "widowed?life_status=widowed", name:"Widowed"},
-        {to: "widower?life_status=widower", name:"Widower"},
+        {to: "sick?life_status=sick", name:"sick"},
+        {to: "single?life_status=single", name:"single"},
+        {to: "living alone?life_status=living alone", name:"living alone"},
+        {to: "widowed?life_status=widowed", name:"widowed"},
+        {to: "widower?life_status=widower", name:"widower"},
     ]
+
+    function navigateData(isToggle: boolean, link: string){
+        if(isToggle){
+            navigate("sick?life_status=");
+        }else{
+            navigate(link);
+        }
+    }
     return (
         <> 
             <div className="w-full bg-white p-5 rounded-lg shadow-2xl">
@@ -45,7 +57,7 @@ export default function Basic_infoForm({data_info}: IbasicInform) {
                         <div className='w-full flex flex-col md:flex-row items-center gap-3'>
                             {btnContent.map((data: TbtnContent)=>{
                                 return (
-                                    <NavLink to={data.to} className={({ isActive }: { isActive: boolean }) =>`${isActive?"bg-slate-600 text-white ":"text-black "}`+ "shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white w-full md:w-[20%] text-center"} key={data.name}>{data.name}</NavLink>
+                                    <button onClick={()=>navigateData(life_status===data.name, data.to)} type='button' className={`${life_status===data.name?"bg-slate-600 text-white ":"text-black "}`+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white w-full md:w-[20%] text-center capitalize cursor-pointer"} key={data.name}>{data.name}</button>
                                 )
                             })}
                         </div>

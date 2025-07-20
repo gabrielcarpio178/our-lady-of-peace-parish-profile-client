@@ -101,7 +101,7 @@ export default function Settings(){
             <MyAppNav/>
             <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
                 {/* add this to a file content */}
-                <div className='text-white w-full md:mt-0 mt-10'>
+                <div className='text-white w-full md:mt-0 mt-10 px-10'>
                     {/* content here */}
                     <div className='flex flex-col w-full'>
                         <div className='w-full flex flex-row'>
