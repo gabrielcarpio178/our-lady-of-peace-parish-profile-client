@@ -23,7 +23,7 @@ export default function Dashboard(){
 
     const getBoxesData = async () =>{
         try {
-            const res = await axios.get(`${api_link()}/getDashboardBoxedData`, {
+            const res = await axios.get(`${api_link()}/getdashboardData`, {
                 headers: {
                     'Content-type':'application/x-www-form-urlencoded',
                     "authorization" : `bearer ${token}`,
