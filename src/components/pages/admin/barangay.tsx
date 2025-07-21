@@ -151,7 +151,7 @@ export default function Baranagay(){
             {isViewBEC&&<EditBECFormData onClose={()=>setViewBEC(!isViewBEC)} setLoading={()=>setLoading(!isLoading)} data={viewBECData}  />}
             <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
                 {/* add this to a file content */}
-                <div className='text-white px-10 w-full md:mt-0 mt-10'>
+                <div className='text-white md:px-10 px-0 w-full md:mt-0 mt-10'>
                     <div className='w-full flex flex-row'>
                         <AdminHeader/>
                     </div>

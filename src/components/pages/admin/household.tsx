@@ -198,7 +198,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             setAllData(res.data)
             setDataTable(res.data)
             setLife_statusCount(lifeCountdataTable)
-            allTableData('sick')
+            allTableData('')
             setIsDisplayLoading(false)
         } catch (error) {
             console.log(error)
