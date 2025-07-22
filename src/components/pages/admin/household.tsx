@@ -133,7 +133,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     const [numberData, setnumberData] = useState({
         total_lumon : "0",  total_encoded : "0", total_encoded_catholic : "0" , total_household : "0", total_population : "0"
     })
-    const [tableSettingData, settableSettingData] = useState( {barangay: "0", bec: "0", barangay_name: "All Barangay", bec_name: "All BEC"} )
+    const [tableSettingData, settableSettingData] = useState( {barangay: 0, bec: 0, barangay_name: "All Barangay", bec_name: "All BEC"} )
     const [isTableSettingShow, setTableSettiingShow] = useState(false)
     const [dataTables, setDataTable] = useState([])
     const [isLoading, setLoading] = useState(false)
