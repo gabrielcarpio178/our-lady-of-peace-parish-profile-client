@@ -47,11 +47,11 @@ export default function Access_user(){
 
     const actionColumn = {
         name: "ACTION",
-        selector: (row: any) => row.ACTION,
-        style: { alignText: "center" }
+        selector: (row: any) => row.ACTION, width: "200px"
     };
 
-    const columns = userData().user.rule==="admin" ? [...baseColumns, actionColumn] : baseColumns;
+    console.log(userData().user.rule)
+    const columns = userData().user.rule==="admin" ? [actionColumn, ...baseColumns] : baseColumns;
 
     const resetPass = (data: {id: number, username: string}) =>{
         const token = userData().token

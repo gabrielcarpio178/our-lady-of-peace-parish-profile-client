@@ -18,6 +18,18 @@ type ToccuptionData = {
     pensioner: number
 }
 
+type TbecList = {
+    bec_name: string
+    id: number
+    barangay_id: number
+}
+
+type TbarangayList = {
+    barangay_name: string
+    id: number
+}
+
+
 export default function Dashboard(){
     const [isLoading, setIsLoading] = useState(true)
     const token = userData().token
@@ -25,6 +37,10 @@ export default function Dashboard(){
     const [householdBox, setHouseholdBox] = useState<Record<string, number>>()
     const [lifeStatusData, setLifeStatusData] = useState<Record<string, number>>()
     const [occuptionData, setOccuptionData] = useState<ToccuptionData|null>();
+    const [barangay_id, setBarangay_id] = useState<number>(0);
+    const [_, setBec_id] = useState<number>(0);
+    const [barangayList, setBarangayList] = useState<TbarangayList[]>([]);
+    const [beclist, setBecList] = useState<TbecList[]>([]);
 
     const getBoxesData = async () =>{
         try {
@@ -47,6 +63,83 @@ export default function Dashboard(){
             setIsLoading(false);
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    const getBarangayList = async () =>{
+         try {
+            const res = await axios.get(`${api_link()}/getBarangay`, {
+                headers: {
+                    'Content-type':'application/x-www-form-urlencoded',
+                    "authorization" : `bearer ${token}`,
+                }
+            })
+            setBarangayList(res.data);
+         } catch (error) {
+            console.log(error)
+         }
+    }
+    const getBecList = async (id: number) =>{
+        setBarangay_id(id)
+        setBec_id(0);
+        try {
+            const res = await axios.get(`${api_link()}/getBecList`, {
+                headers: {
+                    'Content-type':'application/x-www-form-urlencoded',
+                    "authorization" : `bearer ${token}`,
+                }
+            })
+            const resDatas: TbecList[] = res.data.filter((data: TbecList)=>{
+                return (data.barangay_id === id);
+            })
+            setBecList(resDatas);
+            filterDataDisplay(id, 0);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function becGetId(id: number){
+        setBec_id(id)
+        filterDataDisplay(barangay_id, id);
+    }
+
+    async function filterDataDisplay(barangay_id: number, bec_id: number){
+        setIsLoading(true);
+        if(barangay_id!==0||bec_id!==0){
+            try {
+                const res = await axios.get(`${api_link()}/getFilterData/${barangay_id}/${bec_id}`, {
+                    headers: {
+                        'Content-type':'application/x-www-form-urlencoded',
+                        "authorization" : `bearer ${token}`,
+                    }
+                })
+                if(res.data.length!==0){
+                    const lifeStatus = res.data.map((data:any)=>{
+                        return (
+                            {[data.life_status]: data.total_life_status}
+                        )
+                    })
+                    setIsLoading(false);
+                    const ofw = res.data[0].OFW;
+                    const pensioner = res.data[0].Pensioner;
+                    setLifeStatusData(getlifeStatus(lifeStatus))
+                    setHouseholdBox(householdBoxDataByKey(res.data))
+                    setOccuptionData({ofw, pensioner})
+                }else{
+                    setIsLoading(false);
+                    const ofw = 0;
+                    const pensioner = 0;
+                    setOccuptionData({ofw, pensioner})
+                    setLifeStatusData({});
+                    setHouseholdBox({});
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }else{
+            setIsLoading(false);
+            getBoxesData();
         }
     }
 
@@ -89,8 +182,10 @@ export default function Dashboard(){
         {name: "Pensioner", countData: isLoading?"Loading...":occuptionData?.pensioner??0},
     ]
 
+
     useEffect(()=>{
-        getBoxesData()
+        getBoxesData();
+        getBarangayList();
     }, [])
 
     return (
@@ -106,6 +201,27 @@ export default function Dashboard(){
                         <h2 className='text-2xl text-black opacity-[50%]'>
                             Dashboard
                         </h2>
+
+                        <div className="flex flex-row text-white p-2 rounded-lg gap-x-2 bg-[#001656] md:w-[30%] w-full md:mt-0 mt-4">
+                            <div className='flex flex-col w-[50%]'>
+                                <label htmlFor="barangay" className="block mb-2 text-sm font-medium">Barangay</label>
+                                <select name="barangay" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={e=>getBecList(parseInt(e.target.value))} value={barangay_id}>
+                                    <option value="0">All</option>
+                                    {barangayList.map((data: TbarangayList)=>{
+                                        return (<option key={data.id} value={data.id}>{data.barangay_name}</option>)
+                                    })}
+                                </select>
+                            </div>
+                            <div className='flex flex-col w-[50%]'>
+                                <label htmlFor="bec_name" className="block mb-2 text-sm font-medium">BEC Name</label>
+                                <select name="bec_name" id="bec_name" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required disabled={beclist.length === 0} onChange={e=>becGetId(parseInt(e.target.value))}>
+                                    <option value="0">All</option>
+                                    {beclist.map((data: TbecList)=>{
+                                        return (<option key={data.id} value={data.id}>{data.bec_name}</option>)
+                                    })}
+                                </select>
+                            </div>
+                        </div>
                     </div> 
                     <div className='flex flex-col md:flex-row mt-3 gap-3'>
                         <div className='w-full md:w-[30%] grid grid-cols-2 gap-1'>

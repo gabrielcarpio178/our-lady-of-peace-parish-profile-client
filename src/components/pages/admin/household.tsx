@@ -114,8 +114,8 @@ type TtableContent = {
 }
 
 type sendData = {
-    barangay: string;
-    bec: string;
+    barangay: number;
+    bec: number;
     barangay_name: string;
     bec_name: string
 }
@@ -186,7 +186,6 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                     "authorization" : `bearer ${token}`,
                 }
             })
-
             const lifeCountdataTable: Tlife_statusCount = {
                 normal:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="")}).length,
                 sick:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="sick")}).length,
@@ -298,34 +297,60 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         setTableContent({columns: columnName, data:data})
     }
 
-    // const tableData = (bec_id: any, barangay_id: any) => {
-    //     barangay_id = barangay_id=="all"?0:parseInt(barangay_id)
-    //     bec_id = bec_id=="all"?0:parseInt(bec_id)
-    //     if(barangay_id!=0||bec_id!=0){
-    //         let searchRes = allData;
-    //         if(barangay_id!=0){
-    //             searchRes = allData.filter((data: any)=>{
-    //                 return (data["BARANGAY_ID"]===barangay_id)
-    //             })
-    //         }
-    //         if(bec_id!=0){
-    //             searchRes = allData.filter((data: any)=>{
-    //                 return (data["BEC_ID"]===bec_id)
-    //             })
-    //         }
-    //         if(bec_id!=0&&barangay_id!=0){
-    //             searchRes = allData.filter((data: any)=>{
-    //                 return (data["BEC_ID"]===bec_id&&data["BARANGAY_ID"]===barangay_id)
-    //             })
-    //         }
-    //         setDataTable(searchRes);
-    //     }
-    // }
-    // const handleDataFromChild = (data: sendData): void => {
-    //     setTableSettiingShow(!isTableSettingShow)
-    //     settableSettingData(data)
-    //     tableData(data.bec, data.barangay)
-    // };
+    const tableData = async (bec_id: any, barangay_id: any) => {
+        setIsDisplayLoading(true)
+        if(barangay_id!==0||bec_id!==0){
+            const token = userData().token
+            try {
+                const res = await axios.get(`${api_link()}/getFilterHousehold/${barangay_id}/${bec_id}`, {
+                    headers: {
+                        'Content-type':'application/x-www-form-urlencoded',
+                        "authorization" : `bearer ${token}`,
+                    }
+                })
+                console.log(res.data);
+                if(res.data.length!==0){
+                    const lifeCountdataTable: Tlife_statusCount = {
+                        normal:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="")}).length,
+                        sick:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="sick")}).length,
+                        single:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="single")}).length,
+                        living_alone:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="living alone")}).length,
+                        widowed:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="widowed")}).length,
+                        widower:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="widower")}).length
+                    }
+                    setAllData(res.data)
+                    setDataTable(res.data)
+                    setLife_statusCount(lifeCountdataTable)
+                }else{
+                    const lifeCountdataTable: Tlife_statusCount = {
+                        normal:0,
+                        sick:0,
+                        single:0,
+                        living_alone:0,
+                        widowed:0,
+                        widower:0
+                    }
+                    setTableContent({columns: [], data:[]})
+                    setLife_statusCount(lifeCountdataTable)
+                    setAllData([]);
+                    setDataTable([]);
+                }
+                setIsDisplayLoading(false)
+            } catch (error) {
+                console.log(error)
+            }
+        }else{
+            getDataTable();
+            setIsDisplayLoading(false)
+        }
+    }
+
+
+    const handleDataFromChild = (data: sendData): void => {
+        setTableSettiingShow(!isTableSettingShow)
+        settableSettingData(data)
+        tableData(data.bec, data.barangay)
+    };
     useEffect(()=>{
         getDataTable()
         getNumberData()
@@ -387,7 +412,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         } 
 
         {/* add this to a file content */}
-        {/* {isTableSettingShow&&<TableSettings onClose={()=>setTableSettiingShow(!isTableSettingShow)} sendDataToHousehold={handleDataFromChild}/>} */}
+        {isTableSettingShow&&<TableSettings onClose={()=>setTableSettiingShow(!isTableSettingShow)} sendDataToHousehold={handleDataFromChild}/>}
         {isHouseholdDataShow&&<ViewHouseholdData data={householdData} onClose={()=>setHouseholdDataShow(!isHouseholdDataShow)} onLoading={()=>setLoading(!isLoading)} />}
         <div className='flex flex-col m-0 md:ml-[16%] text-white bg-[#86ACE2] py-1 h-screen'>
             <div className='text-white w-full'>
@@ -403,7 +428,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                     Households - <span>{tableSettingData==null?"All Barangay":tableSettingData.barangay_name+" - "+`${tableSettingData.bec_name==""||tableSettingData.bec_name==""?"All BEC":tableSettingData.bec_name}`}</span>
                                 </h2>
                                 <div className="flex flex-row border border-black rounded-sm">
-                                    {/* <div className="flex flex-row bg-[#001656] items-center px-2 gap-x-1 cursor-pointer" onClick={()=>setTableSettiingShow(!isTableSettingShow)}>
+                                    <div className="flex flex-row bg-[#001656] items-center px-2 gap-x-1 cursor-pointer" onClick={()=>setTableSettiingShow(!isTableSettingShow)}>
                                         <div>
                                             <IconContext.Provider value={{ color: "white", size: "1em" }}>
                                                 <IoMdSettings/>
@@ -412,7 +437,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                         <div>
                                             Table Settings
                                         </div>
-                                    </div> */}
+                                    </div>
                                     <div className="flex flex-row items-center px-2 gap-x-1 cursor-pointer" onClick={exportExcel}>
                                         <div>
                                             <IconContext.Provider value={{ color: "white", size: "1em" }}>
@@ -537,8 +562,8 @@ interface settingTableProps {
 const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClose}) => {
     const [barangayList, setBarangayList] = useState([])
     const [becList, setBecList] = useState([]);
-    const [bec_id, setBec_id] = useState("");
-    const [barangay_id, setBarangay_id] = useState("")
+    const [bec_id, setBec_id] = useState(0);
+    const [barangay_id, setBarangay_id] = useState(0)
     const [bec_nameData, setBec_name] = useState("");
     const [barangay_nameData, setBarangay_name] = useState("")
     function capitalizeFirstLetter(item: string) {
@@ -588,6 +613,9 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
         const barangay_name = e.target.options[e.target.selectedIndex].text
         getBEClist(id)
         setBarangay_name(barangay_name)
+        if(id===0){
+            getBec_name(0);
+        }
     }
 
     const getBec_name = (e: any)=>{
@@ -600,11 +628,13 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
     const procced = async (e: React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        const {barangay, bec} = {
-            barangay: formData.get("barangay"),
-            bec: formData.get("bec")
+        const formValues = {
+            barangay:  Number(formData.get("barangay") ?? 0),
+            bec: Number(formData.get("bec") ?? 0),
         }
-        sendDataToHousehold({ barangay: barangay as string, bec: bec as string, barangay_name: barangay_nameData as string, bec_name: bec_nameData as string })
+        const barangay = formValues.barangay
+        const bec = formValues.bec
+        sendDataToHousehold({barangay, bec, barangay_name: barangay_nameData, bec_name: bec_nameData})
     }
 
     useEffect(()=>{
@@ -632,13 +662,13 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
                         <div>Select Barangay</div>
                         <div className="flex flex-row gap-x-1 p-3">
                             <select name="barangay" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required onChange={(e: any)=>getDataBangay(e)} value={barangay_id}>
+                                <option value="0">All</option>
                                 {barangayList.map((brgy: any)=>{
                                     return(<option value={brgy.id} key={brgy.id}>{brgy.name}</option>)
                                 })}
                             </select>
                             <select name="bec" id="bec" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-blue-500 w-full" required disabled={becList.length==0} onChange={(e: any)=>getBec_name(e)} value={bec_id}>
-                                {becList.length==0?<option value="" disabled>No BEC Name for this Barangay</option>:""}
-                                <option value="all" >All</option>
+                                <option value="0" >All</option>
                                 {becList.map((bec: any)=> {return (<option value={bec.id} key={bec.id}>{bec.bec_name}</option>)})}
                             </select>
                         </div>
