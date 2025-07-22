@@ -84,7 +84,7 @@ export default function Records(){
                         <div className='w-full flex flex-row'>
                             <AdminHeader/>
                         </div>
-                        <div className='w-full flex flex-col px-10  animate__animated animate__fadeIn'>
+                        <div className='w-full flex flex-col md:px-10 px-0 animate__animated animate__fadeIn'>
                             <div className='w-full flex md:flex-row flex-col justify-between'>
                                 <h2 className='text-2xl text-black opacity-[50%]'>
                                     Records

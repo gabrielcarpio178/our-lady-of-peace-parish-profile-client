@@ -136,7 +136,7 @@ export default function SurveyForm(){
                                 <AdminHeader/>
                             </div>
                             <div className='w-full flex flex-row'>
-                                <div className='w-full flex flex-col px-10  animate__animated animate__fadeIn'>
+                                <div className='w-full flex flex-col md:px-10 px-0 animate__animated animate__fadeIn'>
                                     <div className="">
                                         <h2 className='text-2xl text-black opacity-[50%]'>
                                             Add Household Information

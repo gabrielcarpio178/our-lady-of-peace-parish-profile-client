@@ -169,7 +169,7 @@ export default function Access_user(){
                         <div className='w-full flex flex-row'>
                             <AdminHeader/>
                         </div>
-                        <div className='w-full flex flex-col px-10 animate__animated animate__fadeIn'>
+                        <div className='w-full flex flex-col md:px-10 px-0 animate__animated animate__fadeIn'>
                             <h2 className='text-2xl text-black opacity-[50%]'>
                                 List of Users
                             </h2>
