@@ -581,7 +581,7 @@ const TableSettings: React.FC<settingTableProps> = ({sendDataToHousehold, onClos
             })
             const datas = res.data.filter((data: any)=>{return data.barangay_id == id})
             setBecList(datas)
-            setBarangay_id(id)
+            setBarangay_id(parseInt(id))
         } catch (error) {
             console.log(error)
         }
