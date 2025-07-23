@@ -220,7 +220,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     
 
     const singleContentData = (datas: TnotSick[]) =>{
-        const columnName = ["FAMILY NAME", "FIRST NAME", "OCCUPATION", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","BAPTISM", "CONFIRMATION","MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"];
+        const columnName = ["FAMILY NAME", "FIRST NAME", "OCCUPATION", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTISM", "NOT CONFIRMATION","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"];
         const data = datas.map((data: TnotSick)=>{
             return ({
                 "Action": <div>
@@ -237,9 +237,9 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                 "HOUSEHOLDS": data.household,
                 "CATHOLIC": data.no_catholic_residence,
                 "ATTENDANTS": capitalize(data.mass_attendants),
-                "BAPTISM": data.baptism,
-                "CONFIRMATION": data.isNotBaptismConfirmation,
-                "MARRIED": data.marrige,
+                "NOT BAPTISM": data.baptism,
+                "NOT CONFIRMATION": data.isNotBaptismConfirmation,
+                "NOT MARRIED": data.marrige,
                 "PROFESSIONAL": data.no_professional,
                 "HIGH SCHOOL": data.no_high_school,
                 "COLLECE": data.no_college,
@@ -252,7 +252,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     }
 
     const sickContentData = (datas: TsickData[]) => {
-        const columnName = ["FAMILY NAME", "HUSBAND NAME", "WIFE NAME", "OCCUPATION HUSBAND", "OCCUPATION WIFE", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","BAPTISM", "CONFIRMATION","MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"]
+        const columnName = ["FAMILY NAME", "HUSBAND NAME", "WIFE NAME", "OCCUPATION HUSBAND", "OCCUPATION WIFE", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTISM", "NOT CONFIRMATION","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"]
 
         const data = datas.map((data:TsickData)=>{
             return ({
@@ -272,9 +272,9 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                 "HOUSEHOLDS": data.household,
                 "CATHOLIC": data.no_catholic_residence,
                 "ATTENDANTS": capitalize(data.mass_attendants),
-                "BAPTISM": data.baptism,
-                "CONFIRMATION": data.isNotBaptismConfirmation,
-                "MARRIED": data.marrige,
+                "NOT BAPTISM": data.baptism,
+                "NOT CONFIRMATION": data.isNotBaptismConfirmation,
+                "NOT MARRIED": data.marrige,
                 "PROFESSIONAL": data.no_professional,
                 "HIGH SCHOOL": data.no_high_school,
                 "COLLECE": data.no_college,
@@ -385,12 +385,12 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             delete data["BARANGAY_ID"];
             delete data["BEC_ID"];
             delete data["Action"]
+            delete data['id'];
             return data;
         })
-        console.log(dataExport)
         const downloadfileData = dataExport.map((data: any)=>{
             return (
-                {id: data.id, "Family name": data.family_name, "Life Status": data.life_status===""?"---":data.life_status, "Wife name": data.mname===""?"":data.mname, "Husband name - First Name": data.oname===""?"---":data.oname, "Barangay name": data.barangay_name, "BEC name": data.bec_name, "Household": data.household, "Catholic": data.no_catholic_residence, "Lumon": data.lumon, "Attendants": data.mass_attendants, "Baptism": data.baptism, "Confirmation": data.isNotBaptismConfirmation, "Married": data.marrige, "Professional": data.no_professional, "College": data.no_college,"High School": data.no_high_school, "Living condition": data.living_condition, "Comment": data.comment===""?"---":data.comment}
+                {"Family name": data.family_name, "Life Status": data.life_status===""?"---":data.life_status, "Wife name": data.mname===""?"":data.mname, "Husband name - First Name": data.oname===""?"---":data.oname, "Barangay name": data.barangay_name, "BEC name": data.bec_name, "Household": data.household, "Catholic": data.no_catholic_residence, "Lumon": data.lumon, "Attendants": data.mass_attendants, "Not Baptism": data.baptism, "Not Confirmation": data.isNotBaptismConfirmation, "Not Married": data.marrige, "Professional": data.no_professional, "College": data.no_college,"High School": data.no_high_school, "Living condition": data.living_condition, "Comment": data.comment===""?"---":data.comment}
             )
         })
         const worksheet = XLSX.utils.json_to_sheet(downloadfileData);
