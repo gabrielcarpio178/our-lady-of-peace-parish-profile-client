@@ -220,7 +220,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     
 
     const singleContentData = (datas: TnotSick[]) =>{
-        const columnName = ["FAMILY NAME", "FIRST NAME", "OCCUPATION", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTISM", "NOT CONFIRMATION","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"];
+        const columnName = ["FAMILY NAME", "FIRST NAME", "OCCUPATION", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTISED", "NOT CONFIRMED","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"];
         const data = datas.map((data: TnotSick)=>{
             return ({
                 "Action": <div>
@@ -237,8 +237,8 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                 "HOUSEHOLDS": data.household,
                 "CATHOLIC": data.no_catholic_residence,
                 "ATTENDANTS": capitalize(data.mass_attendants),
-                "NOT BAPTISM": data.baptism,
-                "NOT CONFIRMATION": data.isNotBaptismConfirmation,
+                "NOT BAPTISED": data.baptism,
+                "NOT CONFIRMED": data.isNotBaptismConfirmation,
                 "NOT MARRIED": data.marrige,
                 "PROFESSIONAL": data.no_professional,
                 "HIGH SCHOOL": data.no_high_school,
@@ -252,7 +252,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     }
 
     const sickContentData = (datas: TsickData[]) => {
-        const columnName = ["FAMILY NAME", "HUSBAND NAME", "WIFE NAME", "OCCUPATION HUSBAND", "OCCUPATION WIFE", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTISM", "NOT CONFIRMATION","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"]
+        const columnName = ["FAMILY NAME", "HUSBAND NAME", "WIFE NAME", "OCCUPATION HUSBAND", "OCCUPATION WIFE", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTISED", "NOT CONFIRMED","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"]
 
         const data = datas.map((data:TsickData)=>{
             return ({
@@ -272,8 +272,8 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                 "HOUSEHOLDS": data.household,
                 "CATHOLIC": data.no_catholic_residence,
                 "ATTENDANTS": capitalize(data.mass_attendants),
-                "NOT BAPTISM": data.baptism,
-                "NOT CONFIRMATION": data.isNotBaptismConfirmation,
+                "NOT BAPTISED": data.baptism,
+                "NOT CONFIRMED": data.isNotBaptismConfirmation,
                 "NOT MARRIED": data.marrige,
                 "PROFESSIONAL": data.no_professional,
                 "HIGH SCHOOL": data.no_high_school,

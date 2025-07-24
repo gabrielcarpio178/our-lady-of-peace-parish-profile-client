@@ -52,7 +52,7 @@ export const BarGraph:React.FC<TBarGraph> = ({datas}) => {
             },
         },
     };
-    const labels: string[] = ["Population", "Not Baptized", "Not Confirmation", "Not Married", "Lumon"]
+    const labels: string[] = ["Population", "Not Baptized", "Not Confirmed", "Not Married", "Lumon"]
     const data = {
     labels,
     datasets: [

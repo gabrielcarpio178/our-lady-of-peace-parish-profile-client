@@ -168,7 +168,7 @@ export default function Dashboard(){
     const boxesData: TboxesData[] = [
         {name: "Population", countData: isLoading?"Loading...":householdBox?.population??0},
         {name: "Not Baptized", countData: isLoading?"Loading...":householdBox?.baptism?? 0},
-        {name: "Not Confirmation", countData: isLoading?"Loading...":householdBox?.confirmation?? 0},
+        {name: "Not Confirmed", countData: isLoading?"Loading...":householdBox?.confirmation?? 0},
         {name: "Not Married", countData: isLoading?"Loading...":householdBox?.marrige?? 0},
         {name: "Lumon", countData: isLoading?"Loading...":householdBox?.lumon?? 0},
 
