@@ -113,6 +113,7 @@ export default function Baranagay(){
         {name: "VERY POOR CLASS", selector: (row: any) => row["VERY POOR CLASS"], width: "200px" },
     ]
     
+    
 
     useEffect(()=>{
         getBarangayList()

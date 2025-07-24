@@ -52,6 +52,7 @@ type TsickData = {
     life_status: string,
     barangay_name: string,
     bec_id: number,
+    encoded_user: string,
     bec_name: string,
     comment: string,
     family_name: string,
@@ -77,6 +78,7 @@ type TnotSick = {
     barangay_id: number,
     life_status: string,
     barangay_name: string,
+    encoded_user: string,
     bec_id: number,
     bec_name: string,
     comment: string,
@@ -186,6 +188,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                     "authorization" : `bearer ${token}`,
                 }
             })
+            console.log(res.data);
             const lifeCountdataTable: Tlife_statusCount = {
                 normal:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="")}).length,
                 sick:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="sick")}).length,
@@ -220,7 +223,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     
 
     const singleContentData = (datas: TnotSick[]) =>{
-        const columnName = ["FAMILY NAME", "FIRST NAME", "OCCUPATION", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTIZED", "NOT CONFIRMED","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"];
+        const columnName = ["ENCODER", "FAMILY NAME", "FIRST NAME", "OCCUPATION", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTIZED", "NOT CONFIRMED","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"];
         const data = datas.map((data: TnotSick)=>{
             return ({
                 "Action": <div>
@@ -228,6 +231,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                         </div>,
                 "BARANGAY_ID": data.barangay_id,
                 "BEC_ID": data.bec_id,
+                "ENCODER": data.encoded_user,
                 "FAMILY NAME": capitalize(data.family_name),
                 "FIRST NAME": capitalize(data.mname),
                 "OCCUPATION": capitalize(data.moccupation),
@@ -252,7 +256,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     }
 
     const sickContentData = (datas: TsickData[]) => {
-        const columnName = ["FAMILY NAME", "HUSBAND NAME", "WIFE NAME", "OCCUPATION HUSBAND", "OCCUPATION WIFE", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTISED", "NOT CONFIRMED","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"]
+        const columnName = ["ENCODER", "FAMILY NAME", "HUSBAND NAME", "WIFE NAME", "OCCUPATION HUSBAND", "OCCUPATION WIFE", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTIZED", "NOT CONFIRMED","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"]
 
         const data = datas.map((data:TsickData)=>{
             return ({
@@ -261,6 +265,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                         </div>,
                 "BARANGAY_ID": data.barangay_id,
                 "BEC_ID": data.bec_id,
+                "ENCODER": data.encoded_user,
                 "FAMILY NAME": capitalize(data.family_name),
                 "HUSBAND NAME": data.oname!==""?capitalize(data.oname):"---",
                 "WIFE NAME": data.mname!==""?capitalize(data.mname):"---",
@@ -386,17 +391,18 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             delete data["BEC_ID"];
             delete data["Action"]
             delete data['id'];
+            delete data['encoded_user'];
             return data;
         })
         const downloadfileData = dataExport.map((data: any)=>{
             return (
-                {"Family name": data.family_name, "Life Status": data.life_status===""?"---":data.life_status, "Wife name": data.mname===""?"":data.mname, "Husband name - First Name": data.oname===""?"---":data.oname, "Barangay name": data.barangay_name, "BEC name": data.bec_name, "Household": data.household, "Catholic": data.no_catholic_residence, "Lumon": data.lumon, "Attendants": data.mass_attendants, "Not Baptism": data.baptism, "Not Confirmation": data.isNotBaptismConfirmation, "Not Married": data.marrige, "Professional": data.no_professional, "College": data.no_college,"High School": data.no_high_school, "Living condition": data.living_condition, "Comment": data.comment===""?"---":data.comment}
+                {"Family name": data.family_name, "Life Status": data.life_status===""?"---":data.life_status, "Wife name": data.mname===""?"":data.mname, "Husband name - First Name": data.oname===""?"---":data.oname, "Barangay name": data.barangay_name, "BEC name": data.bec_name, "Household": data.household, "WIFE OCCOPATION":data.moccupation===""?"---":data.moccupation,  "HUSBAND OCCOPATION":data.ooccupation===""?"---":data.ooccupation, "Catholic": data.no_catholic_residence, "Lumon": data.lumon, "Attendants": data.mass_attendants, "Not Baptized": data.baptism, "Not Confirmed": data.isNotBaptismConfirmation, "Not Married": data.marrige, "Professional": data.no_professional, "College": data.no_college,"High School": data.no_high_school, "Living condition": data.living_condition, "Comment": data.comment===""?"---":data.comment}
             )
         })
         const worksheet = XLSX.utils.json_to_sheet(downloadfileData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-        XLSX.writeFile(workbook, "household.xlsx");
+        XLSX.writeFile(workbook, "OLPP-Profiling.xlsx");
     }
 
     return(
