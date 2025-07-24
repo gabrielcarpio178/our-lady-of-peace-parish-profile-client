@@ -110,7 +110,7 @@ export default function Living_alone() {
                 <input disabled value={0} onChange={e=>sethousehold_member(e.target.value)} name="no_catholic" type="number" min="0" id="no_catholic" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required />
             </div>
             <div className="w-full">
-                <label htmlFor="no_catholic_residence" className="block mb-2 text-sm font-medium capitalize">No. of catholic residence</label>
+                <label htmlFor="no_catholic_residence" className="block mb-2 text-sm font-medium capitalize">No. of catholic residing</label>
                 <input disabled value={0} onChange={e=>setcatholic_member(e.target.value)} name="no_catholic_residence" type="number" min="0" id="no_catholic_residence" className="border text-sm rounded-lg focus:ring-gray-700 block p-2.5 bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-gray-700 w-full" required />
             </div>
             <div className="w-full">
