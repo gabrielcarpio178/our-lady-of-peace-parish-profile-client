@@ -11,6 +11,7 @@ import Swal from 'sweetalert2'
 import { BounceLoader } from 'react-spinners'
 import DataTable from 'react-data-table-component'
 import 'animate.css';
+import { MdDelete } from "react-icons/md";
 
 
 export default function Baranagay(){
@@ -59,6 +60,44 @@ export default function Baranagay(){
         }
     }
 
+    const deleteData = async (id:number)=>{
+        const token = userData().token;
+        Swal.fire({
+            title: "Are you sure?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async (result) => {
+            if(result){
+                try {
+                    await axios.delete(`${api_link()}/deleteBarangay`,{
+                        headers:{
+                                'Content-type':'application/x-www-form-urlencoded',
+                                "authorization" : `bearer ${token}`,
+                            },
+                            data: {
+                                id: id
+                            }
+                    })
+                    Swal.fire({
+                        position: "center",
+                        title: `Delete Successfully`,
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    }).then(()=>{
+                        window.location.reload()
+                    })
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        })
+        
+    }
+
     const getHousehold = async ()=>{
         const token = userData().token
         setIsLoadingTable(true)
@@ -70,8 +109,13 @@ export default function Baranagay(){
                 }
             })
             const datas = res.data.map((data: any)=>{
+                let actionElem = null
+                if(userData().user.rule=="admin"){
+                    actionElem = <><button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>edit({bec_id: data.id, barangay_name: data.barangay_name, bec_name: data.bec_name, population: data.population})}><FaEdit/></button>
+                    <button type="button" className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-red-800" onClick={()=>deleteData(data.id)}><MdDelete/></button></>
+                }
                 return {
-                    "": <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800" onClick={()=>edit({bec_id: data.id, barangay_name: data.barangay_name, bec_name: data.bec_name, population: data.population})}><FaEdit/></button>,
+                    "": actionElem,
                     "BARANGAY NAME": <div className='capitalize'>{data.barangay_name}</div>,
                     "BEC": <div className='capitalize'>{data.bec_name}</div>,
                     "HOUSEHOLD": data.total_household,
@@ -95,23 +139,50 @@ export default function Baranagay(){
             console.log(error)
         }
     }
-    const colums = [
-        {name: "EDIT", selector: (row: any)=>row[""]},
-        {name: "BARANGAY NAME", selector: (row: any) => row["BARANGAY NAME"], sortable: true, width: "200px" },
-        {name: "BEC", selector: (row: any) => row["BEC"], sortable: true, width: "200px" },
-        {name: "HOUSEHOLD", selector: (row: any) => row["HOUSEHOLD"], sortable: true, width: "200px" },
-        {name: "CATHOLIC RESIDINCES", selector: (row: any) => row["CATHOLIC RESIDINCES"], sortable: true, width: "200px" },
-        {name: "ENCODED", selector: (row: any) => row["ENCODED"], sortable: true, width: "200px" },
-        {name: "NOT BAPTIZED", selector: (row: any) => row["NOT BAPTIZED"], sortable: true, width: "200px" },
-        {name: "NOT CONFIRMED", selector: (row: any) => row["NOT CONFIRMED"], sortable: true, width: "200px" },
-        {name: "NOT MARRIED", selector: (row: any) => row["NOT MARRIED"], width: "200px" },
-        {name: "NOT HIGH SCHOOL", selector: (row: any) => row["NOT HIGH SCHOOL"], width: "200px" },
-        {name: "NOT COLLEGE", selector: (row: any) => row["NOT COLLEGE"], width: "200px" },
-        {name: "UPPER CLASS", selector: (row: any) => row["UPPER CLASS"], width: "200px" },
-        {name: "MIDDLE CLASS", selector: (row: any) => row["MIDDLE CLASS"], width: "200px" },
-        {name: "POOR CLASS", selector: (row: any) => row["POOR CLASS"], width: "200px" },
-        {name: "VERY POOR CLASS", selector: (row: any) => row["VERY POOR CLASS"], width: "200px" },
-    ]
+   
+    function getColumn(){
+        let columns = [];
+        if(userData().user.rule!="admin"){
+            columns = [
+                {name: "BARANGAY NAME", selector: (row: any) => row["BARANGAY NAME"], sortable: true, width: "200px" },
+                {name: "BEC", selector: (row: any) => row["BEC"], sortable: true, width: "200px" },
+                {name: "HOUSEHOLD", selector: (row: any) => row["HOUSEHOLD"], sortable: true, width: "200px" },
+                {name: "CATHOLIC RESIDINCES", selector: (row: any) => row["CATHOLIC RESIDINCES"], sortable: true, width: "200px" },
+                {name: "ENCODED", selector: (row: any) => row["ENCODED"], sortable: true, width: "200px" },
+                {name: "NOT BAPTIZED", selector: (row: any) => row["NOT BAPTIZED"], sortable: true, width: "200px" },
+                {name: "NOT CONFIRMED", selector: (row: any) => row["NOT CONFIRMED"], sortable: true, width: "200px" },
+                {name: "NOT MARRIED", selector: (row: any) => row["NOT MARRIED"], width: "200px" },
+                {name: "NOT HIGH SCHOOL", selector: (row: any) => row["NOT HIGH SCHOOL"], width: "200px" },
+                {name: "NOT COLLEGE", selector: (row: any) => row["NOT COLLEGE"], width: "200px" },
+                {name: "UPPER CLASS", selector: (row: any) => row["UPPER CLASS"], width: "200px" },
+                {name: "MIDDLE CLASS", selector: (row: any) => row["MIDDLE CLASS"], width: "200px" },
+                {name: "POOR CLASS", selector: (row: any) => row["POOR CLASS"], width: "200px" },
+                {name: "VERY POOR CLASS", selector: (row: any) => row["VERY POOR CLASS"], width: "200px" },
+            ]
+        }else{
+            columns = [
+                {name: "ACTION", selector: (row: any)=>row[""]},
+                {name: "BARANGAY NAME", selector: (row: any) => row["BARANGAY NAME"], sortable: true, width: "200px" },
+                {name: "BEC", selector: (row: any) => row["BEC"], sortable: true, width: "200px" },
+                {name: "HOUSEHOLD", selector: (row: any) => row["HOUSEHOLD"], sortable: true, width: "200px" },
+                {name: "CATHOLIC RESIDINCES", selector: (row: any) => row["CATHOLIC RESIDINCES"], sortable: true, width: "200px" },
+                {name: "ENCODED", selector: (row: any) => row["ENCODED"], sortable: true, width: "200px" },
+                {name: "NOT BAPTIZED", selector: (row: any) => row["NOT BAPTIZED"], sortable: true, width: "200px" },
+                {name: "NOT CONFIRMED", selector: (row: any) => row["NOT CONFIRMED"], sortable: true, width: "200px" },
+                {name: "NOT MARRIED", selector: (row: any) => row["NOT MARRIED"], width: "200px" },
+                {name: "NOT HIGH SCHOOL", selector: (row: any) => row["NOT HIGH SCHOOL"], width: "200px" },
+                {name: "NOT COLLEGE", selector: (row: any) => row["NOT COLLEGE"], width: "200px" },
+                {name: "UPPER CLASS", selector: (row: any) => row["UPPER CLASS"], width: "200px" },
+                {name: "MIDDLE CLASS", selector: (row: any) => row["MIDDLE CLASS"], width: "200px" },
+                {name: "POOR CLASS", selector: (row: any) => row["POOR CLASS"], width: "200px" },
+                {name: "VERY POOR CLASS", selector: (row: any) => row["VERY POOR CLASS"], width: "200px" },
+            ]
+            
+        }
+        return columns;
+    }
+    
+
 
     useEffect(()=>{
         getBarangayList()
@@ -187,7 +258,7 @@ export default function Baranagay(){
                                     <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-700 placeholder-white text-white focus:border-blue-500 w-1/4" placeholder="Search Name" required onChange={handleSearch}/>
                                 </div>
                                 {isLoadingTable?<div className='w-full bg-white'>Loading..</div>:""}
-                                <DataTable columns={colums} data={data} pagination paginationPerPage={5} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}></DataTable>
+                                <DataTable columns={getColumn()} data={data} pagination paginationPerPage={5} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}></DataTable>
                             </div>
                         </div>
                     </div>

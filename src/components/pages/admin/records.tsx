@@ -41,7 +41,8 @@ export default function Records(){
                         "DATE": moment(data.addDate).format("MMMM DD, YYYY"),
                         "USER": <div className='capitalize'>{`${data.firstname} ${data.lastname}`}</div>,
                         "ROLE": <div className='capitalize'>{data.rule}</div>,
-                        "NO. OF SURVEY": data.total_encoded
+                        "NO. OF SURVEY": data.total_encoded,
+                        "Encoded Date": data.addDate
                     }
                 })
                 setRecordsData(datas)
@@ -57,6 +58,7 @@ export default function Records(){
             {name: "USER", selector: ((row: any) => row["USER"]), sortable: true},
             {name: "ROLE", selector: ((row: any) => row["ROLE"])},
             {name: "NO. OF SURVEY", selector: ((row: any) => row["NO. OF SURVEY"]), sortable: true},
+            
         ]
         
         const handleSearch = (e: any) =>{
@@ -110,6 +112,7 @@ export default function Records(){
                                 {!isDisplayLoading&&
                                     <DataTable columns={columns} data={recordsData} pagination paginationPerPage={5} responsive paginationRowsPerPageOptions={[1,2,3,4,5]}></DataTable>
                                 }
+                                
                                 
                             </div>
                         </div>

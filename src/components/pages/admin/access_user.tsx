@@ -40,6 +40,7 @@ export default function Access_user(){
     const baseColumns = [
         { name: "NAME", selector: (row: any) => row.NAME, sortable: true },
         { name: "USERNAME", selector: (row: any) => row.USERNAME, sortable: true },
+        { name: "TOTAL ENCODED", selector: (row: any) => row["TOTAL ENCODED"], sortable: true },
         { name: "ROLE", selector: (row: any) => row.ROLE },
         { name: "STATUS", selector: (row: any) => row.STATUS },
         { name: "DATE", selector: (row: any) => row.DATE, sortable: true, width: "200px"},
@@ -50,8 +51,12 @@ export default function Access_user(){
         selector: (row: any) => row.ACTION, width: "200px"
     };
 
-    console.log(userData().user.rule)
-    const columns = userData().user.rule==="admin" ? [actionColumn, ...baseColumns] : baseColumns;
+    const totalEncoded = {
+        name: "TOTAL ENCODED",
+        selector: (row: any) => row["TOTAL ENCODED"], width: "200px"
+    }
+
+    const columns = userData().user.rule==="admin" ? [actionColumn, totalEncoded, ...baseColumns] : baseColumns;
 
     const resetPass = (data: {id: number, username: string}) =>{
         const token = userData().token
@@ -102,6 +107,7 @@ export default function Access_user(){
                 }
             })
 
+
             const filterData = res.data.filter((user: any)=>{
                 return (user.id!==userInfo.id)
             })
@@ -110,6 +116,7 @@ export default function Access_user(){
                 return {
                             NAME: <div className='capitalize'>{user.firstname+" "+user.lastname}</div>,
                             USERNAME: user.username, 
+                            "TOTAL ENCODED": <div className='capitalize'>{user.totalEncode}</div>,
                             ROLE: <div className='capitalize'>{user.rule}</div>, 
                             STATUS: user.isActive==0?"DEACTIVE":"ACTIVE",
                             DATE: moment(user.addDate).format("MMM D, YYYY"),

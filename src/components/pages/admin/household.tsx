@@ -123,12 +123,21 @@ type sendData = {
 }
 
 type Tlife_statusCount = {
+    all: number,
     normal: number,
     sick: number,
     single: number,
     widower: number
     living_alone: number,
     widowed: number
+}
+
+type TLivingCont = {
+    all: number,
+    upperClass: number,
+    middleClass: number,
+    poor: number,
+    veryPoor: number
 }
 
 const Household:React.FC<dataToHouseholdProps> = ()=>{
@@ -139,6 +148,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     const [isTableSettingShow, setTableSettiingShow] = useState(false)
     const [dataTables, setDataTable] = useState([])
     const [isLoading, setLoading] = useState(false)
+    const [searchText, setSearchText] = useState("");
     const [isDisplayLoading, setIsDisplayLoading] = useState(true)
     const [isHouseholdDataShow, setHouseholdDataShow] = useState(false)
     const [householdData, setHouseholdData] = useState<ThouseholdData|null>(null); 
@@ -148,8 +158,12 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
     })
     const [allData, setAllData] = useState([])
 
-    const [tableSelectContent, setTableSelectContent] = useState("")
+    const [tableSelectContent, setTableSelectContent] = useState("all")
     const [life_statusCount, setLife_statusCount] = useState<Tlife_statusCount|null>(null)
+
+    const [livingContData, setLivingContData] = useState("all");
+    const [selectedData, setSelectData] = useState([])
+    const [livingContCount, setLivingContCount] = useState<TLivingCont>();
 
     const getNumberData = async () =>{
         const token = userData().token
@@ -188,8 +202,8 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                     "authorization" : `bearer ${token}`,
                 }
             })
-            console.log(res.data);
             const lifeCountdataTable: Tlife_statusCount = {
+                all: res.data.length,
                 normal:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="")}).length,
                 sick:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="sick")}).length,
                 single:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="single")}).length,
@@ -197,6 +211,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                 widowed:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="widowed")}).length,
                 widower:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="widower")}).length
             }
+
             setAllData(res.data)
             setDataTable(res.data)
             setLife_statusCount(lifeCountdataTable)
@@ -212,10 +227,46 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         setTableSelectContent(selectTableContent)
         const resultData = dataTables.filter((data: any)=>{return (data.life_status===selectTableContent)})
         setAllData(resultData);
-        if(selectTableContent==="sick"||selectTableContent===""){
+        livingCondition('all')
+        handleSearch('')
+        if(selectTableContent==="all"){
+            sickContentData(dataTables)
+            setSelectData(dataTables)
+            const livingContidition: TLivingCont = {
+                all: dataTables.length,
+                upperClass:dataTables.filter((dataTable: any)=>{return (dataTable.living_condition==="upper class")}).length,
+                middleClass:dataTables.filter((dataTable: any)=>{return (dataTable.living_condition==="middle class")}).length,
+                poor:dataTables.filter((dataTable: any)=>{return (dataTable.living_condition==="poor")}).length,
+                veryPoor:dataTables.filter((dataTable: any)=>{return (dataTable.living_condition==="very poor")}).length,
+            }
+            setAllData(dataTables);
+            setLivingContCount(livingContidition)
+        }else if(selectTableContent==="sick"||selectTableContent===""){
             sickContentData(resultData)
+            setSelectData(resultData)
+
+            const livingContidition: TLivingCont = {
+                all: resultData.length,
+                upperClass:resultData.filter((dataTable: any)=>{return (dataTable.living_condition==="upper class")}).length,
+                middleClass:resultData.filter((dataTable: any)=>{return (dataTable.living_condition==="middle class")}).length,
+                poor:resultData.filter((dataTable: any)=>{return (dataTable.living_condition==="poor")}).length,
+                veryPoor:resultData.filter((dataTable: any)=>{return (dataTable.living_condition==="very poor")}).length,
+            }
+
+            setLivingContCount(livingContidition)
         }else{
             singleContentData(resultData)
+            setSelectData(resultData)
+
+            const livingContidition: TLivingCont = {
+                all: resultData.length,
+                upperClass:resultData.filter((dataTable: any)=>{return (dataTable.living_condition==="upper class")}).length,
+                middleClass:resultData.filter((dataTable: any)=>{return (dataTable.living_condition==="middle class")}).length,
+                poor:resultData.filter((dataTable: any)=>{return (dataTable.living_condition==="poor")}).length,
+                veryPoor:resultData.filter((dataTable: any)=>{return (dataTable.living_condition==="very poor")}).length,
+            }
+
+            setLivingContCount(livingContidition)
         }
     }
 
@@ -252,12 +303,11 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             })
         })
         displayTableData({columns: columnName, data: data})
-        
+
     }
 
     const sickContentData = (datas: TsickData[]) => {
         const columnName = ["ENCODER", "FAMILY NAME", "HUSBAND NAME", "WIFE NAME", "OCCUPATION HUSBAND", "OCCUPATION WIFE", "BARANGAY NAME", "BEC NAME", "LUMON", "HOUSEHOLDS", "CATHOLIC", "ATTENDANTS","NOT BAPTIZED", "NOT CONFIRMED","NOT MARRIED", "PROFESSIONAL", "HIGH SCHOOL", "COLLECE", "LIVING CONDITION", "COMMENT"]
-
         const data = datas.map((data:TsickData)=>{
             return ({
                 "Action": <div>
@@ -313,9 +363,9 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                         "authorization" : `bearer ${token}`,
                     }
                 })
-                console.log(res.data);
                 if(res.data.length!==0){
                     const lifeCountdataTable: Tlife_statusCount = {
+                        all: res.data.length,
                         normal:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="")}).length,
                         sick:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="sick")}).length,
                         single:res.data.filter((dataTable: any)=>{return (dataTable.life_status==="single")}).length,
@@ -328,6 +378,7 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                     setLife_statusCount(lifeCountdataTable)
                 }else{
                     const lifeCountdataTable: Tlife_statusCount = {
+                        all: 0,
                         normal:0,
                         sick:0,
                         single:0,
@@ -356,25 +407,16 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
         settableSettingData(data)
         tableData(data.bec, data.barangay)
     };
-    useEffect(()=>{
-        getDataTable()
-        getNumberData()
-    },[])
-
-    useEffect(() => {
-        if (dataTables.length > 0) {
-            allTableData('')
-        }
-    }, [dataTables]);
-    const handleSearch = (e: any)=>{
-        let query = e.target.value;
-        console.log(allData)
-        if(tableSelectContent==="sick"){
-            const resSearch = allData.filter((data: any)=>{
-                return (
-                    data.bec_name.toUpperCase().includes(query.toUpperCase())||data.family_name.toUpperCase().includes(query.toUpperCase())||data.mname.toUpperCase().includes(query.toUpperCase())||data.oname.toUpperCase().includes(query.toUpperCase())||data.mname.toUpperCase().includes(query.toUpperCase())
-                )
-            })
+    const handleSearch = (query: string)=>{
+        setSearchText(query)
+        // livingCondition('all')
+        // allTableData('all')
+        const resSearch = allData.filter((data: any)=>{
+            return (
+                data.bec_name.toUpperCase().includes(query.toUpperCase())||data.family_name.toUpperCase().includes(query.toUpperCase())||data.mname.toUpperCase().includes(query.toUpperCase())||data.oname.toUpperCase().includes(query.toUpperCase())||data.mname.toUpperCase().includes(query.toUpperCase())
+            )
+        })
+        if(tableSelectContent==="sick"||tableSelectContent===""||tableSelectContent==="all"){
             sickContentData(resSearch)
         }else{
             const resSearch = allData.filter((data: any)=>{
@@ -384,7 +426,39 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
             })
             singleContentData(resSearch)
         }
+        
     }
+
+    const livingCondition = (livingCont: string)=>{
+        setLivingContData(livingCont);
+       
+        if(livingCont!='all'){
+            const resultData = selectedData.filter((data: any)=>{return (data.living_condition===livingCont)})
+            if(tableSelectContent=='sick'||tableSelectContent==''){
+                sickContentData(resultData)
+            }else{
+                singleContentData(resultData)
+            }
+        }else{
+            if(tableSelectContent=='sick'||tableSelectContent==''){
+                sickContentData(selectedData)
+            }else{
+                singleContentData(selectedData)
+            }
+        }
+    }
+    useEffect(()=>{
+        getDataTable()
+        getNumberData()
+    },[])
+
+    useEffect(() => {
+        if (dataTables.length > 0) {
+            allTableData('all')
+        
+        }
+        
+    }, [dataTables]);
     const exportExcel = () =>{
         const dataExport = dataTables.map((data: any)=>{
             delete data["BARANGAY_ID"];
@@ -505,43 +579,81 @@ const Household:React.FC<dataToHouseholdProps> = ()=>{
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <div className="flex flex-col md:flex-row md:items-end w-full justify-between bg-white gap-x-3 py-2 px-3">
-                                    <div className="flex flex-col w-full">
-                                        <div className="text-black">
-                                            Life Status
+                                <div className="flex flex-col">
+                                    <div className="flex flex-col md:flex-row md:items-end  w-full bg-white gap-x-3 py-2 px-3">
+                                        <div className="flex flex-col w-full">
+                                            <div className="text-black">
+                                                Life Status
+                                            </div>
+                                            <div className="flex flex-col md:flex-row w-full items-center gap-3">
+                                                <div onClick={()=>{allTableData("all")}} className={(tableSelectContent==="all"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(tableSelectContent==="all"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.all!==null?life_statusCount?.all:0}</span>
+                                                    All
+                                                </div>
+                                                <div onClick={()=>{allTableData("")}} className={(tableSelectContent===""?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(tableSelectContent===""?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.normal!==null?life_statusCount?.normal:0}</span>
+                                                    ---
+                                                </div>
+                                                <div onClick={()=>{allTableData("sick")}} className={(tableSelectContent==="sick"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(tableSelectContent==="sick"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.sick!==null?life_statusCount?.sick:0}</span>
+                                                    Sick
+                                                </div>
+                                                <div onClick={()=>{allTableData("single")}} className={(tableSelectContent==="single"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(tableSelectContent==="single"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.single!==null?life_statusCount?.single:0}</span>
+                                                    Single
+                                                </div>
+                                                <div onClick={()=>{allTableData("living alone")}} className={(tableSelectContent==="living alone"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full text-sm whitespace-nowrap"}>
+                                                    <span className={(tableSelectContent==="living alone"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.living_alone!==null?life_statusCount?.living_alone:0}</span>
+                                                    Living Alone
+                                                </div>
+                                                <div onClick={()=>{allTableData('widowed')}} className={(tableSelectContent==="widowed"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(tableSelectContent==="widowed"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.widowed!==null?life_statusCount?.widowed:0}</span>
+                                                    Widowed
+                                                </div>
+                                                <div onClick={()=>{allTableData('widower')}} className={(tableSelectContent==="widower"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(tableSelectContent==="widower"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.widower!==null?life_statusCount?.widower:0}</span>
+                                                    Widower
+                                                </div>
+                                                
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col md:flex-row w-full gap-3">
-                                            <div onClick={()=>{allTableData("")}} className={(tableSelectContent===""?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
-                                                <span className={(tableSelectContent===""?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.normal!==null?life_statusCount?.normal:0}</span>
-                                                ---
+                                        <div className="w-[30%]">
+                                            <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-700 placeholder-white text-white focus:border-blue-500 w-full" placeholder="Search Name" required onChange={(e)=>handleSearch(e.target.value)} value={searchText}/>
+                                        </div>
+                                        
+                                    </div>
+                                    <div className="flex flex-col md:flex-row md:items-end  w-full bg-white gap-x-3 py-2 px-3">
+                                        <div className="flex flex-col w-full">
+                                            <div className="text-black">
+                                                Living Condition
                                             </div>
-                                            <div onClick={()=>{allTableData("sick")}} className={(tableSelectContent==="sick"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
-                                                <span className={(tableSelectContent==="sick"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.sick!==null?life_statusCount?.sick:0}</span>
-                                                Sick
+                                            <div className="flex flex-col md:flex-row w-full items-center gap-3">
+                                                <div onClick={()=>{livingCondition("all")}} className={(livingContData==="all"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(livingContData==="all"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{livingContCount?.all!==null?livingContCount?.all:0}</span>
+                                                    All
+                                                </div>
+                                                <div onClick={()=>{livingCondition("upper class")}} className={(livingContData==="upper class"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(livingContData==="upper class"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{livingContCount?.upperClass!==null?livingContCount?.upperClass:0}</span>
+                                                    Upper Class
+                                                </div>
+                                                <div onClick={()=>{livingCondition("middle class")}} className={(livingContData==="middle class"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(livingContData==="middle class"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{livingContCount?.middleClass!==null?livingContCount?.middleClass:0}</span>
+                                                    Middle Class
+                                                </div>
+                                                <div onClick={()=>{livingCondition("poor")}} className={(livingContData==="poor"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
+                                                    <span className={(livingContData==="poor"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{livingContCount?.poor!==null?livingContCount?.poor:0}</span>
+                                                    Poor
+                                                </div>
+                                                <div onClick={()=>{livingCondition("very poor")}} className={(livingContData==="very poor"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full text-sm whitespace-nowrap"}>
+                                                    <span className={(livingContData==="very poor"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{livingContCount?.veryPoor!==null?livingContCount?.veryPoor:0}</span>
+                                                    Very Poor
+                                                </div>
+                                                
                                             </div>
-                                            <div onClick={()=>{allTableData("single")}} className={(tableSelectContent==="single"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
-                                                <span className={(tableSelectContent==="single"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.single!==null?life_statusCount?.single:0}</span>
-                                                Single
-                                            </div>
-                                            <div onClick={()=>{allTableData("living alone")}} className={(tableSelectContent==="living alone"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full text-sm"}>
-                                                <span className={(tableSelectContent==="living alone"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.living_alone!==null?life_statusCount?.living_alone:0}</span>
-                                                Living Alone
-                                            </div>
-                                            <div onClick={()=>{allTableData('widowed')}} className={(tableSelectContent==="widowed"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
-                                                <span className={(tableSelectContent==="widowed"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.widowed!==null?life_statusCount?.widowed:0}</span>
-                                                Widowed
-                                            </div>
-                                            <div onClick={()=>{allTableData('widower')}} className={(tableSelectContent==="widower"?"bg-slate-600 text-white ":"text-black ")+"shadow-sm p-2 rounded-lg hover:bg-slate-600 hover:text-white md:w-[20%] text-center cursor-pointer group w-full"}>
-                                                <span className={(tableSelectContent==="widower"?"bg-white text-black px-2 ":"bg-slate-600 text-white px-2 group-hover:bg-white group-hover:text-black ")+ "px-1 rounded-full mr-1"}>{life_statusCount?.widower!==null?life_statusCount?.widower:0}</span>
-                                                Widower
-                                            </div>
-                                            
                                         </div>
                                     </div>
-                                    <div className="w-[30%]">
-                                        <label htmlFor="search" className="block mb-2 text-sm font-medium text-black">Search: </label>
-                                        <input name="search" type="text" id="search" className="border text-sm rounded-lg focus:ring-blue-500 block p-2.5 bg-gray-700 border-gray-700 placeholder-gray-700 text-white focus:border-blue-500 w-full" placeholder="Search Name" required onChange={handleSearch}/>
-                                    </div>
+                                    
+
                                 </div>
                                 
                                 {!isDisplayLoading?<div className='w-full bg-white'>Loading..</div>:""}
