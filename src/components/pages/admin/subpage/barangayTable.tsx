@@ -249,7 +249,7 @@ const AddForm: React.FC<IAddForm> = (props)=>{
     }
     return(
         <>
-            <div className='w-full h-fit absolute z-1 top-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2'>
+            <div className='w-full h-fit absolute z-1 top-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/4'>
                 <div className='flex items-center justify-center'>
                     <form className="px-8 pt-6 pb-8 mb-4 bg-[#86ACE2] border border-black shadow-lg rounded relative  animate__animated animate__fadeIn" onSubmit={addSubmit}>
                         <div className='absolute right-2 top-2 cursor-pointer' onClick={props.onClick}>
@@ -366,7 +366,7 @@ const FormEdit: React.FC<IForm> = (props) => {
     }
     return(
         <>
-            <div className='w-full h-fit absolute z-1 top-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2'>
+            <div className='w-full h-fit absolute z-1 top-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/4'>
                 <div className='flex items-center justify-center'>
                     <form className="px-8 pt-6 pb-8 mb-4 bg-[#86ACE2] border border-black shadow-lg rounded relative animate__animated animate__fadeIn" onSubmit={editSubmit}>
                         <div className='absolute right-2 top-2 cursor-pointer' onClick={props.onClick}>
