@@ -5,7 +5,7 @@ import ourLadyOfPeaceFull from './../../../assets/image/our-lady-of-peace-full.p
 import 'animate.css';
 import { useEffect, useState } from 'react';
 import { api_link, userData } from '../../../api_link';
-import {BarGraph, CircleDoughnut, CircleGraph} from './subpage/Graph'
+import {BarGraph, CircleDoughnut, CircleGraph, CircleGraphBarangay} from './subpage/Graph'
 import axios from 'axios';
 
 type TboxesData = {
@@ -30,6 +30,13 @@ type TbarangayList = {
 }
 
 
+type TdisplayGraph = {
+    total_encoder_catholic: number|null,
+    barangay_name: string,
+    barangay_id: number,
+}
+
+
 export default function Dashboard(){
     const [isLoading, setIsLoading] = useState(true)
     const token = userData().token
@@ -41,6 +48,8 @@ export default function Dashboard(){
     const [_, setBec_id] = useState<number>(0);
     const [barangayList, setBarangayList] = useState<TbarangayList[]>([]);
     const [beclist, setBecList] = useState<TbecList[]>([]);
+    const [valuesPerBarangay, setValuesPerBarangay] = useState<number[]>([])
+    const [labelsPerBarangay, setLabelsPerBarangay] = useState<string[]>([])
 
     const getBoxesData = async () =>{
         try {
@@ -67,7 +76,7 @@ export default function Dashboard(){
     }
 
     const getBarangayList = async () =>{
-         try {
+        try {
             const res = await axios.get(`${api_link()}/getBarangay`, {
                 headers: {
                     'Content-type':'application/x-www-form-urlencoded',
@@ -75,10 +84,39 @@ export default function Dashboard(){
                 }
             })
             setBarangayList(res.data);
-         } catch (error) {
+        } catch (error) {
             console.log(error)
-         }
+        }
     }
+
+    const getCountByBarangay = async ()=>{
+        try {
+            const res = await axios.get(`${api_link()}/getCountByBarangay`, {
+                headers: {
+                    'Content-type':'application/x-www-form-urlencoded',
+                    "authorization" : `bearer ${token}`,
+                }
+            })
+            displayGraph(res.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const displayGraph = (datas: TdisplayGraph[])=>{
+        const values = datas.map((data:TdisplayGraph)=>{
+            if(data.total_encoder_catholic == null){
+                data.total_encoder_catholic = 0
+            }
+            return (data.total_encoder_catholic);
+        })
+        const labels = datas.map((data:TdisplayGraph)=>{
+            return (data.barangay_name.charAt(0).toUpperCase() + data.barangay_name.slice(1));
+        })
+        setValuesPerBarangay(values)
+        setLabelsPerBarangay(labels)
+    }
+
     const getBecList = async (id: number) =>{
         setBarangay_id(id)
         setBec_id(0);
@@ -186,6 +224,7 @@ export default function Dashboard(){
     useEffect(()=>{
         getBoxesData();
         getBarangayList();
+        getCountByBarangay()
     }, [])
 
     return (
@@ -261,8 +300,11 @@ export default function Dashboard(){
 
                         </div>
                         <div className='w-full md:w-[70%] grid grid-cols-2 gap-2'>
-                            <div className='w-full bg-white rounded-sm shadow-sm p-3 col-span-2'>
+                            <div className='w-full bg-white rounded-sm shadow-sm p-3'>
                                 <BarGraph datas={[householdBox?.population??0,  householdBox?.baptism?? 0, householdBox?.confirmation?? 0, householdBox?.marrige?? 0, householdBox?.lumon?? 0]}/>
+                            </div>
+                            <div className='w-full bg-white rounded-sm shadow-sm p-3'>
+                                <CircleGraphBarangay labels={labelsPerBarangay} values={valuesPerBarangay}/>
                             </div>
                             <div className='w-full bg-white rounded-lg shadow-sm p-3'>
                                 <CircleGraph datas={[lifeStatusData?.[""]??0,lifeStatusData?.sick??0, lifeStatusData?.single??0, lifeStatusData?.["living alone"]??0, lifeStatusData?.widowed??0, lifeStatusData?.widower??0]}/>

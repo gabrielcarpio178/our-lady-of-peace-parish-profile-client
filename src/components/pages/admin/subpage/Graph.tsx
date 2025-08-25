@@ -147,8 +147,47 @@ export const CircleDoughnut: React.FC<TDoughnutGraph> = ({datas}) =>{
         };  
 
     return(
-         <div className="w-full h-[30vh] md:h-full">
+        <div className="w-full h-[30vh] md:h-full">
             <Doughnut data={data} options={options} />
+        </div>
+    );
+}
+
+type TPieGraphBarangay ={
+    values: number[]
+    labels: string[]
+}
+
+export const CircleGraphBarangay:  React.FC<TPieGraphBarangay> = ({values, labels})=>{
+    ChartJS.register(ArcElement, Tooltip, Legend, );
+        const data = {
+            labels: labels,
+            datasets: [
+            {
+                label: 'Total Population Of Catholics',
+                data: values,
+                backgroundColor:  useMemo(() => generateRGBAColorArray(labels.length), [labels.length]),
+                borderWidth: 0.5,
+            },
+        ],};
+
+        const options: ChartOptions<'pie'> = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                    legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Total Population Of Catholics',
+                },
+            },
+        };  
+
+    return(
+        <div className="w-full h-[30vh] md:h-full">
+            <Pie data={data} options={options} />
         </div>
     );
 }

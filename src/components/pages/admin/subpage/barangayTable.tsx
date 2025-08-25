@@ -7,7 +7,11 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
-
+type TbarangayList = {
+    barangay_name: string
+    id: number
+    population: number
+}
 
 interface IProps {
     onClick: () => void,
@@ -17,7 +21,7 @@ interface IProps {
 const BarangayTable:React.FC<IProps> = (props)=> {
     const [barangayList, setBarangayList] = useState([]);
     const [allData, setAllData] = useState([])
-    const [editName, setNAme]  = useState({barangay_name: "", id:0});
+    const [editName, setNAme]  = useState({barangay_name: "", id:0, population: 0});
     const [isShowformEdit, setShowformEdit]  = useState(false);
     const [isShowformAdd, setShowformAdd] = useState(false)
     const [isLoadingTable, setLoadingTable] = useState(false)
@@ -35,9 +39,10 @@ const BarangayTable:React.FC<IProps> = (props)=> {
                     "authorization" : `bearer ${token}`,
                 }
             })
-            const data  = res.data.map((result: any)=>{
+            const data  = res.data.map((result: TbarangayList)=>{
                 return {
                     NAME: capitalizeFirstLetter(result.barangay_name),
+                    POPULATION: result.population,
                     ACTION:
                     <div>
                         <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 focus:outline-none dark:focus:ring-blue-800 cursor-pointer" onClick={()=>editBarangay(result)}><FaEdit/></button>
@@ -103,13 +108,18 @@ const BarangayTable:React.FC<IProps> = (props)=> {
             name: "NAME",
             selector: (row: any) => row.NAME
         },
+        {
+            name: "POPULATION",
+            selector: (row: any) => row.POPULATION
+        },
         { 
             name: "ACTION", 
+            width: "200px",
             selector: (row: any)=> row.ACTION
         }
     ]
 
-    const editBarangay = (props: {barangay_name: string, id: number}):void=>{
+    const editBarangay = (props: {barangay_name: string, id: number, population: number}):void=>{
         setNAme(props)
         setShowformEdit(!isShowformEdit)
     }
@@ -183,7 +193,8 @@ const AddForm: React.FC<IAddForm> = (props)=>{
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const formValue = {
-            barangay: formData.get("barangay")
+            barangay: formData.get("barangay"),
+            population: formData.get("population")
         }
         setLoading(true)
         props.setLoading()
@@ -256,6 +267,10 @@ const AddForm: React.FC<IAddForm> = (props)=>{
                                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-black">Name</label>
                                 <input name="barangay" type="text" id="barangay" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-white text-white focus:border-blue-500" placeholder="Name" required />
                             </div>
+                            <div className='flex flex-col w-full'>
+                                <label htmlFor="population" className="block mb-2 text-sm font-medium text-black">Population</label>
+                                <input name="population" type="number" id="population" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-white text-white focus:border-blue-500" placeholder="Population" required />
+                            </div>
                             <div className='flex flex-col w-full mt-2.5'>
 
                                 <button type="submit" className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full">{isLoading?"Loading...":"Submit"}</button>
@@ -272,15 +287,17 @@ const AddForm: React.FC<IAddForm> = (props)=>{
 interface IForm{
     dataObj: {
         barangay_name: string,
-        id: number
+        id: number,
+        population: number
     },
     onClick: () => void,
     setLoading: ()=>void
 }
 
 const FormEdit: React.FC<IForm> = (props) => {
-    const {barangay_name, id} = props.dataObj
+    const {barangay_name, id, population} = props.dataObj
     const [name, setName] = useState(barangay_name)
+    const [populationData, setPopulation] = useState(population)
     const [isLoading, setLoading] = useState(false)
     const editSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
@@ -289,7 +306,8 @@ const FormEdit: React.FC<IForm> = (props) => {
         const formData = new FormData(e.currentTarget)
         const formValue = {
             barangay_name : formData.get("name"),
-            id: id
+            id: id,
+            population: formData.get('population')
         }
         const token = userData().token;
         if(barangay_name.toLowerCase()!==name){
@@ -365,6 +383,10 @@ const FormEdit: React.FC<IForm> = (props) => {
                             <div className='flex flex-col w-full'>
                                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-black">Name</label>
                                 <input name="name" type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-bg-gray-700 placeholder-gray-400 focus:border-blue-500 text-white" placeholder="Name" required />
+                            </div>
+                            <div className='flex flex-col w-full'>
+                                <label htmlFor="population" className="block mb-2 text-sm font-medium text-black">Population</label>
+                                <input name="population" type="number" id="population" className="border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 bg-gray-700 border-gray-700 placeholder-white text-white focus:border-blue-500" placeholder="Population" required value={populationData} onChange={(e) => setPopulation(parseInt(e.target.value))} />
                             </div>
                             <div className='flex flex-col w-full mt-2.5'>
 
