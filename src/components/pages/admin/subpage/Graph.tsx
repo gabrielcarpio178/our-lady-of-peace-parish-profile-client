@@ -12,7 +12,7 @@ import {
 import type React from 'react';
 import { Bar, Doughnut, Pie } from 'react-chartjs-2';
 import { useMemo } from 'react';
-// import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 
 type TBarGraph = {
@@ -36,13 +36,16 @@ export const BarGraph:React.FC<TBarGraph> = ({datas}) => {
         Title,
         Tooltip,
         Legend,
-        // ChartDataLabels
+        ChartDataLabels
     );
 
     const options: ChartOptions<'bar'>  = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
+            datalabels: {
+                color: '#000000'
+            },
             legend: {
                 position: 'top' as const,
             },
@@ -94,7 +97,10 @@ export const CircleGraph: React.FC<TPieGraph> = ({datas}) =>{
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-                legend: {
+            datalabels: {
+                color: '#000000'
+            },
+            legend: {
                 position: 'right',
             },
             title: {
@@ -137,7 +143,10 @@ export const CircleDoughnut: React.FC<TDoughnutGraph> = ({datas}) =>{
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                    legend: {
+                datalabels: {
+                    color: '#000000'
+                },
+                legend: {
                     position: 'top',
                 },
                 title: {
@@ -182,7 +191,10 @@ export const BarGraphBarangay:  React.FC<TPieGraphBarangay> = ({values, labels, 
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                    legend: {
+                datalabels: {
+                    color: '#000000'
+                },
+                legend: {
                     position: 'top',
                 },
                 title: {
