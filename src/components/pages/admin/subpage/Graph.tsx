@@ -20,7 +20,7 @@ type TBarGraph = {
 }
 
 
-function generateRGBAColorArray(count: number, alpha = 0.5) {
+function generateRGBAColorArray(count: number, alpha = 0.5, isCatholic: boolean = false) {
     return Array.from({ length: count }, (_, i) => {
         const hue = Math.floor((360 / count) * i);
         return `hsla(${hue}, 70%, 50%, ${alpha})`;
@@ -54,14 +54,15 @@ export const BarGraph:React.FC<TBarGraph> = ({datas}) => {
     };
     const labels: string[] = ["Population", "Not Baptized", "Not Confirmed", "Not Married", "Lumon"]
     const data = {
-    labels,
-    datasets: [
-        {
-            label: 'Survey Data Summary',
-            data: datas,
-            backgroundColor: useMemo(() => generateRGBAColorArray(labels.length), [labels.length]),
-        },
-    ],};
+        labels,
+        datasets: [
+            {
+                label: 'Survey Data Summary',
+                data: datas,
+                backgroundColor: useMemo(() => generateRGBAColorArray(labels.length), [labels.length]),
+            },
+        ],
+    };
     return (
         <div className="w-full h-[30vh] md:h-full">
             <Bar options={options} data={data} />
@@ -156,27 +157,33 @@ export const CircleDoughnut: React.FC<TDoughnutGraph> = ({datas}) =>{
 type TPieGraphBarangay ={
     values: number[]
     labels: string[]
+    populations: number[]
 }
 
-export const CircleGraphBarangay:  React.FC<TPieGraphBarangay> = ({values, labels})=>{
+export const BarGraphBarangay:  React.FC<TPieGraphBarangay> = ({values, labels, populations})=>{
     ChartJS.register(ArcElement, Tooltip, Legend, );
+        
         const data = {
             labels: labels,
             datasets: [
             {
-                label: 'Total Population Of Catholics',
+                label: 'Population',
+                data: populations,
+                backgroundColor:  '#44618E',
+            },
+            {
+                label: 'Catholics',
                 data: values,
-                backgroundColor:  useMemo(() => generateRGBAColorArray(labels.length), [labels.length]),
-                borderWidth: 0.5,
+                backgroundColor:  '#00447880',
             },
         ],};
 
-        const options: ChartOptions<'pie'> = {
+        const options: ChartOptions<'bar'> = {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
                     legend: {
-                    position: 'right',
+                    position: 'top',
                 },
                 title: {
                     display: true,
@@ -187,7 +194,7 @@ export const CircleGraphBarangay:  React.FC<TPieGraphBarangay> = ({values, label
 
     return(
         <div className="w-full h-[30vh] md:h-full">
-            <Pie data={data} options={options} />
+            <Bar data={data} options={options}/>
         </div>
     );
 }

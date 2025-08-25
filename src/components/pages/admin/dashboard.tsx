@@ -5,7 +5,7 @@ import ourLadyOfPeaceFull from './../../../assets/image/our-lady-of-peace-full.p
 import 'animate.css';
 import { useEffect, useState } from 'react';
 import { api_link, userData } from '../../../api_link';
-import {BarGraph, CircleDoughnut, CircleGraph, CircleGraphBarangay} from './subpage/Graph'
+import {BarGraph, CircleDoughnut, CircleGraph, BarGraphBarangay} from './subpage/Graph'
 import axios from 'axios';
 
 type TboxesData = {
@@ -34,6 +34,7 @@ type TdisplayGraph = {
     total_encoder_catholic: number|null,
     barangay_name: string,
     barangay_id: number,
+    population: number
 }
 
 
@@ -49,7 +50,9 @@ export default function Dashboard(){
     const [barangayList, setBarangayList] = useState<TbarangayList[]>([]);
     const [beclist, setBecList] = useState<TbecList[]>([]);
     const [valuesPerBarangay, setValuesPerBarangay] = useState<number[]>([])
+    const [populationPerBarangay, setPopulationPerBarangay] = useState<number[]>([])
     const [labelsPerBarangay, setLabelsPerBarangay] = useState<string[]>([])
+    
 
     const getBoxesData = async () =>{
         try {
@@ -97,6 +100,7 @@ export default function Dashboard(){
                     "authorization" : `bearer ${token}`,
                 }
             })
+           
             displayGraph(res.data)
         } catch (error) {
             console.log(error)
@@ -104,6 +108,7 @@ export default function Dashboard(){
     }
 
     const displayGraph = (datas: TdisplayGraph[])=>{
+        console.log(datas)
         const values = datas.map((data:TdisplayGraph)=>{
             if(data.total_encoder_catholic == null){
                 data.total_encoder_catholic = 0
@@ -113,8 +118,12 @@ export default function Dashboard(){
         const labels = datas.map((data:TdisplayGraph)=>{
             return (data.barangay_name.charAt(0).toUpperCase() + data.barangay_name.slice(1));
         })
+        const populations = datas.map((data:TdisplayGraph)=>{
+            return (data.population);
+        })
         setValuesPerBarangay(values)
         setLabelsPerBarangay(labels)
+        setPopulationPerBarangay(populations);
     }
 
     const getBecList = async (id: number) =>{
@@ -304,7 +313,7 @@ export default function Dashboard(){
                                 <BarGraph datas={[householdBox?.population??0,  householdBox?.baptism?? 0, householdBox?.confirmation?? 0, householdBox?.marrige?? 0, householdBox?.lumon?? 0]}/>
                             </div>
                             <div className='w-full bg-white rounded-sm shadow-sm p-3'>
-                                <CircleGraphBarangay labels={labelsPerBarangay} values={valuesPerBarangay}/>
+                                <BarGraphBarangay labels={labelsPerBarangay} values={valuesPerBarangay} populations={populationPerBarangay}/>
                             </div>
                             <div className='w-full bg-white rounded-lg shadow-sm p-3'>
                                 <CircleGraph datas={[lifeStatusData?.[""]??0,lifeStatusData?.sick??0, lifeStatusData?.single??0, lifeStatusData?.["living alone"]??0, lifeStatusData?.widowed??0, lifeStatusData?.widower??0]}/>
