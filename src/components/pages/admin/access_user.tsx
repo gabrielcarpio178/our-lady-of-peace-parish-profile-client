@@ -40,7 +40,6 @@ export default function Access_user(){
     const baseColumns = [
         { name: "NAME", selector: (row: any) => row.NAME, sortable: true },
         { name: "USERNAME", selector: (row: any) => row.USERNAME, sortable: true },
-        { name: "TOTAL ENCODED", selector: (row: any) => row["TOTAL ENCODED"], sortable: true },
         { name: "ROLE", selector: (row: any) => row.ROLE },
         { name: "STATUS", selector: (row: any) => row.STATUS },
         { name: "DATE", selector: (row: any) => row.DATE, sortable: true, width: "200px"},
